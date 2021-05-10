@@ -1,7 +1,7 @@
 [
     {
         "columnName":"id",
-        "dataType": "Int",
+        "dataType": "int",
         "primaryKey": true
     },
     {
