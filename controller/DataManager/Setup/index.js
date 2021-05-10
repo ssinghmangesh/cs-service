@@ -1,5 +1,6 @@
 const PostresqlDb = require('./../../../db')
 const orderColumns = require('./orderColumns')
+
 const ORDER_TABLE_NAME = (workspaceId) => {
     return `order${workspaceId}`
 }
@@ -12,7 +13,7 @@ const PRODUCT_TABLE_NAME = (workspaceId) => {
 
 const setupWorkspace = async(workspaceId) => {
 
-    await createCustomerTable()
+    await createCustomerTable(workspaceId)
 
 
     await createOrderTable()
@@ -22,11 +23,11 @@ const setupWorkspace = async(workspaceId) => {
 }
 
 
-const createCustomerTable = (worksoaceId) => {
+const createCustomerTable = async (workspaceId) => {
 
     let columnsQuery  = getColumnQuery(orderColumns)
     let query = `
-        CREATE TABLE "${CUSTOMER_TABLE_NAME(worksoaceId)}"(
+        CREATE TABLE "${CUSTOMER_TABLE_NAME(workspaceId)}"(
             ${columnsQuery}
         );
     `
@@ -37,7 +38,7 @@ const createCustomerTable = (worksoaceId) => {
 const getColumnQuery = (orderColumns) => {
     return orderColumns.map(col => {
         return `"${col.columnName}" ${col.dataType}`
-    }).join(", ")
+    }).join(",")
 }
 
 
@@ -54,7 +55,7 @@ module.exports = {
  * 1. Install postgrsql in local
  * 2. add your cred in db.js
  * 3. then test createCustomerTable function verify the output in postgresql db
- * 4. try to insert a row in that tabe
+ * 4. try to insert a row in that table
  * 
  * 
  */
