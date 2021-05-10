@@ -5,8 +5,8 @@ const { setupWorkspace } = require('../controller/DataManager/Setup')
 
 router.post('/data-manager/setup', async (req, res) => {
     const { workspaceId } = req.body
-    await setupWorkspace(workspaceId)
-    res.status(200).send("/data-manager/setup")
+    let response = await setupWorkspace(workspaceId)
+    res.status(200).send(response)
 })
 
 router.post('/data-manager/customer/add', (req, res) => {

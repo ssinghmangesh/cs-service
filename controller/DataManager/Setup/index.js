@@ -1,45 +1,23 @@
-const PostresqlDb = require('./../../../db')
-const orderColumns = require('./orderColumns')
 
-const ORDER_TABLE_NAME = (workspaceId) => {
-    return `order${workspaceId}`
-}
-const CUSTOMER_TABLE_NAME = (workspaceId) => {
-    return `customer${workspaceId}`
-}
-const PRODUCT_TABLE_NAME = (workspaceId) => {
-    return `product${workspaceId}`
-}
+const { createCustomerTable, createOrderTable, createProductTable } = require('./helper')
 
 const setupWorkspace = async(workspaceId) => {
 
     await createCustomerTable(workspaceId)
 
+    await createOrderTable(workspaceId)
 
-    await createOrderTable()
+    await createProductTable(workspaceId)
 
-    await createProductTable()
+    return {
+        status: true,
+        message: "Successful"
+    }
 
 }
 
 
-const createCustomerTable = async (workspaceId) => {
 
-    let columnsQuery  = getColumnQuery(orderColumns)
-    let query = `
-        CREATE TABLE "${CUSTOMER_TABLE_NAME(workspaceId)}"(
-            ${columnsQuery}
-        );
-    `
-    let res = await PostresqlDb.query(query)
-    return res 
-}
-
-const getColumnQuery = (orderColumns) => {
-    return orderColumns.map(col => {
-        return `"${col.columnName}" ${col.dataType}`
-    }).join(",")
-}
 
 
 
