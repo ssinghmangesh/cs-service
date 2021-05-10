@@ -32,7 +32,7 @@ const ORDER_TABLE_NAME = (workspaceId) => {
     return `order${workspaceId}`
 }
 
-const createOrderTable = async () => {
+const createOrderTable = async (workspaceId) => {
 
     let columnsQuery  = getColumnQuery(orderColumns)
     let query = `
@@ -51,10 +51,10 @@ const PRODUCT_TABLE_NAME = (workspaceId) => {
     return `product${workspaceId}`
 }
 
-const createProductTable = async () => {
+const createProductTable = async (workspaceId) => {
     let columnsQuery  = getColumnQuery(productColumns)
     let query = `
-        CREATE TABLE "${ORDER_TABLE_NAME(workspaceId)}"(
+        CREATE TABLE "${PRODUCT_TABLE_NAME(workspaceId)}"(
             ${columnsQuery}
         );
     `
