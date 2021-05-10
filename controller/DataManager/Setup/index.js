@@ -1,3 +1,5 @@
+const PostresqlDb = require('./../../../db')
+const orderColumns = require('./orderColumns')
 const ORDER_TABLE_NAME = (workspaceId) => {
     return `order${workspaceId}`
 }
@@ -13,7 +15,6 @@ const setupWorkspace = async(workspaceId) => {
     await createCustomerTable()
 
 
-    //https://shopify.dev/docs/admin-api/rest/reference/orders/order#index-2021-04
     await createOrderTable()
 
     await createProductTable()
@@ -21,6 +22,23 @@ const setupWorkspace = async(workspaceId) => {
 }
 
 
+const createCustomerTable = (worksoaceId) => {
+
+    let columnsQuery  = getColumnQuery(orderColumns)
+    let query = `
+        CREATE TABLE "${CUSTOMER_TABLE_NAME(worksoaceId)}"(
+            ${columnsQuery}
+        );
+    `
+    let res = await PostresqlDb.query(query)
+    return res 
+}
+
+const getColumnQuery = (orderColumns) => {
+    return orderColumns.map(col => {
+        return `"${col.columnName}" ${col.dataType}`
+    }).join(", ")
+}
 
 
 
@@ -29,5 +47,16 @@ const setupWorkspace = async(workspaceId) => {
 module.exports = {
     setupWorkspace
 }
+
+
+/**
+ * 
+ * 1. Install postgrsql in local
+ * 2. add your cred in db.js
+ * 3. then test createCustomerTable function verify the output in postgresql db
+ * 4. try to insert a row in that tabe
+ * 
+ * 
+ */
 
 
