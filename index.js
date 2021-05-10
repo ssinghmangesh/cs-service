@@ -1,6 +1,8 @@
 const app = require('express')();
-
 const allRoutes = require('./routes');
+const port = 3000
+
+
 Object.keys(allRoutes).forEach(key => {
     let routes = allRoutes[key]
     app.use('/', routes);
@@ -9,6 +11,6 @@ Object.keys(allRoutes).forEach(key => {
 
 
 
-app.listen(3000, () => {
-    console.log('App listening on port 3000');
+app.listen(port, () => {
+    console.log('App listening on port ', port);
 });

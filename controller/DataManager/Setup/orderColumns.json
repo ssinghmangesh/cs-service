@@ -1,0 +1,19 @@
+[
+    {
+        "columnName":"id",
+        "dataType": "Int",
+        "primaryKey": true
+    },
+    {
+        "columnName":"email",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"",
+        "dataType": ""
+    },
+    {
+        "columnName":"",
+        "dataType": ""
+    },
+]
