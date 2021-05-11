@@ -2,6 +2,7 @@ const PostresqlDb = require('./../../../db')
 const orderColumns = require('./orderColumns')
 const customerColumns = require('./customerColumns')
 const productColumns = require('./productColumns')
+const discountColumns = require('./discountColumns')
 
 
 
@@ -63,17 +64,34 @@ const createProductTable = async (workspaceId) => {
 }
 
 
+// discount section
+const DISCOUNT_TABLE_NAME = (workspaceId) => {
+    return `discount${workspaceId}`
+}
+
+const createDiscountTable = async (workspaceId) => {
+    let columnsQuery  = getColumnQuery(discountColumns)
+    let query = `
+        CREATE TABLE "${DISCOUNT_TABLE_NAME(workspaceId)}"(
+            ${columnsQuery}
+        );
+    `
+    let res = await PostresqlDb.query(query)
+    return res 
+}
+
 
 //common
 const getColumnQuery = (orderColumns) => {
     return orderColumns.map(col => {
         return `"${col.columnName}" ${col.dataType}`
-    }).join(",")
+    }).join(", ")
 }
 
 
 module.exports = {
     createCustomerTable, 
     createOrderTable, 
-    createProductTable
+    createProductTable,
+    createDiscountTable
 }
