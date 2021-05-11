@@ -20,7 +20,7 @@ const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0 }) => {
         console.log("nextSinceId", nextSinceId)
         await SYNC({ shopName, accessToken, sinceId: nextSinceId, limit})
     }
-    retrun {}
+    return;
 }
 
 

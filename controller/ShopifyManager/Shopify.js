@@ -21,14 +21,47 @@ class Shopify {
         })
     }
 
-    static fetchCustomer(shopName, accessToken) {
-
+    static fetchCustomer(shopName, accessToken, option) {
+        const { since_id, limit } = option
+        return axios({
+            method: 'GET',
+            url: `https://${shopName}/admin/api/2021-04/customers.json?since_id=${since_id}&limit=${limit}`,
+            headers:  {
+                'X-Shopify-Access-Token': accessToken,
+            }
+        })
     }
-    static fetchProducts(shopName, accessToken) {
 
+    static fetchCustomerCount(shopName, accessToken) {
+        return axios({
+            method: 'GET',
+            url: `https://${shopName}/admin/api/2021-04/customers/count.json`,
+            headers:  {
+                'X-Shopify-Access-Token': accessToken,
+            }
+        })
     }
 
+    static fetchProduct(shopName, accessToken, option) {
+        const { since_id, limit } = option
+        return axios({
+            method: 'GET',
+            url: `https://${shopName}/admin/api/2021-04/products.json?since_id=${since_id}&limit=${limit}`,
+            headers:  {
+                'X-Shopify-Access-Token': accessToken,
+            }
+        })
+    }
 
+    static fetchProductCount(shopName, accessToken) {
+        return axios({
+            method: 'GET',
+            url: `https://${shopName}/admin/api/2021-04/products/count.json`,
+            headers:  {
+                'X-Shopify-Access-Token': accessToken,
+            }
+        })
+    }
     
 
 }
