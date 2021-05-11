@@ -1,9 +1,9 @@
 const PostresqlDb = require('./../../../db')
-const { getIds, REFUNDED_TABLE_NAME } =  require("../helper")
-const refundedColumn = require('./../Setup/refundedColumns')
+const { getIds, VARIANT_TABLE_NAME } =  require("../helper")
+const variantColumn = require('./../Setup/variantColumns')
 
 const del = async (data, workspaceId) => {
-    let query = `DELETE FROM ${REFUNDED_TABLE_NAME(workspaceId)} WHERE id IN ${getIds(data)}`
+    let query = `DELETE FROM ${VARIANT_TABLE_NAME(workspaceId)} WHERE id IN ${getIds(data)}`
     console.log(query);
     let response =  await PostresqlDb.query(query);
     console.log(response);
@@ -14,9 +14,9 @@ const del = async (data, workspaceId) => {
 const insert = async(data, workspaceId) => {
 
     let query = `
-        INSERT INTO ${REFUNDED_TABLE_NAME(workspaceId)}
-        ${getColumnName({ columnData: refundedColumn })}
-        VALUES ${getValues({ columnData: refundedColumn, data })}
+        INSERT INTO ${VARIANT_TABLE_NAME(workspaceId)}
+        ${getColumnName({ columnData: variantColumn })}
+        VALUES ${getValues({ columnData: variantColumn, data })}
     `
 
     console.log(query);

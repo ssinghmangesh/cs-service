@@ -18,6 +18,22 @@ const DISCOUNT_TABLE_NAME = (workspaceId) => {
     return `discount${workspaceId}`
 }
 
+const FULFILLMENT_TABLE_NAME = (workspaceId) => {
+    return `discount${workspaceId}`
+}
+
+const LINEITEMS_TABLE_NAME = (workspaceId) => {
+    return `discount${workspaceId}`
+}
+
+const REFUNDED_TABLE_NAME = (workspaceId) => {
+    return `discount${workspaceId}`
+}
+
+const VARIANT_TABLE_NAME = (workspaceId) => {
+    return `discount${workspaceId}`
+}
+
 
 
 module.exports={
@@ -25,5 +41,9 @@ module.exports={
     CUSTOMER_TABLE_NAME,
     PRODUCT_TABLE_NAME,
     ORDER_TABLE_NAME,
-    DISCOUNT_TABLE_NAME
+    DISCOUNT_TABLE_NAME,
+    FULFILLMENT_TABLE_NAME,
+    LINEITEMS_TABLE_NAME,
+    REFUNDED_TABLE_NAME,
+    VARIANT_TABLE_NAME
 }
