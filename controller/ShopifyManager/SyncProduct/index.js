@@ -8,8 +8,10 @@ const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0, workspaceId
     console.log(response.data.products.length)
 
     //insert
-    if(response.data.orders.length){
-        await insert(response.data.orders, workspaceId)
+    if(response.data.products.length){
+        
+        await insert(response.data.products, workspaceId)
+        await insert(response.data.products, workspaceId)
     }
     
     
@@ -31,6 +33,6 @@ module.exports = {
     SYNC
 }
 
-SYNC({ shopName: 'grofers-orders.myshopify.com', accessToken: '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',  limit: 2, workspaceId: 12345 })
-.then(console.log)
-.catch(console.log)
+// SYNC({ shopName: 'grofers-orders.myshopify.com', accessToken: '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',  limit: 2, workspaceId: 12345 })
+// .then(console.log)
+// .catch(console.log)

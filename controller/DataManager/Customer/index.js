@@ -91,9 +91,9 @@ getValues = ({ columnData, data }) => {
 }
 
 const order = require('../Order/order.json')
-del([ order ], 12345)
-.then(console.log)
-.catch(console.log)
+// del([ order ], 12345)
+// .then(console.log)
+// .catch(console.log)
 
 
 

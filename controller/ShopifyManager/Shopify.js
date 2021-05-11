@@ -92,9 +92,9 @@ class Shopify {
 //test token == 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
 // shopName = grofers-orders.myshopify.com
 
-Shopify.fetchCustomerCount('grofers-orders.myshopify.com', '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', {since_id: 0, limit: 2})
-.then(console.log)
-.catch(console.log)
+// Shopify.fetchCustomerCount('grofers-orders.myshopify.com', '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', {since_id: 0, limit: 2})
+// .then(console.log)
+// .catch(console.log)
 
 
 

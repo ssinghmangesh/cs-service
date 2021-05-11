@@ -30,6 +30,6 @@ module.exports = {
     SYNC
 }
 
-SYNC({ shopName: 'grofers-orders.myshopify.com', accessToken: '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',  limit: 5, workspaceId: 12345 })
-.then(console.log)
-.catch(console.log)
+// SYNC({ shopName: 'grofers-orders.myshopify.com', accessToken: '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',  limit: 5, workspaceId: 12345 })
+// .then(console.log)
+// .catch(console.log)

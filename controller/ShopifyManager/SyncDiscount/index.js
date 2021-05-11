@@ -8,9 +8,9 @@ const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0, workspaceId
     console.log(response.data.price_rules.length)
 
     //insert
-    if(response.data.customers.length){
-        await del(response.data.customers, workspaceId)
-        await insert(response.data.customers, workspaceId)
+    if(response.data.price_rules.length){
+        await del(response.data.price_rules, workspaceId)
+        await insert(response.data.price_rules, workspaceId)
     }
     
     //call next batch
@@ -31,6 +31,6 @@ module.exports = {
     SYNC
 }
 
-SYNC({ shopName: 'grofers-orders.myshopify.com', accessToken: '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',  limit: 1, workspaceId: 12345 })
-.then(console.log)
-.catch(console.log)
+// SYNC({ shopName: 'grofers-orders.myshopify.com', accessToken: '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',  limit: 1, workspaceId: 12345 })
+// .then(console.log)
+// .catch(console.log)

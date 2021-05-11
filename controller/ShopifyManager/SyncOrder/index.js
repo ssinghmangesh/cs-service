@@ -8,6 +8,7 @@ const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0 , workspaceI
 
     //insert
     if(response.data.orders.length){
+        await del(response.data.orders, workspaceId)
         await insert(response.data.orders, workspaceId)
     }
     
@@ -29,6 +30,6 @@ module.exports = {
     SYNC
 }
 
-SYNC({ shopName: 'grofers-orders.myshopify.com', accessToken: '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',  limit: 50, workspaceId: 12345 })
-.then(console.log)
-.catch(console.log)
+// SYNC({ shopName: 'grofers-orders.myshopify.com', accessToken: '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',  limit: 50, workspaceId: 12345 })
+// .then(console.log)
+// .catch(console.log)
