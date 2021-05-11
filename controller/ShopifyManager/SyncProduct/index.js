@@ -1,6 +1,15 @@
 const Shopify = require('../Shopify')
 const {insert, del} = require("../../DataManager/Order/index");
+const {insert: insertVariants, del: deleteVariants} = require("../../DataManager/Variants/index");
 
+const getImageUrl = (image_id, images) => {
+    let image = images.find(image => image.id === image_id);
+    if(image){
+        return image.src;
+    }else{
+        return null;
+    }
+}
 
 const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0, workspaceId }) => {
     //call to shopify fetch one batch
@@ -8,10 +17,24 @@ const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0, workspaceId
     console.log(response.data.products.length)
 
     //insert
+
+    const variants = [];
+
+    response.data.products.map(product => {
+        product.variants.map(variant => {
+            variants.push({
+                ...variant,
+                image_url: getImageUrl(variant.image_id, variant.images)
+            })
+        })
+    })
+
     if(response.data.products.length){
         
+        await del(response.data.products, workspaceId)
         await insert(response.data.products, workspaceId)
-        await insert(response.data.products, workspaceId)
+        await deleteVariants(variants, workspaceId)
+        await insertVariants(variants, workspaceId)
     }
     
     

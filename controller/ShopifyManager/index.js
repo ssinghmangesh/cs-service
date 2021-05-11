@@ -7,7 +7,7 @@ const syncAll = async ({ shopName, accessToken, limit,workspaceId }) => {
     await customerSync({ shopName, accessToken, limit, workspaceId });
     await orderSync({ shopName, accessToken, limit, workspaceId });
     await productSync({ shopName, accessToken, limit, workspaceId });
-    // await discountSync({ shopName, accessToken, limit, workspaceId });
+    await discountSync({ shopName, accessToken, limit, workspaceId });
     return {status: true, message: "Successful"};
 }
 
