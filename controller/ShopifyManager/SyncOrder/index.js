@@ -1,7 +1,7 @@
 const Shopify = require('../Shopify')
 const {insert, del} = require("../../DataManager/Order/index");
 const {insert: insertLineItems, del: deleteLineItems} = require("../../DataManager/LineItems/index");
-const {insert: insertFulfillments, del: deleteFulfillments} = require("../../DataManager/Fulfillments/index");
+const {insert: insertFulfillments, del: deleteFulfillments} = require("../../DataManager/Fulfilments/index");
 const {insert: insertRefunds, del: deleteRefunds} = require("../../DataManager/Refunded/index");
 
 const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0 , workspaceId}) => {
@@ -35,7 +35,7 @@ const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0 , workspaceI
 
     let refunds = []
     response.data.orders.map(order => {
-        order.refunded.map(refund => {
+        order.refunds.map(refund => {
             refunds.push({
                 ...refund,
                 order_id: order.id,

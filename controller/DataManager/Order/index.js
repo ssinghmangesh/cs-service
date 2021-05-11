@@ -1,12 +1,12 @@
-const PostresqlDb = require('./../../../db')
+const PostgresqlDb = require('./../../../db')
 const { getIds, ORDER_TABLE_NAME } =  require("../helper")
 const orderColumn = require('./../Setup/orderColumns')
 
 const del = async (data, workspaceId) => {
     let query = `DELETE FROM ${ORDER_TABLE_NAME(workspaceId)} WHERE id IN ${getIds(data)}`
-    console.log(query);
-    let response =  await PostresqlDb.query(query);
-    console.log(response);
+    // console.log(query);
+    let response =  await PostgresqlDb.query(query);
+    // console.log(response);
 }
 
 
@@ -19,7 +19,7 @@ const insert = async(data, workspaceId) => {
         VALUES ${getValues({ columnData: orderColumn, data })}
     `
 
-    console.log(query);
+    // console.log(query);
     await PostgresqlDb.query(query);
 }
 

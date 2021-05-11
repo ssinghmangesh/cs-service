@@ -19,19 +19,19 @@ const DISCOUNT_TABLE_NAME = (workspaceId) => {
 }
 
 const FULFILLMENT_TABLE_NAME = (workspaceId) => {
-    return `discount${workspaceId}`
+    return `fulfillment${workspaceId}`
 }
 
 const LINEITEMS_TABLE_NAME = (workspaceId) => {
-    return `discount${workspaceId}`
+    return `lineitems${workspaceId}`
 }
 
 const REFUNDED_TABLE_NAME = (workspaceId) => {
-    return `discount${workspaceId}`
+    return `refunded${workspaceId}`
 }
 
 const VARIANT_TABLE_NAME = (workspaceId) => {
-    return `discount${workspaceId}`
+    return `variant${workspaceId}`
 }
 
 

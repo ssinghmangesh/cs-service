@@ -1,4 +1,4 @@
-const PostresqlDb = require('./../../../db')
+const PostgresqlDb = require('./../../../db')
 
 const { getIds, CUSTOMER_TABLE_NAME } =  require("../helper")
 const customerColumn = require('./../Setup/customerColumns')
@@ -13,16 +13,16 @@ const insert = async(data, workspaceId) => {
     `
 
 
-    console.log(query)
+    // // console.log(query)
 
-    await PostresqlDb.query(query)
+    await PostgresqlDb.query(query)
 }
 
 const del = async (data, workspaceId) => {
     let query = `DELETE FROM ${CUSTOMER_TABLE_NAME(workspaceId)} WHERE id IN ${getIds(data)}`
-    console.log(query);
-    let response =  await PostresqlDb.query(query);
-    console.log(response);
+    // // console.log(query);
+    let response =  await PostgresqlDb.query(query);
+    // // console.log(response);
 }
 
 const getColumnName = ({ columnData }) => {

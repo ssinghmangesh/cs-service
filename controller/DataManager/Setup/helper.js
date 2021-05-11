@@ -1,4 +1,4 @@
-const PostresqlDb = require('./../../../db')
+const PostgresqlDb = require('./../../../db')
 const orderColumns = require('./orderColumns')
 const customerColumns = require('./customerColumns')
 const productColumns = require('./productColumns')
@@ -27,7 +27,7 @@ const createCustomerTable = async (workspaceId) => {
             ${columnsQuery}
         );
     `
-    let res = await PostresqlDb.query(query)
+    let res = await PostgresqlDb.query(query)
     return res 
 }
 
@@ -45,7 +45,7 @@ const createOrderTable = async (workspaceId) => {
             ${columnsQuery}
         );
     `
-    let res = await PostresqlDb.query(query)
+    let res = await PostgresqlDb.query(query)
     return res 
 
 }
@@ -63,7 +63,7 @@ const createProductTable = async (workspaceId) => {
             ${columnsQuery}
         );
     `
-    let res = await PostresqlDb.query(query)
+    let res = await PostgresqlDb.query(query)
     return res 
 }
 
@@ -80,7 +80,7 @@ const createDiscountTable = async (workspaceId) => {
             ${columnsQuery}
         );
     `
-    let res = await PostresqlDb.query(query)
+    let res = await PostgresqlDb.query(query)
     return res 
 }
 
@@ -96,7 +96,7 @@ const createFulfillmentTable = async (workspaceId) => {
             ${columnsQuery}
         );
     `
-    let res = await PostresqlDb.query(query)
+    let res = await PostgresqlDb.query(query)
     return res 
 }
 
@@ -112,7 +112,7 @@ const createLineItemsTable = async (workspaceId) => {
             ${columnsQuery}
         );
     `
-    let res = await PostresqlDb.query(query)
+    let res = await PostgresqlDb.query(query)
     return res 
 }
 
@@ -127,7 +127,7 @@ const createRefundedTable = async (workspaceId) => {
             ${columnsQuery}
         );
     `
-    let res = await PostresqlDb.query(query)
+    let res = await PostgresqlDb.query(query)
     return res 
 }
 
@@ -142,7 +142,7 @@ const createVariantTable = async (workspaceId) => {
             ${columnsQuery}
         );
     `
-    let res = await PostresqlDb.query(query)
+    let res = await PostgresqlDb.query(query)
     return res 
 }
 

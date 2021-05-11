@@ -1,8 +1,11 @@
 const Shopify = require('../Shopify')
-const {insert, del} = require("../../DataManager/Order/index");
-const {insert: insertVariants, del: deleteVariants} = require("../../DataManager/Variants/index");
+const {insert, del} = require("../../DataManager/Product/index");
+const {insert: insertVariants, del: deleteVariants} = require("../../DataManager/Variant/index");
 
 const getImageUrl = (image_id, images) => {
+    if(!images){
+        return ''
+    }
     let image = images.find(image => image.id === image_id);
     if(image){
         return image.src;
@@ -24,7 +27,7 @@ const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0, workspaceId
         product.variants.map(variant => {
             variants.push({
                 ...variant,
-                image_url: getImageUrl(variant.image_id, variant.images)
+                image_url: getImageUrl(variant.image_id, product.images)
             })
         })
     })
