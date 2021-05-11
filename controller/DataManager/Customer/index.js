@@ -1,8 +1,10 @@
 const PostresqlDb = require('./../../../db')
+const CUSTOMER_TABLE_NAME = (workspaceId) => {
+    return `customer${workspaceId}`
+}
 
-
-const costumerColumn = require
-const insert = (data) => {
+const costumerColumn = require('../Setup/customerColumns.json')
+const insert = async (data, workspaceId) => {
 
 // `
 //     insert into product111 
@@ -13,14 +15,14 @@ const insert = (data) => {
 // `
 
     let query = `
-        INSERT INTO ${TABLE_NAME}
+        INSERT INTO ${CUSTOMER_TABLE_NAME(workspaceId)}
         ${getColumnName({ columnData: costumerColumn })}
         VALUES ${getValues({columnData: costumerColumn, data })}
     
     `
 
 
-
+    console.log(query)
 
     await PostresqlDb.query(query)
 }
@@ -37,21 +39,60 @@ const getColumnName = ({ columnData }) => {
 }
 
 getValues = ({ columnData, data }) => {
-    data.map(value => {
 
-        let oneRowQuery = ''
-        columnData.map(col => {
+    /**
+     * data: 
+     * refer to ./Order/order.json
+     * 
+     */
+    let allRow = data.map(value => {
+        let row = columnData.map(col => {
             if(col.dataType === 'varchar') {
-                data[col.columnName]
-            } else if(col.dataType === 'timestamp') {
-                        
+                if(value[col.columnName]) {
+                    return `'${value[col.columnName]}'`
+                } else {
+                    return `''`
+                }
+            } else if(col.dataType === 'numeric') {
+                if(value[col.columnName]) {
+                    return value[col.columnName]
+                } else {
+                    return `0`
+                }
+            } else if(col.dataType === 'boolean') {
+                if(typeof value[col.columnName] === 'bool') {
+                    return value[col.columnName]
+                } else {
+                    return false
+                }
+            } else if(col.dataType === 'timestamp' || col.dataType === 'timestamptz' ) {
+                if(value[col.columnName]) {
+                    return `'${value[col.columnName]}'`
+                } else {
+                    return `'2008-01-10T11:00:00-05:00'`
+                }
             } else if(col.dataType === 'jsonb') {
-
+                return `'{}'`
             }
-        })
-        
-    
-    })
-    
+        }).join(", ")
+        return `( ${row}) `
+    }).join(",")
+
+
+    return allRow
 
 }
+
+const order = require('../Order/order.json')
+insert([ order ], 111)
+.then(console.log)
+.catch(console.log)
+
+
+
+/****
+ * 1. timestamp convert to timestamptz
+ * 2. default value for timestamp
+ * 3. handle jsonb and jsonb for array
+ * 
+ * /
