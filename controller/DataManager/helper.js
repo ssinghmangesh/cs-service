@@ -14,6 +14,10 @@ const PRODUCT_TABLE_NAME = (workspaceId) => {
     return `product${workspaceId}`
 }
 
+const DISCOUNT_TABLE_NAME = (workspaceId) => {
+    return `discount${workspaceId}`
+}
+
 
 
 module.exports={
@@ -21,4 +25,5 @@ module.exports={
     CUSTOMER_TABLE_NAME,
     PRODUCT_TABLE_NAME,
     ORDER_TABLE_NAME,
+    DISCOUNT_TABLE_NAME
 }

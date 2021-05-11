@@ -10,15 +10,15 @@
     },
     {
         "columnName":"closed_at",
-        "dataType": "timestamp"
+        "dataType": "timestamptz"
     },
     {
         "columnName":"created_at",
-        "dataType": "timestamp"
+        "dataType": "timestamptz"
     },
     {
         "columnName":"updated_at",
-        "dataType": "timestamp"
+        "dataType": "timestamptz"
     },
     {
         "columnName":"number",
