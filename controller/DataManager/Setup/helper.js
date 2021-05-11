@@ -89,6 +89,8 @@ const getColumnQuery = (orderColumns) => {
 }
 
 
+// createProductTable("12345");
+
 module.exports = {
     createCustomerTable, 
     createOrderTable, 

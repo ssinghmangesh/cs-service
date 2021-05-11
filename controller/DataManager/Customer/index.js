@@ -1,10 +1,8 @@
-const PostgresqlDb = require('./../../../db')
+const PostresqlDb = require('./../../../db')
 
+const { getIds, CUSTOMER_TABLE_NAME } =  require("../helper")
 const customerColumn = require('./../Setup/customerColumns')
 
-const CUSTOMER_TABLE_NAME = (workspaceId) => {
-    return `customer${workspaceId}`
-}
 
 const insert = async(data, workspaceId) => {
 
@@ -14,8 +12,17 @@ const insert = async(data, workspaceId) => {
         VALUES ${getValues({ columnData: customerColumn, data })}
     `
 
+
+    console.log(query)
+
+    await PostresqlDb.query(query)
+}
+
+const del = async (data, workspaceId) => {
+    let query = `DELETE FROM ${CUSTOMER_TABLE_NAME(workspaceId)} WHERE id IN ${getIds(data)}`
     console.log(query);
-    await PostgresqlDb.query(query);
+    let response =  await PostresqlDb.query(query);
+    console.log(response);
 }
 
 const getColumnName = ({ columnData }) => {
@@ -52,7 +59,6 @@ const getValues = ({ columnData, data }) => {
                 if(value[col.columnName]) {
                     return `'${value[col.columnName]}'`
                 } else {
-                    // return `'${Date()}'`
                     return `NULL`
                 }
             } else if(col.dataType === 'jsonb') {
@@ -71,11 +77,13 @@ const getValues = ({ columnData, data }) => {
     return allRow
 }
 
-const order = require('../Order/order.json')
-insert([ order ], 111)
-.then(console.log)
-.catch(console.log)
+// const order = require('../Order/order.json')
+// del([ order ], 12345)
+// .then(console.log)
+// .catch(console.log)
+
 
 module.exports = {
-    insert
+    insert,
+    del
 }

@@ -1,10 +1,16 @@
-const PostgresqlDb = require('./../../../db')
-
+const PostresqlDb = require('./../../../db')
+const { getIds, DISCOUNT_TABLE_NAME } =  require("../helper")
 const discountColumn = require('./../Setup/discountColumns')
 
-const DISCOUNT_TABLE_NAME = (workspaceId) => {
-    return `discount${workspaceId}`
+
+const del = async (data, workspaceId) => {
+    let query = `DELETE FROM ${DISCOUNT_TABLE_NAME(workspaceId)} WHERE id IN ${getIds(data)}`
+    console.log(query);
+    let response =  await PostresqlDb.query(query);
+    console.log(response);
 }
+
+
 
 const insert = async(data, workspaceId) => {
 
@@ -71,11 +77,12 @@ const getValues = ({ columnData, data }) => {
     return allRow
 }
 
-const order = require('../Order/order.json')
-insert([ order ], 111)
-.then(console.log)
-.catch(console.log)
+// const order = require('../Order/order.json')
+// insert([ order ], 111)
+// .then(console.log)
+// .catch(console.log)
 
 module.exports = {
-    insert
+    insert,
+    del
 }
