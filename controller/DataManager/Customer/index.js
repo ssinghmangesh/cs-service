@@ -1,35 +1,20 @@
-const PostresqlDb = require('./../../../db')
+const PostgresqlDb = require('./../../../db')
+const customerColumn = require('./../Setup/customerColumns')
+
 const CUSTOMER_TABLE_NAME = (workspaceId) => {
     return `customer${workspaceId}`
 }
 
-const costumerColumn = require('../Setup/customerColumns.json')
-const insert = async (data, workspaceId) => {
-
-// `
-//     insert into product111 
-//         (id, email, closed_at, created_at, updated_at, number, buyer_accepts_marketing, client_details, discount_codes) 
-//     values 
-//         (1, 'user1@gmail.com', '2021-05-10'::timestamp, '2021-05-01'::timestamp, '2021-05-02'::timestamp, 1234567890, true, '{ "customer": "user1", "items": { "product": "bulb","qty": 24 } }', '{ "code": "discount30", "amount": "30.00", "type": "fixed_amount" }'), 
-//         (1, 'user1@gmail.com', '2021-05-10'::timestamp, '2021-05-01'::timestamp, '2021-05-02'::timestamp, 1234567890, true, '{ "customer": "user1", "items": { "product": "bulb","qty": 24 } }', '{ "code": "discount30", "amount": "30.00", "type": "fixed_amount" }');
-// `
+const insert = async(data, workspaceId) => {
 
     let query = `
         INSERT INTO ${CUSTOMER_TABLE_NAME(workspaceId)}
-        ${getColumnName({ columnData: costumerColumn })}
-        VALUES ${getValues({columnData: costumerColumn, data })}
-    
+        ${getColumnName({ columnData: customerColumn })}
+        VALUES ${getValues({ columnData: customerColumn, data })}
     `
 
-
-    console.log(query)
-
-    await PostresqlDb.query(query)
-}
-
-
-module.exports = {
-    insert
+    console.log(query);
+    await PostgresqlDb.query(query);
 }
 
 const getColumnName = ({ columnData }) => {
@@ -38,15 +23,12 @@ const getColumnName = ({ columnData }) => {
     return query
 }
 
-getValues = ({ columnData, data }) => {
+const getValues = ({ columnData, data }) => {
 
-    /**
-     * data: 
-     * refer to ./Order/order.json
-     * 
-     */
     let allRow = data.map(value => {
+
         let row = columnData.map(col => {
+
             if(col.dataType === 'varchar') {
                 if(value[col.columnName]) {
                     return `'${value[col.columnName]}'`
@@ -69,18 +51,22 @@ getValues = ({ columnData, data }) => {
                 if(value[col.columnName]) {
                     return `'${value[col.columnName]}'`
                 } else {
-                    return `'2008-01-10T11:00:00-05:00'`
+                    return `NULL`
                 }
             } else if(col.dataType === 'jsonb') {
-                return `'{}'`
+                if(value[col.columnName]) {
+                    let details = JSON.stringify(value[col.columnName])
+                    return `'${details}'`
+                } else {
+                    return `'{}'`
+                }
             }
         }).join(", ")
         return `( ${row}) `
-    }).join(",")
+    }).join(", ")
 
 
     return allRow
-
 }
 
 const order = require('../Order/order.json')
@@ -88,11 +74,6 @@ insert([ order ], 111)
 .then(console.log)
 .catch(console.log)
 
-
-
-/****
- * 1. timestamp convert to timestamptz
- * 2. default value for timestamp
- * 3. handle jsonb and jsonb for array
- * 
- * /
+module.exports = {
+    insert
+}

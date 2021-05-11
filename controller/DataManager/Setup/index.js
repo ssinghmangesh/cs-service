@@ -1,5 +1,5 @@
 
-const { createCustomerTable, createOrderTable, createProductTable } = require('./helper')
+const { createCustomerTable, createOrderTable, createProductTable, createDiscountTable } = require('./helper')
 
 const setupWorkspace = async(workspaceId) => {
 
@@ -9,6 +9,8 @@ const setupWorkspace = async(workspaceId) => {
 
     await createProductTable(workspaceId)
 
+    await createDiscountTable(workspaceId)
+
     return {
         status: true,
         message: "Successful"
@@ -17,7 +19,9 @@ const setupWorkspace = async(workspaceId) => {
 }
 
 
-
+createDiscountTable(111)
+.then(console.log)
+.catch(console.log)
 
 
 
