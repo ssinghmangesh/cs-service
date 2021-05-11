@@ -9,8 +9,8 @@ const pgConfig = () => {
     return {
         user: 'postgres',
         host: 'localhost',
-        database: 'cs-service', 
-        password: '25032000',
+        database: 'cs', 
+        password: 'postgres',
         port: 5432
 	}
 
