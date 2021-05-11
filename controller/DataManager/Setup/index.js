@@ -30,9 +30,9 @@ module.exports = {
 
 /**
  * 
- * 1. Install postgrsql in local
- * 2. add your cred in db.js
- * 3. then test createCustomerTable function verify the output in postgresql db
+ * 1. Install postgrsql in local  DONE
+ * 2. add your cred in db.js DONE
+ * 3. then test createCustomerTable function verify the output in postgresql db (insert)
  * 4. try to insert a row in that table
  * 
  * 
