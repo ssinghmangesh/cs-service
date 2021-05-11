@@ -1,5 +1,5 @@
 const Shopify = require('../Shopify')
-const {insert, del} = require("../../DataManager/Customer/index");
+const {insert, del} = require("../../DataManager/Discount/index");
 
 
 const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0, workspaceId }) => {

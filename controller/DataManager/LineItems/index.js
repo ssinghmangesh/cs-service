@@ -1,22 +1,22 @@
 const PostgresqlDb = require('./../../../db')
-const { getIds, PRODUCT_TABLE_NAME } =  require("../helper")
-const productColumn = require('./../Setup/productColumns')
-
+const { getIds, LINEITEMS_TABLE_NAME } =  require("../helper")
+const lineitemsColumn = require('./../Setup/lineitemsColumns')
 
 const del = async (data, workspaceId) => {
-    let query = `DELETE FROM ${PRODUCT_TABLE_NAME(workspaceId)} WHERE id IN ${getIds(data)}`
+    let query = `DELETE FROM ${LINEITEMS_TABLE_NAME(workspaceId)} WHERE id IN ${getIds(data)}`
     // console.log(query);
     let response =  await PostgresqlDb.query(query);
     // console.log(response);
 }
 
 
+
 const insert = async(data, workspaceId) => {
 
     let query = `
-        INSERT INTO ${PRODUCT_TABLE_NAME(workspaceId)}
-        ${getColumnName({ columnData: productColumn })}
-        VALUES ${getValues({ columnData: productColumn, data })}
+        INSERT INTO ${LINEITEMS_TABLE_NAME(workspaceId)}
+        ${getColumnName({ columnData: lineitemsColumn })}
+        VALUES ${getValues({ columnData: lineitemsColumn, data })}
     `
 
     // console.log(query);

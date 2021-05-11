@@ -1,0 +1,39 @@
+[
+    {
+        "columnName":"id",
+        "dataType": "numeric",
+        "primaryKey": true
+    },
+    {
+        "columnName":"email",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"closed_at",
+        "dataType": "timestamptz"
+    },
+    {
+        "columnName":"created_at",
+        "dataType": "timestamptz"
+    },
+    {
+        "columnName":"updated_at",
+        "dataType": "timestamptz"
+    },
+    {
+        "columnName":"number",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"buyer_accepts_marketing",
+        "dataType": "boolean"
+    },
+    {
+        "columnName":"client_details",
+        "dataType": "jsonb"
+    },
+    {
+        "columnName":"discount_codes",
+        "dataType": "jsonb"
+    }
+]
