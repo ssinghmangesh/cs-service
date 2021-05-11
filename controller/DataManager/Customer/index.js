@@ -1,7 +1,6 @@
 const PostresqlDb = require('./../../../db')
-const CUSTOMER_TABLE_NAME = (workspaceId) => {
-    return `customer${workspaceId}`
-}
+
+const { getIds, CUSTOMER_TABLE_NAME } =  require("../helper")
 
 const costumerColumn = require('../Setup/customerColumns.json')
 const insert = async (data, workspaceId) => {
@@ -27,9 +26,17 @@ const insert = async (data, workspaceId) => {
     await PostresqlDb.query(query)
 }
 
+const del = async (data, workspaceId) => {
+    let query = `DELETE FROM ${CUSTOMER_TABLE_NAME(workspaceId)} WHERE id IN ${getIds(data)}`
+    console.log(query);
+    let response =  await PostresqlDb.query(query);
+    console.log(response);
+}
+
 
 module.exports = {
-    insert
+    insert,
+    del
 }
 
 const getColumnName = ({ columnData }) => {
@@ -84,7 +91,7 @@ getValues = ({ columnData, data }) => {
 }
 
 const order = require('../Order/order.json')
-insert([ order ], 111)
+del([ order ], 12345)
 .then(console.log)
 .catch(console.log)
 
@@ -95,4 +102,4 @@ insert([ order ], 111)
  * 2. default value for timestamp
  * 3. handle jsonb and jsonb for array
  * 
- * /
+ ****/ 

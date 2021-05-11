@@ -62,6 +62,27 @@ class Shopify {
             }
         })
     }
+
+    static fetchDiscount(shopName, accessToken, option) {
+        const { since_id, limit } = option
+        return axios({
+            method: 'GET',
+            url: `https://${shopName}/admin/api/2021-04/price_rules.json?since_id=${since_id}&limit=${limit}`,
+            headers:  {
+                'X-Shopify-Access-Token': accessToken,
+            }
+        })
+    }
+
+    static fetchDiscountCount(shopName, accessToken) {
+        return axios({
+            method: 'GET',
+            url: `https://${shopName}/admin/api/2021-04/price_rules/count.json`,
+            headers:  {
+                'X-Shopify-Access-Token': accessToken,
+            }
+        })
+    }
     
 
 }
@@ -71,7 +92,7 @@ class Shopify {
 //test token == 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
 // shopName = grofers-orders.myshopify.com
 
-Shopify.fetchOrderCount('grofers-orders.myshopify.com', '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')
+Shopify.fetchCustomerCount('grofers-orders.myshopify.com', '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', {since_id: 0, limit: 2})
 .then(console.log)
 .catch(console.log)
 
