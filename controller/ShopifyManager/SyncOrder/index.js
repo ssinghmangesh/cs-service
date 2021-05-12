@@ -18,7 +18,7 @@ const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0 , workspaceI
                 ...line_item,
                 order_id: order.id,
                 order_name: order.name,
-                customer_id: customer.id
+                customer_id: customer ? customer.id : null 
             })
         }) 
     })
@@ -32,7 +32,7 @@ const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0 , workspaceI
                 ...fulfillment,
                 order_id: order.id,
                 order_name: order.name,
-                customer_id:  customer.id
+                customer_id: customer ? customer.id : null 
             })
         }) 
     })
@@ -45,7 +45,7 @@ const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0 , workspaceI
                 ...refund,
                 order_id: order.id,
                 order_name: order.name,
-                customer_id:  customer.id
+                customer_id: customer ? customer.id : null 
             })
         }) 
     })
