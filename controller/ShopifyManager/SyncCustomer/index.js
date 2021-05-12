@@ -5,7 +5,7 @@ const {insert, del} = require("../../DataManager/Customer/index");
 const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0, workspaceId }) => {
     //call to shopify fetch one batch
     let response = await Shopify.fetchCustomer(shopName, accessToken, { since_id: sinceId, limit })
-    console.log(response.data.customers.length)
+    // console.log(response.data.customers.length)
 
     //insert
     if(response.data.customers.length){
@@ -18,7 +18,7 @@ const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0, workspaceId
     } else {
         //call next since id
         let nextSinceId = response.data.customers[response.data.customers.length - 1].id;
-        console.log("nextSinceId", nextSinceId)
+        // console.log("nextSinceId", nextSinceId)
         await SYNC({ shopName, accessToken, sinceId: nextSinceId, limit, workspaceId})
     }
     return;

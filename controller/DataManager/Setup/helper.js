@@ -7,44 +7,30 @@ const fulfillmentsColumns = require('./fulfillmentsColumns')
 const lineItemsColumns = require('./lineItemsColumns')
 const refundedColumns = require('./refundedColumns')
 const variantColumns = require('./variantColumns')
-
-
-
-
+const {getCreateQuery, 
+    CUSTOMER_TABLE_NAME, 
+    ORDER_TABLE_NAME,
+    PRODUCT_TABLE_NAME,
+    DISCOUNT_TABLE_NAME,
+    FULFILLMENT_TABLE_NAME,
+    LINEITEMS_TABLE_NAME,
+    REFUNDED_TABLE_NAME,
+    VARIANT_TABLE_NAME
+} = require("../helper");
 
 
 // customer section
-const CUSTOMER_TABLE_NAME = (workspaceId) => {
-    return `customer${workspaceId}`
-}
-
 
 const createCustomerTable = async (workspaceId) => {
-
-    let columnsQuery  = getColumnQuery(customerColumns)
-    let query = `
-        CREATE TABLE "${CUSTOMER_TABLE_NAME(workspaceId)}"(
-            ${columnsQuery}
-        );
-    `
+    const query = getCreateQuery(customerColumns, CUSTOMER_TABLE_NAME, workspaceId);
     let res = await PostgresqlDb.query(query)
     return res 
 }
 
-
 // order section
-const ORDER_TABLE_NAME = (workspaceId) => {
-    return `order${workspaceId}`
-}
 
 const createOrderTable = async (workspaceId) => {
-
-    let columnsQuery  = getColumnQuery(orderColumns)
-    let query = `
-        CREATE TABLE "${ORDER_TABLE_NAME(workspaceId)}"(
-            ${columnsQuery}
-        );
-    `
+    const query = getCreateQuery(orderColumns, ORDER_TABLE_NAME, workspaceId);
     let res = await PostgresqlDb.query(query)
     return res 
 
@@ -52,105 +38,57 @@ const createOrderTable = async (workspaceId) => {
 
 
 // product section
-const PRODUCT_TABLE_NAME = (workspaceId) => {
-    return `product${workspaceId}`
-}
 
 const createProductTable = async (workspaceId) => {
-    let columnsQuery  = getColumnQuery(productColumns)
-    let query = `
-        CREATE TABLE "${PRODUCT_TABLE_NAME(workspaceId)}"(
-            ${columnsQuery}
-        );
-    `
+    const query = getCreateQuery(productColumns, PRODUCT_TABLE_NAME, workspaceId);
     let res = await PostgresqlDb.query(query)
     return res 
 }
 
 
 // discount section
-const DISCOUNT_TABLE_NAME = (workspaceId) => {
-    return `discount${workspaceId}`
-}
+
 
 const createDiscountTable = async (workspaceId) => {
-    let columnsQuery  = getColumnQuery(discountColumns)
-    let query = `
-        CREATE TABLE "${DISCOUNT_TABLE_NAME(workspaceId)}"(
-            ${columnsQuery}
-        );
-    `
+    const query = getCreateQuery(discountColumns, DISCOUNT_TABLE_NAME, workspaceId);
     let res = await PostgresqlDb.query(query)
     return res 
 }
 
-// fulfillment
-const FULFILLMENT_TABLE_NAME = (workspaceId) => {
-    return `fulfillment${workspaceId}`
-}
+// fulfillment section
+
 
 const createFulfillmentTable = async (workspaceId) => {
-    let columnsQuery  = getColumnQuery(fulfillmentsColumns)
-    let query = `
-        CREATE TABLE "${FULFILLMENT_TABLE_NAME(workspaceId)}"(
-            ${columnsQuery}
-        );
-    `
+    const query = getCreateQuery(fulfillmentsColumns, FULFILLMENT_TABLE_NAME, workspaceId);
     let res = await PostgresqlDb.query(query)
     return res 
 }
 
+// line_items section
 
-const LINEITEMS_TABLE_NAME = (workspaceId) => {
-    return `lineitems${workspaceId}`
-}
 
 const createLineItemsTable = async (workspaceId) => {
-    let columnsQuery  = getColumnQuery(lineItemsColumns)
-    let query = `
-        CREATE TABLE "${LINEITEMS_TABLE_NAME(workspaceId)}"(
-            ${columnsQuery}
-        );
-    `
+    const query = getCreateQuery(lineItemsColumns, LINEITEMS_TABLE_NAME, workspaceId);
     let res = await PostgresqlDb.query(query)
     return res 
 }
 
-const REFUNDED_TABLE_NAME = (workspaceId) => {
-    return `refunded${workspaceId}`
-}
+// refunded section
+
 
 const createRefundedTable = async (workspaceId) => {
-    let columnsQuery  = getColumnQuery(refundedColumns)
-    let query = `
-        CREATE TABLE "${REFUNDED_TABLE_NAME(workspaceId)}"(
-            ${columnsQuery}
-        );
-    `
+    const query = getCreateQuery(refundedColumns, REFUNDED_TABLE_NAME, workspaceId);
     let res = await PostgresqlDb.query(query)
     return res 
 }
 
-const VARIANT_TABLE_NAME = (workspaceId) => {
-    return `variant${workspaceId}`
-}
+// variant section
+
 
 const createVariantTable = async (workspaceId) => {
-    let columnsQuery  = getColumnQuery(variantColumns)
-    let query = `
-        CREATE TABLE "${VARIANT_TABLE_NAME(workspaceId)}"(
-            ${columnsQuery}
-        );
-    `
+    const query = getCreateQuery(variantColumns, VARIANT_TABLE_NAME, workspaceId);
     let res = await PostgresqlDb.query(query)
     return res 
-}
-
-//common
-const getColumnQuery = (orderColumns) => {
-    return orderColumns.map(col => {
-        return `"${col.columnName}" ${col.dataType}`
-    }).join(", ")
 }
 
 
