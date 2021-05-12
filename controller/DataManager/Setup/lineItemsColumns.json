@@ -1,39 +1,95 @@
 [
     {
+        "columnName":"customer_id",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"fulfillable_quantity",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"fulfillment_service",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"fulfillment_status",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"grams",
+        "dataType": "numeric"
+    },
+    {
         "columnName":"id",
         "dataType": "numeric",
         "primaryKey": true
     },
     {
-        "columnName":"email",
-        "dataType": "varchar"
-    },
-    {
-        "columnName":"closed_at",
-        "dataType": "timestamptz"
-    },
-    {
-        "columnName":"created_at",
-        "dataType": "timestamptz"
-    },
-    {
-        "columnName":"updated_at",
-        "dataType": "timestamptz"
-    },
-    {
-        "columnName":"number",
+        "columnName":"order_id",
         "dataType": "numeric"
     },
     {
-        "columnName":"buyer_accepts_marketing",
+        "columnName":"order_name",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"price",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"product_id",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"quantity",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"requires_shipping",
         "dataType": "boolean"
     },
     {
-        "columnName":"client_details",
-        "dataType": "jsonb"
+        "columnName":"sku",
+        "dataType": "varchar"
     },
     {
-        "columnName":"discount_codes",
+        "columnName":"title",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"variant_id",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"variant_title",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"vendor",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"name",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"gift_card",
+        "dataType": "boolean"
+    },
+    {
+        "columnName":"properties",
+        "dataType": "jsonb []"
+    },
+    {
+        "columnName":"taxable",
+        "dataType": "boolean"
+    },
+    {
+        "columnName":"total_discount",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"origin_location",
         "dataType": "jsonb"
     }
 ]

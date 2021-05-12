@@ -5,35 +5,39 @@
         "primaryKey": true
     },
     {
-        "columnName":"email",
-        "dataType": "varchar"
+        "columnName":"customer_id",
+        "dataType": "numeric"
     },
     {
-        "columnName":"closed_at",
-        "dataType": "timestamptz"
+        "columnName":"order_id",
+        "dataType": "numeric"
     },
     {
         "columnName":"created_at",
         "dataType": "timestamptz"
     },
     {
-        "columnName":"updated_at",
-        "dataType": "timestamptz"
+        "columnName":"note",
+        "dataType": "varchar"
     },
     {
-        "columnName":"number",
+        "columnName":"user_id",
         "dataType": "numeric"
     },
     {
-        "columnName":"buyer_accepts_marketing",
-        "dataType": "boolean"
+        "columnName":"processed_at",
+        "dataType": "timestamptz"
     },
     {
-        "columnName":"client_details",
-        "dataType": "jsonb"
+        "columnName":"refund_line_items",
+        "dataType": "jsonb []"
     },
     {
-        "columnName":"discount_codes",
-        "dataType": "jsonb"
+        "columnName":"transactions",
+        "dataType": "jsonb []"
+    },
+    {
+        "columnName":"order_adjustments",
+        "dataType": "jsonb []"
     }
 ]

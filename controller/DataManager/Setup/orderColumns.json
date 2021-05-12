@@ -49,27 +49,27 @@
     },
     {
         "columnName":"current_total_discounts",
-        "dataType": "varchar"
+        "dataType": "numeric"
     },
     {
         "columnName":"current_total_price",
-        "dataType": "varchar"
+        "dataType": "numeric"
     },
     {
         "columnName":"current_subtotal_price",
-        "dataType": "varchar"
+        "dataType": "numeric"
     },
     {
         "columnName":"current_total_tax",
-        "dataType": "varchar"
+        "dataType": "numeric"
     },
     {
         "columnName":"customer_id",
-        "dataType": "varchar"
+        "dataType": "numeric"
     },
     {
         "columnName":"discount_codes",
-        "dataType": "jsonb"
+        "dataType": "jsonb []"
     },
     {
         "columnName":"email",
@@ -90,7 +90,7 @@
     {
         "columnName":"id",
         "dataType": "numeric",
-        "primary": true
+        "primaryKey": true
     },
     {
         "columnName":"landing_site",
@@ -115,5 +115,113 @@
     {
         "columnName":"number",
         "dataType": "numeric"
+    },
+    {
+        "columnName":"order_number",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"payment_details",
+        "dataType": "jsonb"
+    },
+    {
+        "columnName":"payment_gateway_names",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"phone",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"presentment_currency",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"processed_at",
+        "dataType": "timestamptz"
+    },
+    {
+        "columnName":"processing_method",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"referring_site",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"shipping_address",
+        "dataType": "jsonb"
+    },
+    {
+        "columnName":"shipping_lines",
+        "dataType": "jsonb"
+    },
+    {
+        "columnName":"source_name",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"subtotal_price",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"tags",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"tax_lines",
+        "dataType": "jsonb"
+    },
+    {
+        "columnName":"taxes_included",
+        "dataType": "boolean"
+    },
+    {
+        "columnName":"test",
+        "dataType": "boolean"
+    },
+    {
+        "columnName":"token",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"total_discounts",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"total_line_items_price",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"total_outstanding",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"total_price",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"total_tax",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"total_tip_received",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"total_weight",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"updated_at",
+        "dataType": "timestamptz"
+    },
+    {
+        "columnName":"user_id",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"order_status_url",
+        "dataType": "varchar"
     }
 ]
