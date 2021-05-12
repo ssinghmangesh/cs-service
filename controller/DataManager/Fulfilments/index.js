@@ -3,7 +3,7 @@ const { getIds, FULFILLMENT_TABLE_NAME } =  require("../helper")
 const fulfillmentsColumn = require('./../Setup/fulfillmentsColumns.json')
 
 const del = async (data, workspaceId) => {
-    let query = `DELETE FROM ${FULFILLMENT_TABLE_NAME(workspaceId)} WHERE id IN ${getIds(data)}`
+    let query = getDelQuery(FULFILLMENT_TABLE_NAME, data, workspaceId);
     // console.log(query);
     let response =  await PostgresqlDb.query(query);
     // console.log(response);
@@ -13,11 +13,7 @@ const del = async (data, workspaceId) => {
 
 const insert = async(data, workspaceId) => {
 
-    let query = `
-        INSERT INTO ${FULFILLMENT_TABLE_NAME(workspaceId)}
-        ${getColumnName({ columnData: fulfillmentsColumn })}
-        VALUES ${getValues({ columnData: fulfillmentsColumn, data })}
-    `
+    let query = getInsertQuery(FULFILLMENT_TABLE_NAME, fulfillmentsColumn, data, workspaceId)
 
     // console.log(query);
     await PostgresqlDb.query(query);

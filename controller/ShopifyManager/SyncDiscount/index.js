@@ -5,7 +5,7 @@ const {insert, del} = require("../../DataManager/Discount/index");
 const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0, workspaceId }) => {
     //call to shopify fetch one batch
     let response = await Shopify.fetchDiscount(shopName, accessToken, { since_id: sinceId, limit })
-    console.log(response.data.price_rules.length)
+    // console.log(response.data.price_rules.length)
 
     //insert
     if(response.data.price_rules.length){

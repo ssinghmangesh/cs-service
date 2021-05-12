@@ -17,7 +17,7 @@ const getImageUrl = (image_id, images) => {
 const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0, workspaceId }) => {
     //call to shopify fetch one batch
     let response = await Shopify.fetchProduct(shopName, accessToken, { since_id: sinceId, limit })
-    console.log(response.data.products.length)
+    // console.log(response.data.products.length)
 
     //insert
 

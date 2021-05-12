@@ -3,7 +3,7 @@ const { getIds, ORDER_TABLE_NAME } =  require("../helper")
 const orderColumn = require('./../Setup/orderColumns')
 
 const del = async (data, workspaceId) => {
-    let query = `DELETE FROM ${ORDER_TABLE_NAME(workspaceId)} WHERE id IN ${getIds(data)}`
+    let query = getDelQuery(ORDER_TABLE_NAME, data, workspaceId);
     // console.log(query);
     let response =  await PostgresqlDb.query(query);
     // console.log(response);
@@ -13,12 +13,8 @@ const del = async (data, workspaceId) => {
 
 const insert = async(data, workspaceId) => {
 
-    let query = `
-        INSERT INTO ${ORDER_TABLE_NAME(workspaceId)}
-        ${getColumnName({ columnData: orderColumn })}
-        VALUES ${getValues({ columnData: orderColumn, data })}
-    `
-
+    
+    let query = getInsertQuery(ORDER_TABLE_NAME, orderColumn, data, workspaceId)
     // console.log(query);
     await PostgresqlDb.query(query);
 }

@@ -4,7 +4,7 @@ const productColumn = require('./../Setup/productColumns')
 
 
 const del = async (data, workspaceId) => {
-    let query = `DELETE FROM ${PRODUCT_TABLE_NAME(workspaceId)} WHERE id IN ${getIds(data)}`
+    let query = getDelQuery(PRODUCT_TABLE_NAME, data, workspaceId);
     // console.log(query);
     let response =  await PostgresqlDb.query(query);
     // console.log(response);
@@ -13,12 +13,8 @@ const del = async (data, workspaceId) => {
 
 const insert = async(data, workspaceId) => {
 
-    let query = `
-        INSERT INTO ${PRODUCT_TABLE_NAME(workspaceId)}
-        ${getColumnName({ columnData: productColumn })}
-        VALUES ${getValues({ columnData: productColumn, data })}
-    `
-
+    
+    let query = getInsertQuery(PRODUCT_TABLE_NAME, productColumn, data, workspaceId)
     // console.log(query);
     await PostgresqlDb.query(query);
 }

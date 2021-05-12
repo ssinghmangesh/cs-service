@@ -7,7 +7,7 @@ const {insert: insertRefunds, del: deleteRefunds} = require("../../DataManager/R
 const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0 , workspaceId}) => {
     //call to shopify fetch one batch
     let response = await Shopify.fetchOrder(shopName, accessToken, { since_id: sinceId, limit })
-    console.log(response.data.orders.length)
+    // console.log(response.data.orders.length)
 
 
     let line_items = []

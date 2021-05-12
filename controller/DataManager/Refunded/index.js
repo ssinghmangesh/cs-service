@@ -3,7 +3,7 @@ const { getIds, REFUNDED_TABLE_NAME } =  require("../helper")
 const refundedColumn = require('./../Setup/refundedColumns')
 
 const del = async (data, workspaceId) => {
-    let query = `DELETE FROM ${REFUNDED_TABLE_NAME(workspaceId)} WHERE id IN ${getIds(data)}`
+    let query = getDelQuery(REFUNDED_TABLE_NAME, data, workspaceId);
     // console.log(query);
     let response =  await PostgresqlDb.query(query);
     // console.log(response);
@@ -13,12 +13,8 @@ const del = async (data, workspaceId) => {
 
 const insert = async(data, workspaceId) => {
 
-    let query = `
-        INSERT INTO ${REFUNDED_TABLE_NAME(workspaceId)}
-        ${getColumnName({ columnData: refundedColumn })}
-        VALUES ${getValues({ columnData: refundedColumn, data })}
-    `
-
+    
+    let query = getInsertQuery(REFUNDED_TABLE_NAME, refundedColumn, data, workspaceId)
     // console.log(query);
     await PostgresqlDb.query(query);
 }

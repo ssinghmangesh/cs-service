@@ -4,7 +4,7 @@ const discountColumn = require('./../Setup/discountColumns')
 
 
 const del = async (data, workspaceId) => {
-    let query = `DELETE FROM ${DISCOUNT_TABLE_NAME(workspaceId)} WHERE id IN ${getIds(data)}`
+    let query = getDelQuery(DISCOUNT_TABLE_NAME, data, workspaceId);
     // console.log(query);
     let response =  await PostgresqlDb.query(query);
     // console.log(response);
@@ -14,11 +14,8 @@ const del = async (data, workspaceId) => {
 
 const insert = async(data, workspaceId) => {
 
-    let query = `
-        INSERT INTO ${DISCOUNT_TABLE_NAME(workspaceId)}
-        ${getColumnName({ columnData: discountColumn })}
-        VALUES ${getValues({ columnData: discountColumn, data })}
-    `
+    let query = getInsertQuery(DISCOUNT_TABLE_NAME, discountColumn, data, workspaceId);
+    
 
     // console.log(query);
     await PostgresqlDb.query(query);

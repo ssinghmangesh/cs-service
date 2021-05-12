@@ -3,7 +3,7 @@ const { getIds, LINEITEMS_TABLE_NAME } =  require("../helper")
 const lineitemsColumn = require('./../Setup/lineitemsColumns')
 
 const del = async (data, workspaceId) => {
-    let query = `DELETE FROM ${LINEITEMS_TABLE_NAME(workspaceId)} WHERE id IN ${getIds(data)}`
+    let query = getDelQuery(LINEITEMS_TABLE_NAME, data, workspaceId);
     // console.log(query);
     let response =  await PostgresqlDb.query(query);
     // console.log(response);
@@ -13,12 +13,8 @@ const del = async (data, workspaceId) => {
 
 const insert = async(data, workspaceId) => {
 
-    let query = `
-        INSERT INTO ${LINEITEMS_TABLE_NAME(workspaceId)}
-        ${getColumnName({ columnData: lineitemsColumn })}
-        VALUES ${getValues({ columnData: lineitemsColumn, data })}
-    `
-
+   
+    let query = getInsertQuery(LINEITEMS_TABLE_NAME, lineitemsColumn, data, workspaceId)
     // console.log(query);
     await PostgresqlDb.query(query);
 }

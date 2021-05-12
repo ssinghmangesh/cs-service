@@ -3,7 +3,7 @@ const { getIds, VARIANT_TABLE_NAME } =  require("../helper")
 const variantColumn = require('./../Setup/variantColumns')
 
 const del = async (data, workspaceId) => {
-    let query = `DELETE FROM ${VARIANT_TABLE_NAME(workspaceId)} WHERE id IN ${getIds(data)}`
+    let query = getDelQuery(VARIANT_TABLE_NAME, data, workspaceId);
     // console.log(query);
     let response =  await PostgresqlDb.query(query);
     // console.log(response);
@@ -13,12 +13,8 @@ const del = async (data, workspaceId) => {
 
 const insert = async(data, workspaceId) => {
 
-    let query = `
-        INSERT INTO ${VARIANT_TABLE_NAME(workspaceId)}
-        ${getColumnName({ columnData: variantColumn })}
-        VALUES ${getValues({ columnData: variantColumn, data })}
-    `
 
+    let query = getInsertQuery(VARIANT_TABLE_NAME, variantColumn, data, workspaceId)
     // console.log(query);
     await PostgresqlDb.query(query);
 }

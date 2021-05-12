@@ -1,16 +1,17 @@
 const PostgresqlDb = require('./../../../db')
 
-const { getIds, CUSTOMER_TABLE_NAME } =  require("../helper")
+const { getIds, CUSTOMER_TABLE_NAME, getInsertQuery, getDelQuery } =  require("../helper")
 const customerColumn = require('./../Setup/customerColumns')
 
 
 const insert = async(data, workspaceId) => {
 
-    let query = `
-        INSERT INTO ${CUSTOMER_TABLE_NAME(workspaceId)}
-        ${getColumnName({ columnData: customerColumn })}
-        VALUES ${getValues({ columnData: customerColumn, data })}
-    `
+    let query = getInsertQuery(CUSTOMER_TABLE_NAME, customerColumn, data, workspaceId);
+    // `
+    //     INSERT INTO ${CUSTOMER_TABLE_NAME(workspaceId)}
+    //     ${getColumnName({ columnData: customerColumn })}
+    //     VALUES ${getValues({ columnData: customerColumn, data })}
+    // `
 
 
     // // console.log(query)
@@ -19,7 +20,8 @@ const insert = async(data, workspaceId) => {
 }
 
 const del = async (data, workspaceId) => {
-    let query = `DELETE FROM ${CUSTOMER_TABLE_NAME(workspaceId)} WHERE id IN ${getIds(data)}`
+    let query = getDelQuery(CUSTOMER_TABLE_NAME, data, workspaceId);
+    // `DELETE FROM ${CUSTOMER_TABLE_NAME(workspaceId)} WHERE id IN ${getIds(data)}`
     // // console.log(query);
     let response =  await PostgresqlDb.query(query);
     // // console.log(response);
