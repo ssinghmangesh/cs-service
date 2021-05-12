@@ -9,26 +9,27 @@ router.post('/data-manager/setup', async (req, res) => {
     res.status(200).send(response)
 })
 
-router.post('/data-manager/customer/add', (req, res) => {
+router.post('/data-manager/customer/add',async (req, res) => {
     const {customer} = req.body;
-    const workspaceId = 1;
+    const workspaceId = 2;
+    console.log(req);
     const response = await updateCustomer(customer, workspaceId);
     //delete and insert customer of that id
     res.status(200).send(response);
 })
 
 
-router.post('/data-manager/order/add', (req, res) => {
+router.post('/data-manager/order/add',async (req, res) => {
     const {order} = req.body;
-    const workspaceId = 1;
+    const workspaceId = 2;
     //delete and insert order of that id, all lineitems of that order, all fufilment of that order
     const response = await updateOrder(order, workspaceId);
     res.status(200).send(response);
 })
 
-router.post('/data-manager/product/add', (req, res) => {
+router.post('/data-manager/product/add',async (req, res) => {
     const {product} = req.body;
-    const workspaceId = 1;
+    const workspaceId = 2;
     //delete and insert product of that id, all variant of that order
     const response = await updateProduct(product, workspaceId);
     res.status(200).send(response);
