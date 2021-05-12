@@ -6,7 +6,7 @@ const getColumnQuery = (orderColumns) => {
 
 
 const getColumnName = ({ columnData }) => {
-    let query = `(${columnData.map(col => col.columnName).join(", ")})`
+    const query = `(${columnData.map(col => col.columnName).join(", ")})`
 
     return query
 }
@@ -95,21 +95,22 @@ const VARIANT_TABLE_NAME = (workspaceId) => {
 }
 
 const getInsertQuery = (TABLE_NAME, customerColumn, data, workspaceId) => {
-    return `
+    const query = `
         INSERT INTO ${TABLE_NAME(workspaceId)}
         ${getColumnName({ columnData: customerColumn })}
         VALUES ${getValues({ columnData: customerColumn, data })}
     `
+    return query;
 }
 
 const getDelQuery = (TABLE_NAME, data, workspaceId) => {
-    let query = `DELETE FROM ${TABLE_NAME(workspaceId)} WHERE id IN ${getIds(data)}`
+    const query = `DELETE FROM ${TABLE_NAME(workspaceId)} WHERE id IN ${getIds(data)}`
     return query;
 }
 
 const getCreateQuery = (customerColumns, TABLE_NAME, workspaceId) => {
-    let columnsQuery  = getColumnQuery(customerColumns)
-    let query = `
+    const columnsQuery  = getColumnQuery(customerColumns)
+    const query = `
         CREATE TABLE "${TABLE_NAME(workspaceId)}"(
             ${columnsQuery}
         );
