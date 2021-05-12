@@ -7,7 +7,7 @@ const {insert: insertRefunds, del: deleteRefunds} = require("../../DataManager/R
 const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0 , workspaceId}) => {
     //call to shopify fetch one batch
     let response = await Shopify.fetchOrder(shopName, accessToken, { since_id: sinceId, limit })
-    console.log(response.data.orders.length)
+    // console.log(response.data.orders.length)
 
 
     let line_items = []
@@ -18,7 +18,7 @@ const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0 , workspaceI
                 ...line_item,
                 order_id: order.id,
                 order_name: order.name,
-                customer_id: customer.id
+                customer_id: customer ? customer.id : null 
             })
         }) 
     })
@@ -32,7 +32,7 @@ const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0 , workspaceI
                 ...fulfillment,
                 order_id: order.id,
                 order_name: order.name,
-                customer_id:  customer.id
+                customer_id: customer ? customer.id : null 
             })
         }) 
     })
@@ -45,7 +45,7 @@ const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0 , workspaceI
                 ...refund,
                 order_id: order.id,
                 order_name: order.name,
-                customer_id:  customer.id
+                customer_id: customer ? customer.id : null 
             })
         }) 
     })
@@ -68,7 +68,7 @@ const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0 , workspaceI
     } else {
         //call next since id
         let nextSinceId = response.data.orders[response.data.orders.length - 1].id;
-        console.log("nextSinceId", nextSinceId)
+        // console.log("nextSinceId", nextSinceId)
         await SYNC({ shopName, accessToken, sinceId: nextSinceId, limit, workspaceId})
     }
     return;
