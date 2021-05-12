@@ -1,39 +1,91 @@
 [
     {
-        "columnName":"id",
-        "dataType": "numeric",
+        "columnName":"accepts_marketing",
+        "dataType": "boolean",
         "primaryKey": true
     },
     {
-        "columnName":"email",
-        "dataType": "varchar"
+        "columnName":"accepts_marketing_updated_at",
+        "dataType": "timestamptz"
     },
     {
-        "columnName":"closed_at",
-        "dataType": "timestamptz"
+        "columnName":"addresses",
+        "dataType": "jsonb"
+    },
+    {
+        "columnName":"currency",
+        "dataType": "varchar"
     },
     {
         "columnName":"created_at",
         "dataType": "timestamptz"
     },
     {
+        "columnName":"default_address",
+        "dataType": "jsonb"
+    },
+    {
+        "columnName":"email",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"first_name",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"last_name",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"id",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"last_order_id",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"last_order_name",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"marketing_opt_in_level",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"note",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"orders_count",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"phone",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"state",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"tags",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"tax_exempt",
+        "dataType": "boolean"
+    },
+    {
+        "columnName":"total_spent",
+        "dataType": "boolean"
+    },
+    {
         "columnName":"updated_at",
         "dataType": "timestamptz"
     },
     {
-        "columnName":"number",
-        "dataType": "numeric"
-    },
-    {
-        "columnName":"buyer_accepts_marketing",
+        "columnName":"verified_email",
         "dataType": "boolean"
-    },
-    {
-        "columnName":"client_details",
-        "dataType": "jsonb"
-    },
-    {
-        "columnName":"discount_codes",
-        "dataType": "jsonb"
     }
 ]

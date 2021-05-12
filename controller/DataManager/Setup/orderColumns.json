@@ -1,12 +1,39 @@
 [
     {
-        "columnName":"id",
-        "dataType": "numeric",
-        "primaryKey": true
+        "columnName":"app_id",
+        "dataType": "numeric"
     },
     {
-        "columnName":"email",
+        "columnName":"billing_address",
+        "dataType": "jsonb"
+    },
+    {
+        "columnName":"browser_ip",
         "dataType": "varchar"
+    },
+    {
+        "columnName":"buyer_accepts_marketing",
+        "dataType": "boolean"
+    },
+    {
+        "columnName":"cancel_reason",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"cancelled_at",
+        "dataType": "timestamptz"
+    },
+    {
+        "columnName":"cart_token",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"checkout_token",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"client_details",
+        "dataType": "jsonb"
     },
     {
         "columnName":"closed_at",
@@ -17,23 +44,76 @@
         "dataType": "timestamptz"
     },
     {
-        "columnName":"updated_at",
-        "dataType": "timestamptz"
+        "columnName":"currency",
+        "dataType": "varchar"
     },
     {
-        "columnName":"number",
-        "dataType": "numeric"
+        "columnName":"current_total_discounts",
+        "dataType": "varchar"
     },
     {
-        "columnName":"buyer_accepts_marketing",
-        "dataType": "boolean"
+        "columnName":"current_total_price",
+        "dataType": "varchar"
     },
     {
-        "columnName":"client_details",
-        "dataType": "jsonb"
+        "columnName":"current_subtotal_price",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"current_total_tax",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"customer_id",
+        "dataType": "varchar"
     },
     {
         "columnName":"discount_codes",
         "dataType": "jsonb"
+    },
+    {
+        "columnName":"email",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"financial_status",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"fulfillment_status",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"gateway",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"id",
+        "dataType": "numeric",
+        "primary": true
+    },
+    {
+        "columnName":"landing_site",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"location_id",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"name",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"note",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"note_attributes",
+        "dataType": "jsonb"
+    },
+    {
+        "columnName":"number",
+        "dataType": "numeric"
     }
 ]

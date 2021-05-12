@@ -12,11 +12,13 @@ const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0 , workspaceI
 
     let line_items = []
     response.data.orders.map(order => {
+        const { customer } = order
         order.line_items.map(line_item => {
             line_items.push({
                 ...line_item,
                 order_id: order.id,
-                order_name: order.name
+                order_name: order.name,
+                customer_id: customer.id
             })
         }) 
     })
@@ -24,22 +26,26 @@ const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0 , workspaceI
 
     let fulfillments = []
     response.data.orders.map(order => {
+        const { customer } = order
         order.line_items.map(fulfillment => {
             fulfillments.push({
                 ...fulfillment,
                 order_id: order.id,
-                order_name: order.name
+                order_name: order.name,
+                customer_id:  customer.id
             })
         }) 
     })
 
     let refunds = []
     response.data.orders.map(order => {
+        const { customer } = order
         order.refunds.map(refund => {
             refunds.push({
                 ...refund,
                 order_id: order.id,
-                order_name: order.name
+                order_name: order.name,
+                customer_id:  customer.id
             })
         }) 
     })
