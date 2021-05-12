@@ -1,3 +1,10 @@
+const getColumnQuery = (orderColumns) => {
+    return orderColumns.map(col => {
+        return `"${col.columnName}" ${col.dataType}`
+    }).join(", ")
+}
+
+
 const getColumnName = ({ columnData }) => {
     let query = `(${columnData.map(col => col.columnName).join(", ")})`
 
@@ -100,7 +107,19 @@ const getDelQuery = (TABLE_NAME, data, workspaceId) => {
     return query;
 }
 
+const getCreateQuery = (customerColumns, TABLE_NAME, workspaceId) => {
+    let columnsQuery  = getColumnQuery(customerColumns)
+    let query = `
+        CREATE TABLE "${TABLE_NAME(workspaceId)}"(
+            ${columnsQuery}
+        );
+    `
+    return query;
+}
+
 module.exports={
+    getCreateQuery,
+    getColumnQuery,
     getDelQuery,
     getInsertQuery,
     getIds,

@@ -68,7 +68,7 @@ const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0 , workspaceI
     } else {
         //call next since id
         let nextSinceId = response.data.orders[response.data.orders.length - 1].id;
-        console.log("nextSinceId", nextSinceId)
+        // console.log("nextSinceId", nextSinceId)
         await SYNC({ shopName, accessToken, sinceId: nextSinceId, limit, workspaceId})
     }
     return;
