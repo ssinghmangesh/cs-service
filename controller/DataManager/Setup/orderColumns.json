@@ -69,7 +69,7 @@
     },
     {
         "columnName":"discount_codes",
-        "dataType": "jsonb []"
+        "dataType": "jsonb[]"
     },
     {
         "columnName":"email",

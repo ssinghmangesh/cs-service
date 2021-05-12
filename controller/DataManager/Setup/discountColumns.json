@@ -21,19 +21,19 @@
     },
     {
         "columnName":"entitled_collection_ids",
-        "dataType": "numeric []"
+        "dataType": "numeric[]"
     },
     {
         "columnName":"entitled_country_ids",
-        "dataType": "numeric []"
+        "dataType": "numeric[]"
     },
     {
         "columnName":"entitled_product_ids",
-        "dataType": "numeric []"
+        "dataType": "numeric[]"
     },
     {
         "columnName":"entitled_variant_ids",
-        "dataType": "numeric []"
+        "dataType": "numeric[]"
     },
     {
         "columnName":"id",
@@ -45,7 +45,7 @@
     },
     {
         "columnName":"prerequisite_customer_ids",
-        "dataType": "numeric []"
+        "dataType": "numeric[]"
     },
     {
         "columnName":"prerequisite_quantity_range",
@@ -53,7 +53,7 @@
     },
     {
         "columnName":"prerequisite_saved_search_ids",
-        "dataType": "numeric []"
+        "dataType": "numeric[]"
     },
     {
         "columnName":"prerequisite_shipping_price_range",
@@ -89,15 +89,15 @@
     },
     {
         "columnName":"prerequisite_product_ids",
-        "dataType": "numeric []"
+        "dataType": "numeric[]"
     },
     {
         "columnName":"prerequisite_variant_ids",
-        "dataType": "numeric []"
+        "dataType": "numeric[]"
     },
     {
         "columnName":"prerequisite_collection_ids",
-        "dataType": "numeric []"
+        "dataType": "numeric[]"
     },
     {
         "columnName":"value",

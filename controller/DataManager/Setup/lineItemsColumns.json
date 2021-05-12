@@ -78,7 +78,7 @@
     },
     {
         "columnName":"properties",
-        "dataType": "jsonb []"
+        "dataType": "jsonb[]"
     },
     {
         "columnName":"taxable",

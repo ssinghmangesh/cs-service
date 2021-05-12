@@ -18,11 +18,11 @@
     },
     {
         "columnName":"images",
-        "dataType": "jsonb []"
+        "dataType": "jsonb[]"
     },
     {
         "columnName":"options",
-        "dataType": "jsonb []"
+        "dataType": "jsonb[]"
     },
     {
         "columnName":"product_type",

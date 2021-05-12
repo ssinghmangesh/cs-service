@@ -1,6 +1,6 @@
 const PostgresqlDb = require('./../../../db')
 const { LINEITEMS_TABLE_NAME, getInsertQuery, getDelQuery  } =  require("../helper")
-const lineitemsColumn = require('./../Setup/lineitemsColumns')
+const lineitemsColumn = require('./../Setup/lineItemsColumns')
 
 const del = async (data, workspaceId) => {
     let query = getDelQuery(LINEITEMS_TABLE_NAME, data, workspaceId);

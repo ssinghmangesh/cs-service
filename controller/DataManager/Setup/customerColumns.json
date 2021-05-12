@@ -10,7 +10,7 @@
     },
     {
         "columnName":"addresses",
-        "dataType": "jsonb []"
+        "dataType": "jsonb[]"
     },
     {
         "columnName":"currency",

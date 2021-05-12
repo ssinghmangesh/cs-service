@@ -30,14 +30,14 @@
     },
     {
         "columnName":"refund_line_items",
-        "dataType": "jsonb []"
+        "dataType": "jsonb[]"
     },
     {
         "columnName":"transactions",
-        "dataType": "jsonb []"
+        "dataType": "jsonb[]"
     },
     {
         "columnName":"order_adjustments",
-        "dataType": "jsonb []"
+        "dataType": "jsonb[]"
     }
 ]
