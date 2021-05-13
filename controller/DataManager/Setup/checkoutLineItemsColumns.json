@@ -5,10 +5,98 @@
     },
     {
         "columnName": "applied_discounts",
-        "dataType": ""
+        "dataType": "jsonb[]"
     },
     {
         "columnName": "key",
         "dataType": "varchar"
+    },
+    {
+        "columnName": "destination_location_id",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"gift_card",
+        "dataType": "boolean"
+    },
+    {
+        "columnName":"grams",
+        "dataType": "numeric"
+    },
+    {
+        "columnName": "origin_location_id",
+        "dataType": "numeric"
+    },
+    {
+        "columnName": "presentment_title",
+        "dataType": "varchar"
+    },
+    {
+        "columnName": "presentment_variant_title",
+        "dataType": "varchar"
+    },
+    {
+        "columnName": "product_id",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"properties",
+        "dataType": "jsonb"
+    },
+    {
+        "columnName":"quantity",
+        "dataType": "numeric"
+    },
+    {
+        "columnName": "requires_shipping",
+        "dataType": "boolean"
+    },
+    {
+        "columnName": "sku",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"title",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"variant_id",
+        "dataType": "numeric"
+    },
+    {
+        "columnName": "variant_title",
+        "dataType": "varchar"
+    },
+    {
+        "columnName": "variant_price",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"vendor",
+        "dataType": "varchar"
+    },
+    {
+        "columnName": "user_id",
+        "dataType": "numeric"
+    },
+    {
+        "columnName": "unit_price_measurement",
+        "dataType": "varchar"
+    },
+    {
+        "columnName": "rank",
+        "dataType": "varchar"
+    },
+    {
+        "columnName": "compare_at_price",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"line_price",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"price",
+        "dataType": "numeric"
     }
 ]
