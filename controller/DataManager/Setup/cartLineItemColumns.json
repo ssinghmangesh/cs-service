@@ -1,0 +1,87 @@
+[
+    {
+        "columnName":"id",
+        "dataType": "numeric",
+        "primaryKey": true
+    },
+    {
+        "columnName":"customer_id",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"properties",
+        "dataType": "jsonb"
+    },
+    {
+        "columnName":"quantity",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"variant_id",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"key",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"discounted_price",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"properties",
+        "dataType": "jsonb"
+    },
+    {                                   /*********************************************/
+        "columnName":"discounts",       /*********************************************/
+        "dataType": "jsonb[]"           /*********************************************/
+    },
+    {
+        "columnName":"gift_card",
+        "dataType": "boolean"
+    },
+    {
+        "columnName":"grams",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"line_price",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"original_line_price",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"original_price",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"price",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"product_id",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"sku",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"taxable",
+        "dataType": "boolean"
+    },
+    {
+        "columnName":"title",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"total_discount",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"vendor",
+        "dataType": "varchar"
+    }
+]
