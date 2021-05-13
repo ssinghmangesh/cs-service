@@ -84,7 +84,13 @@ const getValues = ({ columnData, data }) => {
 
 
 const getIds = (data) => {
-    return `(${data.map((value) => value.id).join(",")})`
+    return `(${data.map((value) => {
+        if(typeof value.id === 'string'){
+            return `'${value.id}'`
+        }
+        // if(typeof value.id === '')
+        return value.id
+    }).join(",")})`
 }
 
 const CUSTOMER_TABLE_NAME = (workspaceId) => {

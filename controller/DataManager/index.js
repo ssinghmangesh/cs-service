@@ -17,6 +17,7 @@ const insert = async(TABLE_NAME, column ,data, workspaceId) => {
 
 const del = async (TABLE_NAME, data, workspaceId) => {
     const query = `DELETE FROM ${TABLE_NAME(workspaceId)} WHERE id IN ${getIds(data)}`
+    console.log(query);
     // `DELETE FROM ${CUSTOMER_TABLE_NAME(workspaceId)} WHERE id IN ${getIds(data)}`
     // // console.log(query);
     let response =  await PostgresqlDb.query(query);
