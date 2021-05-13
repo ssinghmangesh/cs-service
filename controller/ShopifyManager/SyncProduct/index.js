@@ -1,6 +1,8 @@
 const Shopify = require('../Shopify')
-const {insert, del} = require("../../DataManager/Product/index");
-const {insert: insertVariants, del: deleteVariants} = require("../../DataManager/Variant/index");
+const {insert, del} = require("../../DataManager/index");
+const {PRODUCT_TABLE_NAME, VARIANT_TABLE_NAME} = require("../../DataManager/helper");
+const productColumns = require("../../DataManager/Setup/productColumns.json");
+const variantColumns = require("../../DataManager/Setup/variantColumns.json");
 
 const getImageUrl = (image_id, images) => {
     if(!images){
@@ -34,10 +36,11 @@ const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0, workspaceId
 
     if(response.data.products.length){
         
-        await del(response.data.products, workspaceId)
-        await insert(response.data.products, workspaceId)
-        await deleteVariants(variants, workspaceId)
-        await insertVariants(variants, workspaceId)
+        await del(PRODUCT_TABLE_NAME, response.data.products, workspaceId)
+        await insert(PRODUCT_TABLE_NAME, productColumns, response.data.products, workspaceId)
+        
+        await del(VARIANT_TABLE_NAME, variants, workspaceId)
+        await insert(VARIANT_TABLE_NAME, variantColumns, variants, workspaceId)
     }
     
     
@@ -59,6 +62,6 @@ module.exports = {
     SYNC
 }
 
-// SYNC({ shopName: 'grofers-orders.myshopify.com', accessToken: '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',  limit: 2, workspaceId: 12345 })
+// SYNC({ shopName: 'grofers-orders.myshopify.com', accessToken: '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',  limit: 50, workspaceId: 2 })
 // .then(console.log)
 // .catch(console.log)

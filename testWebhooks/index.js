@@ -5,7 +5,7 @@ const customerWebhook = async () => {
         url: "http://localhost:3000/data-manager/product/add",
         method: "POST",
         data:{product:{
-            "id": 788032119674292922,
+            "id": 2,
             "title": "Example T-Shirt",
             "body_html": null,
             "vendor": "Acme",
