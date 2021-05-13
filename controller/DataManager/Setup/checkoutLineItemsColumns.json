@@ -1,0 +1,14 @@
+[
+    {
+        "columnName": "customer_id",
+        "dataType": "numeric"
+    },
+    {
+        "columnName": "applied_discounts",
+        "dataType": ""
+    },
+    {
+        "columnName": "key",
+        "dataType": "varchar"
+    }
+]
