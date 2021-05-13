@@ -2,61 +2,21 @@
 const PostgresqlDb = require('./../../db')
 
 
-const axios = require("axios")
-const { CUSTOMER_TABLE_NAME, 
-    ORDER_TABLE_NAME,
-    PRODUCT_TABLE_NAME,
-    DISCOUNT_TABLE_NAME,
-    FULFILLMENT_TABLE_NAME,
-    LINEITEMS_TABLE_NAME,
-    REFUNDED_TABLE_NAME,
-    VARIANT_TABLE_NAME } =  require("../DataManager/helper")
-
 const WHERE_CLAUSE = ({startdate, enddate}) => {
     return ` WHERE created_at >= '${startdate}' AND created_at <= '${enddate}'`
 }
 
 class Dashboard {
-    static async CustomerCount({workspaceId, startdate, enddate}) {
+    static async Count({TABLE_NAME, workspaceId, startdate, enddate}) {
         let query = ``
 
-        query = `SELECT COUNT(*) FROM ${CUSTOMER_TABLE_NAME(workspaceId)} ${WHERE_CLAUSE({startdate, enddate})};`
+        query = `SELECT COUNT(*) FROM ${TABLE_NAME(workspaceId)} ${WHERE_CLAUSE({startdate, enddate})};`
         return await PostgresqlDb.query(query);
     }
 
-    static async OrderCount({workspaceId, startdate, enddate}) {
+    static async Sum({TABLE_NAME, columnname, workspaceId, startdate, enddate}) {
         let query = ``
-        query = `SELECT COUNT(*) FROM ${ORDER_TABLE_NAME(workspaceId)} ${WHERE_CLAUSE({startdate, enddate})};`
-        return await PostgresqlDb.query(query);
-    }
-
-    static async LineItemCount({workspaceId, startdate, enddate}) {
-        let query = ``
-        query = `SELECT COUNT(*) FROM ${LINEITEMS_TABLE_NAME(workspaceId)} ${WHERE_CLAUSE({startdate, enddate})};`
-        return await PostgresqlDb.query(query);
-    }
-
-    static async ProductCount({workspaceId, startdate, enddate}) {
-        let query = ``
-        query = `SELECT COUNT(*) FROM ${PRODUCT_TABLE_NAME(workspaceId)} ${WHERE_CLAUSE({startdate, enddate})};`
-        return await PostgresqlDb.query(query);
-    }
-
-    static async VariantCount({workspaceId, startdate, enddate}) {
-        let query = ``
-        query = `SELECT COUNT(*) FROM ${VARIANT_TABLE_NAME(workspaceId)} ${WHERE_CLAUSE({startdate, enddate})};`
-        return await PostgresqlDb.query(query);
-    }
-
-    static async OrderAmount({workspaceId, startdate, enddate}) {
-        let query = ``
-        query = `SELECT SUM(total_price) FROM ${ORDER_TABLE_NAME(workspaceId)} ${WHERE_CLAUSE({startdate, enddate})};`
-        return await PostgresqlDb.query(query);
-    }
-
-    static async Ordertaxamount({workspaceId, startdate, enddate}) {
-        let query = ``
-        query = `SELECT SUM(total_tax) FROM ${ORDER_TABLE_NAME(workspaceId)} ${WHERE_CLAUSE({startdate, enddate})};`
+        query = `SELECT SUM(${columnname}) FROM ${TABLE_NAME(workspaceId)} ${WHERE_CLAUSE({startdate, enddate})};`
         return await PostgresqlDb.query(query);
     }
 }
@@ -64,9 +24,9 @@ class Dashboard {
 module.exports = Dashboard
 
 
-Dashboard.Ordertaxamount({workspaceId: 333, startdate: '2021-01-01 11:49:40.765997+05:30', enddate: '2021-05-13 11:49:40.765997+05:30'})
-.then(console.log)
-.catch(console.log)
+// Dashboard.Ordertaxamount({workspaceId: 333, startdate: '2021-01-01 11:49:40.765997+05:30', enddate: '2021-05-13 11:49:40.765997+05:30'})
+// .then(console.log)
+// .catch(console.log)
 
 
 
