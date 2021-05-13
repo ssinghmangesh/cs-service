@@ -1,6 +1,7 @@
 const Shopify = require('../Shopify')
-const {insert, del} = require("../../DataManager/Discount/index");
-
+const {insert, del} = require("../../DataManager/index");
+const {DISCOUNT_TABLE_NAME} = require("../../DataManager/helper")
+const discountColumns = require("../../DataManager/Setup/discountColumns.json");
 
 const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0, workspaceId }) => {
     //call to shopify fetch one batch
@@ -9,8 +10,9 @@ const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0, workspaceId
 
     //insert
     if(response.data.price_rules.length){
-        await del(response.data.price_rules, workspaceId)
-        await insert(response.data.price_rules, workspaceId)
+        await del(DISCOUNT_TABLE_NAME, response.data.price_rules, workspaceId)
+        await insert(DISCOUNT_TABLE_NAME, discountColumns, response.data.price_rules, workspaceId)
+        
     }
     
     //call next batch
@@ -31,6 +33,6 @@ module.exports = {
     SYNC
 }
 
-// SYNC({ shopName: 'grofers-orders.myshopify.com', accessToken: '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',  limit: 1, workspaceId: 12345 })
+// SYNC({ shopName: 'grofers-orders.myshopify.com', accessToken: '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',  limit: 50, workspaceId: 2 })
 // .then(console.log)
 // .catch(console.log)

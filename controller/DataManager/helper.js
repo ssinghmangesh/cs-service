@@ -1,9 +1,3 @@
-const getColumnQuery = (orderColumns) => {
-    return orderColumns.map(col => {
-        return `"${col.columnName}" ${col.dataType}`
-    }).join(", ")
-}
-
 
 const getColumnName = ({ columnData }) => {
     const query = `(${columnData.map(col => col.columnName).join(", ")})`
@@ -125,29 +119,7 @@ const VARIANT_TABLE_NAME = (workspaceId) => {
     return `variant${workspaceId}`
 }
 
-const getInsertQuery = (TABLE_NAME, customerColumn, data, workspaceId) => {
-    const query = `
-        INSERT INTO ${TABLE_NAME(workspaceId)}
-        ${getColumnName({ columnData: customerColumn })}
-        VALUES ${getValues({ columnData: customerColumn, data })}
-    `
-    return query;
-}
 
-const getDelQuery = (TABLE_NAME, data, workspaceId) => {
-    const query = `DELETE FROM ${TABLE_NAME(workspaceId)} WHERE id IN ${getIds(data)}`
-    return query;
-}
-
-const getCreateQuery = (customerColumns, TABLE_NAME, workspaceId) => {
-    const columnsQuery  = getColumnQuery(customerColumns)
-    const query = `
-        CREATE TABLE "${TABLE_NAME(workspaceId)}"(
-            ${columnsQuery}
-        );
-    `
-    return query;
-}
 
 // const
 // getInsertQury(discount222, order)
@@ -155,10 +127,8 @@ const getCreateQuery = (customerColumns, TABLE_NAME, workspaceId) => {
 // .catch(console.log)
 
 module.exports={
-    getCreateQuery,
-    getColumnQuery,
-    getDelQuery,
-    getInsertQuery,
+    getColumnName,
+    getValues,
     getIds,
     CUSTOMER_TABLE_NAME,
     PRODUCT_TABLE_NAME,
