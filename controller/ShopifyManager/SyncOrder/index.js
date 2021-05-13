@@ -1,8 +1,11 @@
 const Shopify = require('../Shopify')
-const {insert, del} = require("../../DataManager/Order/index");
-const {insert: insertLineItems, del: deleteLineItems} = require("../../DataManager/LineItems/index");
-const {insert: insertFulfillments, del: deleteFulfillments} = require("../../DataManager/Fulfilments/index");
-const {insert: insertRefunds, del: deleteRefunds} = require("../../DataManager/Refunded/index");
+const {insert, del} = require("../../DataManager/index");
+const {ORDER_TABLE_NAME, LINEITEMS_TABLE_NAME, REFUNDED_TABLE_NAME, FULFILLMENT_TABLE_NAME} = require("../../DataManager/helper")
+const orderColumns = require("../../DataManager/Setup/orderColumns.json");
+const fulfillmentColumns = require("../../DataManager/Setup/fulfillmentsColumns.json");
+const lineitemsColumns = require("../../DataManager/Setup/lineItemsColumns.json");
+const refundedColumns = require("../../DataManager/Setup/refundedColumns.json");
+
 
 const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0 , workspaceId}) => {
     //call to shopify fetch one batch
@@ -52,14 +55,17 @@ const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0 , workspaceI
 
     //insert
     if(response.data.orders.length){
-        await del(response.data.orders, workspaceId);
-        await insert(response.data.orders, workspaceId);
-        await deleteLineItems(line_items, workspaceId);
-        await insertLineItems(line_items, workspaceId);
-        await deleteFulfillments(fulfillments, workspaceId);
-        await insertFulfillments(fulfillments, workspaceId);
-        await deleteRefunds(refunds, workspaceId);
-        await insertRefunds(refunds, workspaceId);
+        await del(ORDER_TABLE_NAME, response.data.orders, workspaceId);
+        await insert(ORDER_TABLE_NAME, orderColumns, response.data.orders, workspaceId);
+        
+        await del(LINEITEMS_TABLE_NAME, line_items, workspaceId);
+        await insert(LINEITEMS_TABLE_NAME, lineitemsColumns, line_items, workspaceId);
+        
+        await del(FULFILLMENT_TABLE_NAME, fulfillments, workspaceId);
+        await insert(FULFILLMENT_TABLE_NAME, fulfillmentColumns, fulfillments, workspaceId);
+        
+        await del(REFUNDED_TABLE_NAME, refunds, workspaceId);
+        await insert(REFUNDED_TABLE_NAME, refundedColumns, refunds, workspaceId);
     }
     
     //call next batch
@@ -80,6 +86,6 @@ module.exports = {
     SYNC
 }
 
-// SYNC({ shopName: 'grofers-orders.myshopify.com', accessToken: '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',  limit: 50, workspaceId: 12345 })
+// SYNC({ shopName: 'grofers-orders.myshopify.com', accessToken: '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',  limit: 50, workspaceId: 2 })
 // .then(console.log)
 // .catch(console.log)
