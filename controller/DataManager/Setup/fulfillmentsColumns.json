@@ -5,35 +5,39 @@
         "primaryKey": true
     },
     {
-        "columnName":"email",
+        "columnName":"created_at",
+        "dataType": "timestamptz"
+    },
+    {
+        "columnName":"customer_id",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"order_id",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"order_name",
         "dataType": "varchar"
     },
     {
-        "columnName":"closed_at",
-        "dataType": "timestamptz"
+        "columnName":"status",
+        "dataType": "varchar"
     },
     {
-        "columnName":"created_at",
-        "dataType": "timestamptz"
+        "columnName":"tracking_company",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"tracking_number",
+        "dataType": "varchar"
     },
     {
         "columnName":"updated_at",
         "dataType": "timestamptz"
     },
     {
-        "columnName":"number",
-        "dataType": "numeric"
-    },
-    {
-        "columnName":"buyer_accepts_marketing",
-        "dataType": "boolean"
-    },
-    {
-        "columnName":"client_details",
-        "dataType": "jsonb"
-    },
-    {
-        "columnName":"discount_codes",
-        "dataType": "jsonb"
+        "columnName":"fulfillment_status",
+        "dataType": "varchar"
     }
 ]

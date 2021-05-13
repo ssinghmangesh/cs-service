@@ -1,16 +1,7 @@
 [
     {
-        "columnName":"id",
-        "dataType": "numeric",
-        "primaryKey": true
-    },
-    {
-        "columnName":"email",
+        "columnName":"allocation_method",
         "dataType": "varchar"
-    },
-    {
-        "columnName":"closed_at",
-        "dataType": "timestamptz"
     },
     {
         "columnName":"created_at",
@@ -21,19 +12,107 @@
         "dataType": "timestamptz"
     },
     {
-        "columnName":"number",
+        "columnName":"customer_selection",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"ends_at",
+        "dataType": "timestamptz"
+    },
+    {
+        "columnName":"entitled_collection_ids",
+        "dataType": "numeric[]"
+    },
+    {
+        "columnName":"entitled_country_ids",
+        "dataType": "numeric[]"
+    },
+    {
+        "columnName":"entitled_product_ids",
+        "dataType": "numeric[]"
+    },
+    {
+        "columnName":"entitled_variant_ids",
+        "dataType": "numeric[]"
+    },
+    {
+        "columnName":"id",
         "dataType": "numeric"
     },
     {
-        "columnName":"buyer_accepts_marketing",
+        "columnName":"once_per_customer",
         "dataType": "boolean"
     },
     {
-        "columnName":"client_details",
+        "columnName":"prerequisite_customer_ids",
+        "dataType": "numeric[]"
+    },
+    {
+        "columnName":"prerequisite_quantity_range",
         "dataType": "jsonb"
     },
     {
-        "columnName":"discount_codes",
+        "columnName":"prerequisite_saved_search_ids",
+        "dataType": "numeric[]"
+    },
+    {
+        "columnName":"prerequisite_shipping_price_range",
         "dataType": "jsonb"
+    },
+    {
+        "columnName":"prerequisite_subtotal_range",
+        "dataType": "jsonb"
+    },
+    {
+        "columnName":"prerequisite_to_entitlement_purchase",
+        "dataType": "jsonb"
+    },
+    {
+        "columnName":"starts_at",
+        "dataType": "timestamptz"
+    },
+    {
+        "columnName":"target_selection",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"target_type",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"title",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"usage_limit",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"prerequisite_product_ids",
+        "dataType": "numeric[]"
+    },
+    {
+        "columnName":"prerequisite_variant_ids",
+        "dataType": "numeric[]"
+    },
+    {
+        "columnName":"prerequisite_collection_ids",
+        "dataType": "numeric[]"
+    },
+    {
+        "columnName":"value",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"value_type",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"prerequisite_to_entitlement_quantity_ratio",
+        "dataType": "jsonb"
+    },
+    {
+        "columnName":"allocation_limit",
+        "dataType": "numeric"
     }
 ]

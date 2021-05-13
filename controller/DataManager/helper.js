@@ -23,11 +23,31 @@ const getValues = ({ columnData, data }) => {
                 } else {
                     return `''`
                 }
+            } else if(col.dataType === 'varchar[]') {
+                if(value[col.columnName].length) {
+                    let q = value[col.columnName].map(str => {
+                        return `'${str}'`
+                    }).join(", ")
+                    return `array[${q}]`
+                    // return value[col.columnName]
+                } else {
+                    return `NULL`
+                }
             } else if(col.dataType === 'numeric') {
                 if(value[col.columnName]) {
                     return value[col.columnName]
                 } else {
                     return `0`
+                }
+            } else if(col.dataType === 'numeric[]') {
+                if(value[col.columnName].length) {
+                    let q = value[col.columnName].map(num => {
+                        return `${num}`
+                    }).join(", ")
+                    return `array[${q}]`
+                    // return value[col.columnName]
+                } else {
+                    return `NULL`
                 }
             } else if(col.dataType === 'boolean') {
                 if(typeof value[col.columnName] === 'bool') {
@@ -47,6 +67,17 @@ const getValues = ({ columnData, data }) => {
                     return `'${details}'`
                 } else {
                     return `'{}'`
+                }
+            } else if(col.dataType === 'jsonb[]') {
+                if(value[col.columnName].length) {
+                    let q = value[col.columnName].map(obj => {
+                        let details = JSON.stringify(obj)
+                        return `'${details}'`
+                    }).join(", ")
+                    return `array[${q}]::jsonb[]`
+                    
+                } else {
+                    return `array[]::jsonb[]`
                 }
             }
         }).join(", ")
@@ -117,6 +148,11 @@ const getCreateQuery = (customerColumns, TABLE_NAME, workspaceId) => {
     `
     return query;
 }
+
+// const
+// getInsertQury(discount222, order)
+// .then(console.log)
+// .catch(console.log)
 
 module.exports={
     getCreateQuery,

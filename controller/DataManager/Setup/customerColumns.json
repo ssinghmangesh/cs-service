@@ -10,7 +10,7 @@
     },
     {
         "columnName":"addresses",
-        "dataType": "jsonb"
+        "dataType": "jsonb[]"
     },
     {
         "columnName":"currency",
@@ -78,7 +78,7 @@
     },
     {
         "columnName":"total_spent",
-        "dataType": "boolean"
+        "dataType": "numeric"
     },
     {
         "columnName":"updated_at",

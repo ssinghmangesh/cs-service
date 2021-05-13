@@ -1,39 +1,63 @@
 [
     {
-        "columnName":"id",
-        "dataType": "numeric",
-        "primaryKey": true
-    },
-    {
-        "columnName":"email",
+        "columnName":"body_html",
         "dataType": "varchar"
-    },
-    {
-        "columnName":"closed_at",
-        "dataType": "timestamptz"
     },
     {
         "columnName":"created_at",
         "dataType": "timestamptz"
     },
     {
+        "columnName":"handle",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"id",
+        "dataType": "numeric",
+        "primaryKey": true
+    },
+    {
+        "columnName":"images",
+        "dataType": "jsonb[]"
+    },
+    {
+        "columnName":"options",
+        "dataType": "jsonb[]"
+    },
+    {
+        "columnName":"product_type",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"published_at",
+        "dataType": "timestamptz"
+    },
+    {
+        "columnName":"published_scope",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"status",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"tags",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"template_suffix",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"title",
+        "dataType": "varchar"
+    },
+    {
         "columnName":"updated_at",
         "dataType": "timestamptz"
     },
     {
-        "columnName":"number",
-        "dataType": "numeric"
-    },
-    {
-        "columnName":"buyer_accepts_marketing",
-        "dataType": "boolean"
-    },
-    {
-        "columnName":"client_details",
-        "dataType": "jsonb"
-    },
-    {
-        "columnName":"discount_codes",
-        "dataType": "jsonb"
+        "columnName":"vendor",
+        "dataType": "varchar"
     }
 ]

@@ -28,7 +28,7 @@ const setupWorkspace = async(workspaceId) => {
 }
 
 
-// createDiscountTable(111)
+// createOrderTable(222)
 // .then(console.log)
 // .catch(console.log)
 
