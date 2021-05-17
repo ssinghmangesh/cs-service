@@ -19,6 +19,19 @@ class Dashboard {
         query = `SELECT SUM(${columnname}) FROM ${TABLE_NAME(workspaceId)} ${WHERE_CLAUSE({startdate, enddate})};`
         return await PostgresqlDb.query(query);
     }
+
+    static async barGraph({TABLE_NAME, columnname, groupBykey = 'MONTH', workspaceId, startdate, enddate}) {
+        let query = ``
+        query = `SELECT EXTRACT(${groupBykey} FROM created_at) AS Period, SUM(${columnname}) AS Revenue FROM ${TABLE_NAME(workspaceId)} ${WHERE_CLAUSE({startdate, enddate})} GROUP BY Period ORDER BY Period;`
+        // console.log(query);
+        return await PostgresqlDb.query(query);
+    }
+
+    static async pieChart({TABLE_NAME, columnname, workspaceId, startdate, enddate}) {
+        let query = ``
+        query = `SELECT ${columnname}, COUNT(${columnname}) AS Count FROM ${TABLE_NAME(workspaceId)} ${WHERE_CLAUSE({startdate, enddate})} GROUP BY ${columnname};`
+        return await PostgresqlDb.query(query);
+    }
 }
 
 module.exports = Dashboard

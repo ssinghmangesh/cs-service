@@ -9,12 +9,29 @@ const { CUSTOMER_TABLE_NAME,
 
 const Dashboard = require('./index.js')
 
-Dashboard.Count({TABLE_NAME: CUSTOMER_TABLE_NAME, workspaceId: 333, 
-                startdate: '2021-01-01 11:49:40.765997+05:30', enddate: '2021-05-13 11:49:40.765997+05:30'})
+// Dashboard.Count({TABLE_NAME: CUSTOMER_TABLE_NAME, workspaceId: 333, 
+//                 startdate: '2021-01-01 11:49:40.765997+05:30', enddate: '2021-05-13 11:49:40.765997+05:30'})
+// .then(console.log)
+// .catch(console.log)
+
+// Dashboard.Sum({TABLE_NAME: ORDER_TABLE_NAME, columnname: 'total_price', workspaceId: 333, 
+//     startdate: '2021-01-01 11:49:40.765997+05:30', enddate: '2021-05-13 11:49:40.765997+05:30'})
+// .then(console.log)
+// .catch(console.log)
+
+Dashboard.barGraph({TABLE_NAME: ORDER_TABLE_NAME, columnname: 'total_price', groupBykey: 'MONTH', workspaceId: 333, 
+    startdate: '2000-01-01 11:49:40.765997+05:30', enddate: '2021-05-13 11:49:40.765997+05:30'})
 .then(console.log)
 .catch(console.log)
 
-Dashboard.Sum({TABLE_NAME: ORDER_TABLE_NAME, columnname: 'total_price', workspaceId: 333, 
-    startdate: '2021-01-01 11:49:40.765997+05:30', enddate: '2021-05-13 11:49:40.765997+05:30'})
-.then(console.log)
-.catch(console.log)
+// Dashboard.pieChart({TABLE_NAME: ORDER_TABLE_NAME, columnname: 'cancel_reason', workspaceId: 333, 
+//     startdate: '2000-01-01 11:49:40.765997+05:30', enddate: '2021-05-13 11:49:40.765997+05:30'})
+// .then(console.log)
+// .catch(console.log)
+
+
+/*
+    1. x-axis = datetime, y-axis = revenue
+    2. pichart
+
+*/
