@@ -73,7 +73,7 @@ router.post('/data-manager/checkout/add',async (req, res) => {
     //delete and insert product of that id, all variant of that order
     const response = await update(CHECKOUT_TABLE_NAME, checkoutColumns, [checkout], workspaceId);
 
-    await update(CHECKOUTLINEITEMS_TABLE_NAME, checkoutLineItemsColumns, checkout.line_items, workspaceId);
+    // await update(CHECKOUTLINEITEMS_TABLE_NAME, checkoutLineItemsColumns, checkout.line_items, workspaceId);
 
     res.status(200).send("")
 })

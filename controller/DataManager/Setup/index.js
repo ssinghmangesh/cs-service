@@ -53,7 +53,7 @@ const setupWorkspace = async(workspaceId) => {
 
     await createTable(checkoutColumns, CHECKOUT_TABLE_NAME, workspaceId)
 
-    await createTable(checkoutLineItemsColumns, CHECKOUTLINEITEMS_TABLE_NAME, workspaceId)
+    // await createTable(checkoutLineItemsColumns, CHECKOUTLINEITEMS_TABLE_NAME, workspaceId)
 
     return {
         status: true,
