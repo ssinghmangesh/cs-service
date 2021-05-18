@@ -9,7 +9,8 @@ const {
     CART_TABLE_NAME,
     CARTLINEITEMS_TABLE_NAME,
     CHECKOUT_TABLE_NAME,
-    CHECKOUTLINEITEMS_TABLE_NAME
+    CHECKOUTLINEITEMS_TABLE_NAME,
+    PAGEVIEWED_TABLE_NAME
 } = require("../controller/DataManager/helper");
 const Dashboard  = require("../controller/AnalyticsManager/index"); 
 
@@ -19,6 +20,7 @@ const productColumns = require("../controller/DataManager/Setup/productColumns.j
 const cartColumns = require("../controller/DataManager/Setup/cartColumns.json");
 const cartLineItemsColumns = require("../controller/DataManager/Setup/cartLineItemColumns.json");
 const checkoutColumns = require("../controller/DataManager/Setup/checkoutColumns.json");
+const pageViewedColumns = require("../controller/DataManager/Setup/pageViewedColumns.json");
 const checkoutLineItemsColumns = require("../controller/DataManager/Setup/checkoutLineItemsColumns.json");
 
 router.get('/data-manager/customer/count', async (req, res) => {
@@ -83,6 +85,16 @@ router.post('/data-manager/checkout/add',async (req, res) => {
 
     res.status(200).send("")
 })
+
+router.post('/data-manager/page-viewed/add',async (req, res) => {
+    const { page_viewed, workspaceId } = req.body;
+    const response = await update(PAGEVIEWED_TABLE_NAME, pageViewedColumns, [page_viewed], workspaceId);
+
+    console.log("pageviewed done");
+
+    res.status(200).send("")
+})
+
 router.get('/data-manager/cart/delete',async (req, res) => {
     res.status(200).send("")
 })

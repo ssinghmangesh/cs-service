@@ -9,6 +9,7 @@ const variantColumns = require('./variantColumns')
 const cartColumns = require('./cartColumns.json')
 const cartLineItemsColumns = require('./cartLineItemColumns.json')
 const checkoutColumns = require('./checkoutColumns.json')
+const pageViewedColumns = require('./pageViewedColumns.json')
 const checkoutLineItemsColumns = require("./checkoutLineItemsColumns.json");
 
 const {
@@ -23,6 +24,7 @@ const {
     CART_TABLE_NAME,
     CARTLINEITEMS_TABLE_NAME,
     CHECKOUT_TABLE_NAME,
+    PAGEVIEWED_TABLE_NAME,
     CHECKOUTLINEITEMS_TABLE_NAME
 } = require("../helper");
 
@@ -52,6 +54,8 @@ const setupWorkspace = async(workspaceId) => {
     await createTable(cartLineItemsColumns, CARTLINEITEMS_TABLE_NAME, workspaceId)
 
     await createTable(checkoutColumns, CHECKOUT_TABLE_NAME, workspaceId)
+
+    await createTable(pageViewedColumns, PAGEVIEWED_TABLE_NAME, workspaceId)
 
     // await createTable(checkoutLineItemsColumns, CHECKOUTLINEITEMS_TABLE_NAME, workspaceId)
 

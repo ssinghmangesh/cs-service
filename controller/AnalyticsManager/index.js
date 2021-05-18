@@ -6,38 +6,49 @@ const WHERE_CLAUSE = ({startdate, enddate}) => {
     return ` WHERE created_at >= '${startdate}' AND created_at <= '${enddate}'`
 }
 
+const abstractData = (response, type) => {
+    //extract only rows
+    let res = null
+    if(type === "single") {
+        res = response.rows[0]
+    } else {
+        res = response.rows
+    }
+    return res
+}
+
 class Dashboard {
-    static async Count({TABLE_NAME, workspaceId, startdate, enddate}) {
+    static async count({TABLE_NAME, workspaceId, startdate, enddate}) {
         let query = ``
 
         query = `SELECT COUNT(*) FROM ${TABLE_NAME(workspaceId)} ${WHERE_CLAUSE({startdate, enddate})};`
-        return await PostgresqlDb.query(query);
+        return abstractData(await PostgresqlDb.query(query), "single");
     }
 
-    static async Sum({TABLE_NAME, columnname, workspaceId, startdate, enddate}) {
+    static async sum({TABLE_NAME, columnname, workspaceId, startdate, enddate}) {
         let query = ``
         query = `SELECT SUM(${columnname}) FROM ${TABLE_NAME(workspaceId)} ${WHERE_CLAUSE({startdate, enddate})};`
-        return await PostgresqlDb.query(query);
+        return abstractData(await PostgresqlDb.query(query), "single");
     }
 
     static async barGraph({TABLE_NAME, columnname, groupBykey = 'MONTH', workspaceId, startdate, enddate}) {
         let query = ``
         query = `SELECT EXTRACT(${groupBykey} FROM created_at) AS Period, SUM(${columnname}) AS Revenue FROM ${TABLE_NAME(workspaceId)} ${WHERE_CLAUSE({startdate, enddate})} GROUP BY Period ORDER BY Period;`
         // console.log(query);
-        return await PostgresqlDb.query(query);
+        return abstractData(await PostgresqlDb.query(query));
     }
 
     static async pieChart({TABLE_NAME, columnname, workspaceId, startdate, enddate}) {
         let query = ``
         query = `SELECT ${columnname}, COUNT(${columnname}) AS Count FROM ${TABLE_NAME(workspaceId)} ${WHERE_CLAUSE({startdate, enddate})} GROUP BY ${columnname};`
-        return await PostgresqlDb.query(query);
+        return abstractData(await PostgresqlDb.query(query));
     }
 
-    static async Constraints({TABLE_NAME, workspaceId, orderBykey, limit, skipRowby}) {
+    static async table({TABLE_NAME, workspaceId, orderBykey, limit = 10, skipRowby = 0}) {
         let query = ``
         query = `SELECT * FROM ${TABLE_NAME(workspaceId)} ORDER BY ${orderBykey} LIMIT ${limit} OFFSET ${skipRowby};`
-        console.log(query)
-        return await PostgresqlDb.query(query);
+        // console.log(query)
+        return abstractData(await PostgresqlDb.query(query));
     }
 }
 
