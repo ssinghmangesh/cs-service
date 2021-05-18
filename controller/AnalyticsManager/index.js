@@ -1,15 +1,53 @@
 
-const axios = require("axios")
+const PostgresqlDb = require('./../../db')
 
+
+const WHERE_CLAUSE = ({startdate, enddate}) => {
+    return ` WHERE created_at >= '${startdate}' AND created_at <= '${enddate}'`
+}
 
 class Dashboard {
-    static orderCount(workspaceId, condition) {
+    static async Count({TABLE_NAME, workspaceId, startdate, enddate}) {
         let query = ``
-        let WHERE_CLAUES = ``
 
-        //run
+        query = `SELECT COUNT(*) FROM ${TABLE_NAME(workspaceId)} ${WHERE_CLAUSE({startdate, enddate})};`
+        return await PostgresqlDb.query(query);
+    }
+
+    static async Sum({TABLE_NAME, columnname, workspaceId, startdate, enddate}) {
+        let query = ``
+        query = `SELECT SUM(${columnname}) FROM ${TABLE_NAME(workspaceId)} ${WHERE_CLAUSE({startdate, enddate})};`
+        return await PostgresqlDb.query(query);
+    }
+
+    static async barGraph({TABLE_NAME, columnname, groupBykey = 'MONTH', workspaceId, startdate, enddate}) {
+        let query = ``
+        query = `SELECT EXTRACT(${groupBykey} FROM created_at) AS Period, SUM(${columnname}) AS Revenue FROM ${TABLE_NAME(workspaceId)} ${WHERE_CLAUSE({startdate, enddate})} GROUP BY Period ORDER BY Period;`
+        // console.log(query);
+        return await PostgresqlDb.query(query);
+    }
+
+    static async pieChart({TABLE_NAME, columnname, workspaceId, startdate, enddate}) {
+        let query = ``
+        query = `SELECT ${columnname}, COUNT(${columnname}) AS Count FROM ${TABLE_NAME(workspaceId)} ${WHERE_CLAUSE({startdate, enddate})} GROUP BY ${columnname};`
+        return await PostgresqlDb.query(query);
+    }
+
+    static async Constraints({TABLE_NAME, workspaceId, orderBykey, limit, skipRowby}) {
+        let query = ``
+        query = `SELECT * FROM ${TABLE_NAME(workspaceId)} ORDER BY ${orderBykey} LIMIT ${limit} OFFSET ${skipRowby};`
+        console.log(query)
+        return await PostgresqlDb.query(query);
     }
 }
+
+module.exports = Dashboard
+
+
+// Dashboard.Ordertaxamount({workspaceId: 333, startdate: '2021-01-01 11:49:40.765997+05:30', enddate: '2021-05-13 11:49:40.765997+05:30'})
+// .then(console.log)
+// .catch(console.log)
+
 
 
 /*
@@ -33,7 +71,7 @@ Dashboard API
 startdate = 
 enddate = 
 let WHERE_CLAUSE = ''
-if(startdate && enddat) {
+if(startdate  &&  enddat) {
     WHERE_CLAUSE = ``
 }
 let query = `
