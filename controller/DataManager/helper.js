@@ -84,7 +84,13 @@ const getValues = ({ columnData, data }) => {
 
 
 const getIds = (data) => {
-    return `(${data.map((value) => value.id).join(",")})`
+    return `(${data.map((value) => {
+        if(typeof value.id === 'string'){
+            return `'${value.id}'`
+        }
+        // if(typeof value.id === '')
+        return value.id
+    }).join(",")})`
 }
 
 const CUSTOMER_TABLE_NAME = (workspaceId) => {
@@ -119,7 +125,21 @@ const VARIANT_TABLE_NAME = (workspaceId) => {
     return `variant${workspaceId}`
 }
 
+const CART_TABLE_NAME = (workspaceId) => {
+    return `cart${workspaceId}`
+}
 
+const CHECKOUT_TABLE_NAME = (workspaceId) => {
+    return `checkout${workspaceId}`
+}
+
+const CARTLINEITEMS_TABLE_NAME = (workspaceId) => {
+    return `cartlineitems${workspaceId}`
+}
+
+const CHECKOUTLINEITEMS_TABLE_NAME = (workspaceId) => {
+    return `checkoutlineitems${workspaceId}`
+}
 
 // const
 // getInsertQury(discount222, order)
@@ -137,5 +157,9 @@ module.exports={
     FULFILLMENT_TABLE_NAME,
     LINEITEMS_TABLE_NAME,
     REFUNDED_TABLE_NAME,
-    VARIANT_TABLE_NAME
+    VARIANT_TABLE_NAME,
+    CART_TABLE_NAME,
+    CARTLINEITEMS_TABLE_NAME,
+    CHECKOUT_TABLE_NAME,
+    CHECKOUTLINEITEMS_TABLE_NAME
 }

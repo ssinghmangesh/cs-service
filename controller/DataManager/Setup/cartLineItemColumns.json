@@ -9,10 +9,6 @@
         "dataType": "numeric"
     },
     {
-        "columnName":"properties",
-        "dataType": "jsonb"
-    },
-    {
         "columnName":"quantity",
         "dataType": "numeric"
     },
@@ -32,9 +28,9 @@
         "columnName":"properties",
         "dataType": "jsonb"
     },
-    {
-        "columnName":"discounts",
-        "dataType": "jsonb[]"
+    {                                   
+        "columnName":"discounts",      
+        "dataType": "jsonb[]"           
     },
     {
         "columnName":"gift_card",
