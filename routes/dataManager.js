@@ -11,6 +11,7 @@ const {
     CHECKOUT_TABLE_NAME,
     CHECKOUTLINEITEMS_TABLE_NAME
 } = require("../controller/DataManager/helper");
+const Dashboard  = require("../controller/AnalyticsManager/index"); 
 
 const customerColumns = require("../controller/DataManager/Setup/customerColumns.json");
 const orderColumns = require("../controller/DataManager/Setup/orderColumns.json");
@@ -20,6 +21,11 @@ const cartLineItemsColumns = require("../controller/DataManager/Setup/cartLineIt
 const checkoutColumns = require("../controller/DataManager/Setup/checkoutColumns.json");
 const checkoutLineItemsColumns = require("../controller/DataManager/Setup/checkoutLineItemsColumns.json");
 
+router.get('/data-manager/customer/count', async (req, res) => {
+    console.log(req.headers);
+    const response = await Dashboard.Count({TABLE_NAME: CUSTOMER_TABLE_NAME, workspaceId: 1, startdate: '2000-01-01 11:49:40.765997+05:30', enddate: '2021-05-13 11:49:40.765997+05:30'})
+    res.status(200).send(response);
+})
 
 router.post('/data-manager/setup', async (req, res) => {
     const { workspaceId } = req.body
