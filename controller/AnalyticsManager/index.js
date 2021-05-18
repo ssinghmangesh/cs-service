@@ -32,6 +32,13 @@ class Dashboard {
         query = `SELECT ${columnname}, COUNT(${columnname}) AS Count FROM ${TABLE_NAME(workspaceId)} ${WHERE_CLAUSE({startdate, enddate})} GROUP BY ${columnname};`
         return await PostgresqlDb.query(query);
     }
+
+    static async Constraints({TABLE_NAME, workspaceId, orderBykey, limit, skipRowby}) {
+        let query = ``
+        query = `SELECT * FROM ${TABLE_NAME(workspaceId)} ORDER BY ${orderBykey} LIMIT ${limit} OFFSET ${skipRowby};`
+        console.log(query)
+        return await PostgresqlDb.query(query);
+    }
 }
 
 module.exports = Dashboard
