@@ -141,6 +141,10 @@ const CHECKOUTLINEITEMS_TABLE_NAME = (workspaceId) => {
     return `checkoutlineitems${workspaceId}`
 }
 
+const PAGEVIEWED_TABLE_NAME = (workspaceId) => {
+    return `checkoutlineitems${workspaceId}`
+}
+
 // const
 // getInsertQury(discount222, order)
 // .then(console.log)
@@ -161,5 +165,6 @@ module.exports={
     CART_TABLE_NAME,
     CARTLINEITEMS_TABLE_NAME,
     CHECKOUT_TABLE_NAME,
-    CHECKOUTLINEITEMS_TABLE_NAME
+    CHECKOUTLINEITEMS_TABLE_NAME,
+    PAGEVIEWED_TABLE_NAME
 }

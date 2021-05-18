@@ -1,0 +1,43 @@
+[
+    {
+        "columnName":"page_id",
+        "dataType": "numeric",
+        "primaryKey": true
+    },
+    {
+        "columnName":"event_name",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"path",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"href",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"cart_id",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"customer_id",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"cart",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"product",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"os",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"previous_page",
+        "dataType": "varchar"
+    }
+]
