@@ -1,0 +1,7 @@
+
+1. Where class build 
+2. Fixed Sync issue  (DONE)
+3. user management
+4. tracking script (DONE)
+
+
