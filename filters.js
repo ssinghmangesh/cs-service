@@ -1,60 +1,60 @@
 
-let filters = {
-    "relation": "AND",  //AND  OR
-    conditions: [
-        {
-            "relation": "AND",  //AND  OR
-            conditions: [{
-                type: "CUSTOMER", //CUSTOMER. ORDER, Cart
-                columnName: "created_at",
-                filterType: "between",  // >, <,=, not 
-                dataType: "timestamptz[]",
-                values: ['2020-05-13 11:49:40.765997+05:30', '2021-05-13 11:49:40.765997+05:30']
-            },
-            {
-                type: "CUSTOMER", //CUSTOMER. ORDER, Cart
-                columnName: "accepts_marketing",
-                filterType: "equal_to",  // >, <,=, not 
-                dataType: "boolean",
-                values: 'FALSE'
-            }]
-        },
-        {
-            "relation": "OR",  //AND  OR
-            conditions: [{
-                realtion: "AND",
-                conditions: [
-                    {
-                        "relation": "OR",  //AND  OR
-                        conditions: [{
-                            type: "CUSTOMER", //CUSTOMER. ORDER, Cart
-                            columnName: "name",
-                            filterType: "in",  // >, <,=, not 
-                            dataType: "varchar[]",
-                            values: ['hello', 'world', 'number', '1']
-                        },
-                        {
-                            type: "CUSTOMER", //CUSTOMER. ORDER, Cart
-                            columnName: "amount",
-                            filterType: "in",  // >, <,=, not 
-                            dataType: "numeric[]",
-                            values: [10, 20, 30]
-                        }]
-                    }
-                ]
-            },
-            {
-                type: "CUSTOMER", //CUSTOMER. ORDER, Cart
-                columnName: "amount",
-                filterType: "in",  // >, <,=, not 
-                dataType: "numeric[]",
-                values: [10, 20, 30]
-            }]
-        }
-    ]
+// let filters = {
+//     "relation": "AND",  //AND  OR
+//     conditions: [
+//         {
+//             "relation": "AND",  //AND  OR
+//             conditions: [{
+//                 type: "CUSTOMER", //CUSTOMER. ORDER, Cart
+//                 columnName: "created_at",
+//                 filterType: "between",  // >, <,=, not 
+//                 dataType: "timestamptz[]",
+//                 values: ['2020-05-13 11:49:40.765997+05:30', '2021-05-13 11:49:40.765997+05:30']
+//             },
+//             {
+//                 type: "CUSTOMER", //CUSTOMER. ORDER, Cart
+//                 columnName: "accepts_marketing",
+//                 filterType: "equal_to",  // >, <,=, not 
+//                 dataType: "boolean",
+//                 values: 'FALSE'
+//             }]
+//         },
+//         {
+//             "relation": "OR",  //AND  OR
+//             conditions: [{
+//                 realtion: "AND",
+//                 conditions: [
+//                     {
+//                         "relation": "OR",  //AND  OR
+//                         conditions: [{
+//                             type: "CUSTOMER", //CUSTOMER. ORDER, Cart
+//                             columnName: "name",
+//                             filterType: "in",  // >, <,=, not 
+//                             dataType: "varchar[]",
+//                             values: ['hello', 'world', 'number', '1']
+//                         },
+//                         {
+//                             type: "CUSTOMER", //CUSTOMER. ORDER, Cart
+//                             columnName: "amount",
+//                             filterType: "in",  // >, <,=, not 
+//                             dataType: "numeric[]",
+//                             values: [10, 20, 30]
+//                         }]
+//                     }
+//                 ]
+//             },
+//             {
+//                 type: "CUSTOMER", //CUSTOMER. ORDER, Cart
+//                 columnName: "amount",
+//                 filterType: "in",  // >, <,=, not 
+//                 dataType: "numeric[]",
+//                 values: [10, 20, 30]
+//             }]
+//         }
+//     ]
 
 
-}
+// }
 
 // (( (created_at between) AND (accepts_marketing equal_to)  ) AND ((name in) OR (amount in)))
 
@@ -180,4 +180,7 @@ const typeBuild = ({ columnName, filterType, dataType, values }) => {
 // AND (accepts_marketing = 'FALSE') 
 // AND (name IN ('hello', 'world', 'number', '1')) 
 // OR (amount IN (10,20,30))
-console.log(whereClause(filters))
+// console.log(whereClause(filters))
+module.exports = {
+    whereClause
+}
