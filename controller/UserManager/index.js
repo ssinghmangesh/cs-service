@@ -1,4 +1,6 @@
-
+const { addUser, deleteUser } = require("./user")
+const { addWorkspace, deleteWorkspace } = require("./workspace")
+const { addUserToWorkspace, deleteUserToWorkspace } = require("./userToWorkspace");
 
 module.exports = {
     createUser, 
