@@ -36,7 +36,7 @@ router.post('/data-manager/setup', async (req, res) => {
 })
 
 router.post('/data-manager/customer/add',async (req, res) => {
-    const {customer, workspaceId} = req.body;
+    const { customer, workspaceId } = req.body;
     console.log(req);
     const response = await update(CUSTOMER_TABLE_NAME, customerColumns, [customer], workspaceId);
     //delete and insert customer of that id
@@ -45,7 +45,7 @@ router.post('/data-manager/customer/add',async (req, res) => {
 
 
 router.post('/data-manager/order/add',async (req, res) => {
-    const {order, workspaceId} = req.body;
+    const { order, workspaceId } = req.body;
     //delete and insert order of that id, all lineitems of that order, all fufilment of that order
     const response = await update(ORDER_TABLE_NAME, orderColumns, [order], workspaceId);
     res.status(200).send(response);
@@ -92,7 +92,7 @@ router.post('/data-manager/page-viewed/add',async (req, res) => {
     // const response = await update(PAGEVIEWED_TABLE_NAME, pageViewedColumns, [page_viewed], workspaceId);
 
     console.log("pageviewed done");
-    res.status(200).send({message: "working"})
+    res.status(200).send({ message: "working" })
 })
 
 router.get('/data-manager/cart/delete',async (req, res) => {
