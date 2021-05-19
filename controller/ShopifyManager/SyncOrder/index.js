@@ -53,19 +53,22 @@ const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0 , workspaceI
         }) 
     })
 
+    // console.log(refunds.length);
+
     //insert
     if(response.data.orders.length){
         await del(ORDER_TABLE_NAME, response.data.orders, workspaceId);
         await insert(ORDER_TABLE_NAME, orderColumns, response.data.orders, workspaceId);
-        
+        // console.log("order complete");
         await del(LINEITEMS_TABLE_NAME, line_items, workspaceId);
         await insert(LINEITEMS_TABLE_NAME, lineitemsColumns, line_items, workspaceId);
-        
+        // console.log("lineitems complete");
         await del(FULFILLMENT_TABLE_NAME, fulfillments, workspaceId);
         await insert(FULFILLMENT_TABLE_NAME, fulfillmentColumns, fulfillments, workspaceId);
-        
+        // console.log("fullfillment complete");
         await del(REFUNDED_TABLE_NAME, refunds, workspaceId);
         await insert(REFUNDED_TABLE_NAME, refundedColumns, refunds, workspaceId);
+        // console.log("refunded complete");
     }
     
     //call next batch
@@ -86,6 +89,6 @@ module.exports = {
     SYNC
 }
 
-SYNC({ shopName: 'grofers-orders.myshopify.com', accessToken: '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',  limit: 50, workspaceId: 1 })
-.then(console.log)
-.catch(console.log)
+// SYNC({ shopName: 'grofers-orders.myshopify.com', accessToken: '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',  limit: 50, workspaceId: 1 })
+// .then(console.log)
+// .catch(console.log)

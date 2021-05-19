@@ -5,7 +5,9 @@ const {getColumnName, getValues, getIds} =  require("./helper")
 
 
 const insert = async(TABLE_NAME, column ,data, workspaceId) => {
-
+    if(data.length == 0){
+        return;
+    }
     const query = `
         INSERT INTO ${TABLE_NAME(workspaceId)}
         ${getColumnName({ columnData: column })}
@@ -16,6 +18,9 @@ const insert = async(TABLE_NAME, column ,data, workspaceId) => {
 }
 
 const del = async (TABLE_NAME, data, workspaceId) => {
+    if(data.length == 0){
+        return;
+    }
     const query = `DELETE FROM ${TABLE_NAME(workspaceId)} WHERE id IN ${getIds(data)}`
     // // console.log(query);
     let response =  await PostgresqlDb.query(query);
