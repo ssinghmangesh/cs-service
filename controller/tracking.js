@@ -8,13 +8,14 @@ const trackingScript = (appClientId, tenantId) => {
             csData.os = navigator.platform
             csData.previous_page = document.referrer
 
-            cartUpdated = function() {
-                console.log('updated')
-                jQuery(window.document).ajaxSuccess(function(_e, _t, _r) {
-                    alert("hello");
-                    console.log(_r.url);
-                    // _r.url.match(/\\/cart\\/(add|update|change).js/) && cartChanges()
-                })
+            if(ShopifyAnalytics && ShopifyAnalytics.meta && ShopifyAnalytics.meta.page && ShopifyAnalytics.meta.page.customerId) {
+                csData.customer_id = ShopifyAnalytics.meta.page.customerId
+            }
+            if(ShopifyAnalytics && ShopifyAnalytics.meta && ShopifyAnalytics.meta.cart_event_id) {
+                csData.cart_id = ShopifyAnalytics.meta.cart_event_id
+            }
+            if(ShopifyAnalytics && ShopifyAnalytics.meta && ShopifyAnalytics.meta.page_view_event_id) {
+                csData.page_id = ShopifyAnalytics.meta.page_view_event_id
             }
 
             function getEventName(path){
@@ -44,7 +45,6 @@ const trackingScript = (appClientId, tenantId) => {
                     dataType: "json",
                     cache: 0
                 })
-                console.log(res);
                 csData = {...csData, cart: res}
                 
             }
@@ -60,18 +60,6 @@ const trackingScript = (appClientId, tenantId) => {
                 csData = {...csData, product: res}
             }
             
-            if(ShopifyAnalytics && ShopifyAnalytics.meta && ShopifyAnalytics.meta.page && ShopifyAnalytics.meta.page.customerId) {
-                csData.customer_id = ShopifyAnalytics.meta.page.customerId
-            }
-            if(ShopifyAnalytics && ShopifyAnalytics.meta && ShopifyAnalytics.meta.cart_event_id) {
-                csData.cart_id = ShopifyAnalytics.meta.cart_event_id
-            }
-            if(ShopifyAnalytics && ShopifyAnalytics.meta && ShopifyAnalytics.meta.page_view_event_id) {
-                csData.page_id = ShopifyAnalytics.meta.page_view_event_id
-            }
-
-            cartUpdated();
-            
 
             csData.event_name = getEventName(csData.path)
             if(csData.event_name === 'cart_view'){
@@ -80,21 +68,36 @@ const trackingScript = (appClientId, tenantId) => {
             else if(csData.event_name === 'product_view'){
                 await product(csData.path)
             }
+
+            async function syncAPI(){
+                console.log(csData)
+                return await jQuery.ajax({
+                                url: "http://localhost:3000/data-manager/page-viewed/add",
+                                type: "POST",
+                                dataType: "json",
+                                cache: 0,
+                                data: {
+                                    workspaceId: 1,
+                                    page_viewed: csData
+                                }
+                            })
+            }
             
+            jQuery(document).ajaxSuccess(async function(_e, _t, _r) {
+                if(_r.url.match(/cart\/(update|change|add).js/g)){
+                    // console.log(_t.responseJSON);
+                    csData = {...csData, cart: _t.responseJSON};
+                    delete csData.cart.attributes;
+                    delete csData.cart.cart_level_discount_applications;
+                    await syncAPI();
+                }
+            })
+                
             
 
-            console.log("csData : ", csData)
-            // const res = await jQuery.ajax({
-            //     url: "http://localhost:3000/data-manager/page-viewed/add",
-            //     type: "POST",
-            //     dataType: "json",
-            //     cache: 0,
-            //     data: {
-            //         workspaceId: 1,
-            //         page_viewed: csData
-            //     }
-            // })
-            // console.log(res)
+            // console.log("csData : ", csData)
+            const res = await syncAPI()
+            console.log(res)
         }
 
         
