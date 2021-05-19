@@ -2,10 +2,10 @@
 module.exports = {
     TableName : "User",
     KeySchema: [       
-        { AttributeName: "userId", KeyType: "HASH"}
+        { AttributeName: "user_id", KeyType: "HASH"}
     ],
     AttributeDefinitions: [       
-        { AttributeName: "userId", AttributeType: "N" }
+        { AttributeName: "user_id", AttributeType: "N" }
     ],
     ProvisionedThroughput: {       
         ReadCapacityUnits: 100, 

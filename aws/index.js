@@ -20,16 +20,17 @@ const insert = async (params) => {
 }
 
 // var params = {
-//     TableName: string,
-//     Item:{
-//         "id": int,
-//         "name": string,
-//         "password": string,
-//         "email": string
-// };
+//     TableName: "User",
+    // Item:{
+    //     "user_id": string,
+    //     "name": string,
+    //     "password": string,
+    //     "email": string
+    // }
+// }
 
 const del = async (params) => {
-    docClient.get(params, function(err, data) {
+    docClient.delete(params, function(err, data) {
         if (err) {
             console.error("Unable to read item. Error JSON:", JSON.stringify(err, null, 2));
         } else {
@@ -39,11 +40,13 @@ const del = async (params) => {
 }
 
 // var params = {
-//     TableName: table,
+//     TableName: string,
 //     Key:{
-//         "id": value
+//         "user_id": string
 //     }
 // }
+
+// insert(params).then(console.log).catch(console.log)
 
 module.exports = {
     insert,

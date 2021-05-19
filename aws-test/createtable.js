@@ -7,7 +7,7 @@ AWS.config.update({
 var dynamodb = new AWS.DynamoDB();
 
 var params = {
-    TableName : "Movies123",
+    TableName : "Movies",
     KeySchema: [       
         { AttributeName: "year", KeyType: "HASH"},  //Partition key
         { AttributeName: "title", KeyType: "RANGE" }  //Sort key
