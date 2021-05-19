@@ -1,29 +1,103 @@
 const trackingScript = (appClientId, tenantId) => {
 
     let jsCode = `
-        trackCS = function(_tenantId, _appClientId) {
+        trackCS = async function(_tenantId, _appClientId) {
             let csData = {}
             csData.path = window.location.pathname
             csData.href = window.location.href
+            csData.os = navigator.platform
+            csData.previous_page = document.referrer
 
+            cartUpdated = function() {
+                console.log('updated')
+                jQuery(window.document).ajaxSuccess(function(_e, _t, _r) {
+                    alert("hello");
+                    console.log(_r.url);
+                    // _r.url.match(/\\/cart\\/(add|update|change).js/) && cartChanges()
+                })
+            }
 
-            getEventName()
+            function getEventName(path){
+                if(path === '/'){
+                    return "home_screen"
+                }
+                if(path.substring(1,5) === 'cart'){
+                    return "cart_view";
+                }
+                if(path.substring(1,12) === 'collections'){
+                    return "collection_view";
+                }
+                if(path.substring(1,9) === 'products'){
+                    return "product_view";
+                }
+                if(path.substring(1,6) === 'blogs'){
+                    return "blog_view";
+                }
+                return "page_view";
+            }
 
+            
+            async function cartChanges() {
+                const res = await jQuery.ajax({
+                    url: "/cart.js",
+                    type: "GET",
+                    dataType: "json",
+                    cache: 0
+                })
+                console.log(res);
+                csData = {...csData, cart: res}
+                
+            }
 
+            async function product(path){
+                const url = path + ".js";
+                const res = await jQuery.ajax({
+                    url: url,
+                    type: "GET",
+                    dataType: "json",
+                    cache: 0
+                })
+                csData = {...csData, product: res}
+            }
             
             if(ShopifyAnalytics && ShopifyAnalytics.meta && ShopifyAnalytics.meta.page && ShopifyAnalytics.meta.page.customerId) {
-                csData.customerId = ShopifyAnalytics.meta.page.customerId
+                csData.customer_id = ShopifyAnalytics.meta.page.customerId
             }
-            csData.eventName = getEventName(csData)
+            if(ShopifyAnalytics && ShopifyAnalytics.meta && ShopifyAnalytics.meta.cart_event_id) {
+                csData.cart_id = ShopifyAnalytics.meta.cart_event_id
+            }
+            if(ShopifyAnalytics && ShopifyAnalytics.meta && ShopifyAnalytics.meta.page_view_event_id) {
+                csData.page_id = ShopifyAnalytics.meta.page_view_event_id
+            }
 
+            cartUpdated();
             
+
+            csData.event_name = getEventName(csData.path)
+            if(csData.event_name === 'cart_view'){
+                await cartChanges();
+            }
+            else if(csData.event_name === 'product_view'){
+                await product(csData.path)
+            }
+            
+            
+
             console.log("csData : ", csData)
+            // const res = await jQuery.ajax({
+            //     url: "http://localhost:3000/data-manager/page-viewed/add",
+            //     type: "POST",
+            //     dataType: "json",
+            //     cache: 0,
+            //     data: {
+            //         workspaceId: 1,
+            //         page_viewed: csData
+            //     }
+            // })
+            // console.log(res)
         }
 
         
-        ()
-        
-
         trackCS('${tenantId || ''}', '${appClientId || ''}')
 
     `
@@ -64,3 +138,5 @@ step 1: on which page we are ? product_view, collection_view, article_view, blog
 // customer_id: 
 // cart: 
 // product: 
+// os
+// previous_page
