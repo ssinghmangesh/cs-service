@@ -8,6 +8,14 @@ const trackingScript = (appClientId, tenantId) => {
             csData.os = navigator.platform
             csData.previous_page = document.referrer
 
+            cartUpdated = function() {
+                console.log('updated')
+                jQuery(window.document).ajaxSuccess(function(_e, _t, _r) {
+                    alert("hello");
+                    console.log(_r.url);
+                    // _r.url.match(/\\/cart\\/(add|update|change).js/) && cartChanges()
+                })
+            }
 
             function getEventName(path){
                 if(path === '/'){
@@ -36,6 +44,7 @@ const trackingScript = (appClientId, tenantId) => {
                     dataType: "json",
                     cache: 0
                 })
+                console.log(res);
                 csData = {...csData, cart: res}
                 
             }
@@ -60,6 +69,10 @@ const trackingScript = (appClientId, tenantId) => {
             if(ShopifyAnalytics && ShopifyAnalytics.meta && ShopifyAnalytics.meta.page_view_event_id) {
                 csData.page_id = ShopifyAnalytics.meta.page_view_event_id
             }
+
+            cartUpdated();
+            
+
             csData.event_name = getEventName(csData.path)
             if(csData.event_name === 'cart_view'){
                 await cartChanges();
@@ -68,13 +81,20 @@ const trackingScript = (appClientId, tenantId) => {
                 await product(csData.path)
             }
             
+            
+
             console.log("csData : ", csData)
-            const res = await jQuery.ajax({
-                url: "/cart.js",
-                type: "GET",
-                dataType: "json",
-                cache: 0
-            })
+            // const res = await jQuery.ajax({
+            //     url: "http://localhost:3000/data-manager/page-viewed/add",
+            //     type: "POST",
+            //     dataType: "json",
+            //     cache: 0,
+            //     data: {
+            //         workspaceId: 1,
+            //         page_viewed: csData
+            //     }
+            // })
+            // console.log(res)
         }
 
         

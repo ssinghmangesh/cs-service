@@ -88,11 +88,11 @@ router.post('/data-manager/checkout/add',async (req, res) => {
 
 router.post('/data-manager/page-viewed/add',async (req, res) => {
     const { page_viewed, workspaceId } = req.body;
-    const response = await update(PAGEVIEWED_TABLE_NAME, pageViewedColumns, [page_viewed], workspaceId);
+    console.log(page_viewed);
+    // const response = await update(PAGEVIEWED_TABLE_NAME, pageViewedColumns, [page_viewed], workspaceId);
 
     console.log("pageviewed done");
-
-    res.status(200).send("")
+    res.status(200).send("working")
 })
 
 router.get('/data-manager/cart/delete',async (req, res) => {
