@@ -16,7 +16,7 @@ const getImageUrl = (image_id, images) => {
     }
 }
 
-const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0, workspaceId }) => {
+const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0, workspaceId, count, progress = 0 }) => {
     //call to shopify fetch one batch
     let response = await Shopify.fetchProduct(shopName, accessToken, { since_id: sinceId, limit })
     // console.log(response.data.products.length)
@@ -46,12 +46,15 @@ const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0, workspaceId
     
     //call next batch
     if(response.data.products.length < limit) {
-        console.log("SYNC complete..")
+        progress += response.data.products.length
+        console.log(`${progress} of ${count} done`);
     } else {
         //call next since id
+        progress += response.data.products.length
+        console.log(`${progress} of ${count} done`);
         let nextSinceId = response.data.products[response.data.products.length - 1].id;
         // console.log("nextSinceId", nextSinceId)
-        await SYNC({ shopName, accessToken, sinceId: nextSinceId, limit, workspaceId})
+        await SYNC({ shopName, accessToken, sinceId: nextSinceId, limit, workspaceId, count, progress })
     }
     return;
 }
