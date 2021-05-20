@@ -51,15 +51,6 @@ const fetch = async (params) => {
     catch(err){
         return err.message
     }
-        // , function(err, data) {
-    //     if (err) {
-    //         console.error("Unable to read item. Error JSON:", JSON.stringify(err, null, 2));
-    //     } else {
-    //         console.log("GetItem succeeded:", JSON.stringify(data, null, 2));
-            
-    //         return "kl";
-    //     }
-    // });
 }
 
 
