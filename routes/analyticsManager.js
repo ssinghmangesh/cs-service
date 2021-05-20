@@ -38,7 +38,7 @@ router.post('/analytics-manager/pieChart', async (req, res) => {
 
 router.post('/analytics-manager/table', async (req, res) => {
     const details = req.body
-    let response = await Dashboard.table({TABLE_NAME: ORDER_TABLE_NAME, workspaceId: details.workspaceId, orderBykey: details.orderBykey, limit: details.limit, skipRowby: details.skipRrowby})
+    let response = await Dashboard.table({TABLE_NAME: CUSTOMER_TABLE_NAME, workspaceId: details.workspaceId, orderBykey: details.orderBykey, limit: details.limit, skipRowby: details.skipRrowby})
     console.log(response)
     res.status(200).send(response)
 })

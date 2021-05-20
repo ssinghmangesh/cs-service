@@ -6,7 +6,7 @@ AWS.config.update({
 
 var docClient = new AWS.DynamoDB.DocumentClient();
 
-console.log("Adding a new item...");
+// console.log("Adding a new item...");
 
 
 const insert = async (params) => {

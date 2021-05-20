@@ -45,7 +45,7 @@ class Dashboard {
         return abstractData(await PostgresqlDb.query(query));
     }
 
-    static async table({TABLE_NAME, workspaceId, orderBykey, limit = 10, skipRowby = 0, filters}) {
+    static async table({TABLE_NAME, workspaceId, orderBykey, limit = 10, skipRowby = 0, filters = {}}) {
         let query = ``
         query = `SELECT * FROM ${TABLE_NAME(workspaceId)} ${whereClause(filters)} ORDER BY ${orderBykey} LIMIT ${limit} OFFSET ${skipRowby};`
         // console.log(query)
