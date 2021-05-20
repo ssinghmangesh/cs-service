@@ -1,10 +1,8 @@
 const express = require('express')
-const { insert, del } = require('../aws/index.js')
-// const { insert } = require('../aws/insert.js')
-const { del } = require('../aws/del.js')
+const { insert, del, fetch, fetchAll } = require('../aws/index.js')
 const router = express.Router()
 
-
+/***** ADD *****/
 router.post('/user-manager/user/add', async function (req, res) {
     let { name, email, password } = req.body
     let params = {
@@ -48,6 +46,7 @@ router.post('/user-manager/workspace/add', function (req, res) {
     res.status(200).send(response)
 })
 
+/***** DELETE *****/
 router.post('/user-manager/user/delete', async function (req, res) {
     // console.log(req.body)
     let { user_id } = req.body
@@ -86,6 +85,59 @@ router.post('/user-manager/workspace/delete', function (req, res) {
     }
     console.log(params)
     let response = await del(params)
+    res.status(200).send(response)
+})
+
+/***** FETCH *****/
+router.post('/user-manager/user/fetch', function (req, res) {
+    let { user_id, name, email, password } = req.body
+    let params = {
+        TableName: "User",
+        Item: {
+            user_id,
+            name,
+            email,
+            password
+        }
+    }
+    console.log(params)
+    let response = await fetch(params)
+    res.status(200).send(response)
+})
+
+router.post('/user-manager/workspace/fetch', function (req, res) {
+    let { workspace_id, workspace_name } = req.body
+    let params = {
+        TableName: "Workspace",
+        Item: {
+            workspace_id,
+            workspace_name
+        }
+    }
+    console.log(params)
+    let response = await fetch(params)
+    res.status(200).send(response)
+})
+
+/***** FETCHALL *****/
+router.post('/user-manager/user/fetchAll', function (req, res) {
+    let params = {
+        TableName: "User"
+    }
+    console.log(params)
+    let response = await fetchAll(params)
+    res.status(200).send(response)
+})
+
+router.post('/user-manager/workspace/fetchAll', function (req, res) {
+    let params = {
+        TableName: "Workspace",
+        Key: {
+            workspace_id
+        }
+    }
+    console.log(params)
+    let response = await fetchAll(params)
     res.status(200).send(response)
 })
 
