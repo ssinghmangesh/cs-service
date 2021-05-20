@@ -1,4 +1,4 @@
-const { insert, del } = require("../../aws/index");
+const { insert, del, fetch } = require("../../aws/index");
 
 const addUserToWorkspace = async (data) => {
     const params = {
@@ -30,7 +30,18 @@ const deleteUserToWorkspace = async (data) => {
     await del(params)
 }
 
+const getUserToWorkspace = async (data) => {
+    var params = {
+            TableName: 'UserToWorkspace',
+            Key:{
+                "id": data.id
+            }
+        }
+    await fetch(params);
+}
+
 module.exports = {
     addUserToWorkspace,
-    deleteUserToWorkspace
+    deleteUserToWorkspace,
+    getUserToWorkspace
 }

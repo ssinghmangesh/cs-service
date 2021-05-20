@@ -9,23 +9,6 @@ var docClient = new AWS.DynamoDB.DocumentClient();
 const insert = (table, parameters) => {
     console.log(table)
     console.log(parameters)
-    var params = {
-        TableName: "User",
-        Item: {
-            "user_id": "5",
-            "name": "name1",
-            "email": "email1",
-            "password": "password1"
-        }
-        // TableName: table,
-        // Item: {
-        //     "id": parameters.id,
-            // "name": parameters.name,
-            // "email": parameters.email,
-            // "password": parameters.password,
-        //     "workspaceId": parameters.workspaceId
-        // }
-    }
     let name = parameters.name
     let email = parameters.email
     let password = parameters.password

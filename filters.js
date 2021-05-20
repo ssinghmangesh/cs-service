@@ -74,6 +74,23 @@
 //     ) 
 // )
 
+let filters = {
+    "relation": "AND",  //AND  OR
+    conditions: [{
+        type: "CUSTOMER", //CUSTOMER. ORDER, Cart
+        columnName: "name",
+        filterType: "contains",  // >, <,=, not 
+        dataType: "varchar",
+        values: "a"
+    },
+    {
+        type: "ORDER", //CUSTOMER. ORDER, Cart
+        columnName: "created_at",
+        filterType: "less_than",  // >, <,=, not 
+        dataType: "timestamptz",
+        values: '2020-05-13 11:49:40.765997+05:30'
+    }]
+}
 
 
 const whereClause = (filters) => {
