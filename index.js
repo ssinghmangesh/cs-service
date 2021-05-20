@@ -1,26 +1,11 @@
 const express = require('express');
 const app = express()
-const http = require("http").createServer(app);
-const io = require("socket.io")(http, {
-    cors: {
-        origin: "http://localhost:3000"
-    }
-});
-
-exports.io = io;
-
 const allRoutes = require('./routes');
 const cors = require("cors");
-const port = 4000;
+const port = 3000;
 
-io.on('connection', (socket) => {
-    //export socket
-    console.log("user connected");
-});
 
-app.use(cors({
-    origin: "http://localhost:3000"
-}))
+app.use(cors());
 
 app.use(express.urlencoded({
     extended: true
@@ -35,7 +20,7 @@ Object.keys(allRoutes).forEach(key => {
 
 
 
-http.listen(port, () => {
+app.listen(port, () => {
     console.log('App listening on port ', port);
 });
 

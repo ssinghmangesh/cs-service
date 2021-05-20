@@ -5,7 +5,7 @@ const orderColumns = require("../../DataManager/Setup/orderColumns.json");
 const fulfillmentColumns = require("../../DataManager/Setup/fulfillmentsColumns.json");
 const lineitemsColumns = require("../../DataManager/Setup/lineItemsColumns.json");
 const refundedColumns = require("../../DataManager/Setup/refundedColumns.json");
-const { io } = require("../../../index");
+const { socket } = require("../../../socket");
 
 
 const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0 , workspaceId, count, progress = 0}) => {
@@ -75,16 +75,12 @@ const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0 , workspaceI
     //call next batch
     if(response.data.orders.length < limit) {
         progress += response.data.orders.length
-        io.on('connection', (socket) => {
-            socket.emit('workspace', `${progress} of ${count} done`)
-        })
+        socket.emit("sync", `${progress} of ${count} done`)
         console.log(`${progress} of ${count} done`);
     } else {
         //call next since id
         progress += response.data.orders.length
-        io.on('connection', (socket) => {
-            socket.emit('workspace', `${progress} of ${count} done`)
-        })
+        socket.emit("sync", `${progress} of ${count} done`)
         console.log(`${progress} of ${count} done`);
         let nextSinceId = response.data.orders[response.data.orders.length - 1].id;
         // console.log("nextSinceId", nextSinceId)

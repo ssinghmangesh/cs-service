@@ -3,7 +3,7 @@ const {insert, del} = require("../../DataManager/index");
 const {PRODUCT_TABLE_NAME, VARIANT_TABLE_NAME} = require("../../DataManager/helper");
 const productColumns = require("../../DataManager/Setup/productColumns.json");
 const variantColumns = require("../../DataManager/Setup/variantColumns.json");
-const { io } = require("../../../index");
+const { socket } = require("../../../socket");
 
 
 const getImageUrl = (image_id, images) => {
@@ -49,13 +49,12 @@ const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0, workspaceId
     //call next batch
     if(response.data.products.length < limit) {
         progress += response.data.products.length
-        io.on('connection', (socket) => {
-            socket.emit('workspace', `${progress} of ${count} done`)
-        })
+        socket.emit("sync", `${progress} of ${count} done`)
         console.log(`${progress} of ${count} done`);
     } else {
         //call next since id
         progress += response.data.products.length
+        socket.emit("sync", `${progress} of ${count} done`)
         console.log(`${progress} of ${count} done`);
         let nextSinceId = response.data.products[response.data.products.length - 1].id;
         // console.log("nextSinceId", nextSinceId)
