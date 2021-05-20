@@ -9,22 +9,17 @@ var docClient = new AWS.DynamoDB.DocumentClient();
 const insert = (table, parameters) => {
     console.log(table)
     console.log(parameters)
+    let name = parameters.name
+    let email = parameters.email
+    let password = parameters.password
     var params = {
-        TableName: "User",
+        TableName: table,
         Item: {
-            "user_id": "5",
-            "name": "name1",
-            "email": "email1",
-            "password": "password1"
+            name,
+            email,
+            password,
+            user_id: "7"
         }
-        // TableName: table,
-        // Item: {
-        //     "id": parameters.id,
-            // "name": parameters.name,
-            // "email": parameters.email,
-            // "password": parameters.password,
-        //     "workspaceId": parameters.workspaceId
-        // }
     }
     console.log(params)
     console.log("Adding a new item...");
@@ -38,4 +33,6 @@ const insert = (table, parameters) => {
 }
 
 
-insert("User", {user_id: 1, name: "name1", email: "email1", password: "password1", workspaceId: [1, 2]})
+module.exports = {
+    insert
+}

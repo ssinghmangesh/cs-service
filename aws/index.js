@@ -6,10 +6,9 @@ AWS.config.update({
 
 var docClient = new AWS.DynamoDB.DocumentClient();
 
-console.log("Adding a new item...");
-
 
 const insert = async (params) => {
+    console.log("Adding a new item...");
     docClient.put(params, function(err, data) {
         if (err) {
             console.error("Unable to add item. Error JSON:", JSON.stringify(err, null, 2));
@@ -30,11 +29,12 @@ const insert = async (params) => {
 // }
 
 const del = async (params) => {
+    console.log("deleting item...")
     docClient.delete(params, function(err, data) {
         if (err) {
-            console.error("Unable to read item. Error JSON:", JSON.stringify(err, null, 2));
+            console.error("Unable to delete item. Error JSON:", JSON.stringify(err, null, 2));
         } else {
-            console.log("GetItem succeeded:", JSON.stringify(data, null, 2));
+            console.log("DeleteItem succeeded:", JSON.stringify(data, null, 2));
         }
     });
 }
