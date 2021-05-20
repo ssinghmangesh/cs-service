@@ -3,6 +3,8 @@ const {insert, del} = require("../../DataManager/index");
 const {PRODUCT_TABLE_NAME, VARIANT_TABLE_NAME} = require("../../DataManager/helper");
 const productColumns = require("../../DataManager/Setup/productColumns.json");
 const variantColumns = require("../../DataManager/Setup/variantColumns.json");
+const { io } = require("../../../index");
+
 
 const getImageUrl = (image_id, images) => {
     if(!images){
@@ -47,6 +49,9 @@ const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0, workspaceId
     //call next batch
     if(response.data.products.length < limit) {
         progress += response.data.products.length
+        io.on('connection', (socket) => {
+            socket.emit('workspace', `${progress} of ${count} done`)
+        })
         console.log(`${progress} of ${count} done`);
     } else {
         //call next since id

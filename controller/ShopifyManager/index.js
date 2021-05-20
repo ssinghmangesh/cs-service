@@ -27,6 +27,6 @@ const syncAll = async ({ shopName, accessToken, limit,workspaceId }) => {
 module.exports={
     syncAll
 }
-syncAll({ shopName: 'grofers-orders.myshopify.com', accessToken: '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',  limit: 50, workspaceId: 1 })
-.then(console.log)
-.catch(console.log)
+// syncAll({ shopName: 'grofers-orders.myshopify.com', accessToken: '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',  limit: 50, workspaceId: 1 })
+// .then(console.log)
+// .catch(console.log)

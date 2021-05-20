@@ -2,6 +2,7 @@ const Shopify = require('../Shopify')
 const {insert, del} = require("../../DataManager/index");
 const {DISCOUNT_TABLE_NAME} = require("../../DataManager/helper")
 const discountColumns = require("../../DataManager/Setup/discountColumns.json");
+const { io } = require("../../../index");
 
 const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0, workspaceId, count, progress = 0 }) => {
     //call to shopify fetch one batch
@@ -18,6 +19,10 @@ const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0, workspaceId
     //call next batch
     if(response.data.price_rules.length < limit) {
         progress += response.data.price_rules.length
+        io.on('connection', (socket) => {
+            console.log(socket.id);
+            socket.emit('workspace', `${progress} of ${count} done`)
+        })
         console.log(`${progress} of ${count} done`);
     } else {
         //call next since id
