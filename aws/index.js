@@ -64,11 +64,21 @@ const fetch = async (params) => {
 //     }
 // }
 
-// insert(params).then(console.log).catch(console.log)
+const fetchAll = async (params) => {
+    console.log("Scanning Movies table.");
+    return await docClient.scan(params).promise();
+}
+
+// var params = {
+//     TableName: "User",
+// };
+
+// fetchAll(params).then(console.log).catch(console.log)
 
 
 module.exports = {
     insert,
     del,
-    fetch
+    fetch,
+    fetchAll
 }
