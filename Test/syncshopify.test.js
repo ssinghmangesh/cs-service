@@ -5,7 +5,8 @@ const run = () => {
         url: 'http://localhost:3000/shopify-manager/sync',
         method: 'post',
         data: {
-            workspaceId: 9
+            workspaceId: 9,
+            iop: "backend"
         }
     })
 }

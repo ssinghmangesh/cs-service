@@ -16,3 +16,21 @@ nimish
 
 devashish
 1. 4. 5
+
+
+
+const io = require("socket.io-client");
+const socket = io.connect("http://localhost:4000/");
+function onError(message)
+{
+    console.log(message);
+}
+socket.on("connect", () => {
+  axios.post("http://localhost:4000/shopify-manager/sync", {workspaceId: 1, iop:"frontend"})
+    console.log(socket.id); // x8WIv7-mJelg7on_ALbx
+  });
+
+socket.on('connect_error', onError )
+socket.on('workspace', (message) => {
+  console.log(message);
+})
