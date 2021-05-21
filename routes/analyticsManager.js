@@ -13,7 +13,7 @@ router.post('/analytics-manager/count', async (req, res) => {
     let table = `${details.table}${details.workspaceId}`
     let response = await Dashboard.count({TABLE_NAME: table, startdate: details.startdate, enddate: details.enddate})
     console.log(response)
-    res.status(200).send(response)
+    res.status(200).send( { status: true, message: "successful", data: response } )
 })
 
 router.post('/analytics-manager/sum', async (req, res) => {
@@ -21,7 +21,7 @@ router.post('/analytics-manager/sum', async (req, res) => {
     let table = `${details.table}${details.workspaceId}`
     let response = await Dashboard.sum({TABLE_NAME: table, columnname: details.columnname, workspaceId: details.workspaceId, startdate: details.startdate, enddate: details.enddate})
     console.log(response)
-    res.status(200).send(response)
+    res.status(200).send( { status: true, message: "successful", data: response } )
 })
 
 router.post('/analytics-manager/lineGraph', async (req, res) => {
@@ -29,7 +29,7 @@ router.post('/analytics-manager/lineGraph', async (req, res) => {
     let table = `${details.table}${details.workspaceId}`
     let response = await Dashboard.lineGraph({TABLE_NAME: table, columnname: details.columnname, groupBykey: details.groupBykey, workspaceId: details.workspaceId, startdate: details.startdate, enddate: details.enddate})
     console.log(response)
-    res.status(200).send(response)
+    res.status(200).send( { status: true, message: "successful", data: response } )
 })
 
 router.post('/analytics-manager/barGraph', async (req, res) => {
@@ -37,7 +37,7 @@ router.post('/analytics-manager/barGraph', async (req, res) => {
     let table = `${details.table}${details.workspaceId}`
     let response = await Dashboard.barGraph({TABLE_NAME: table, columnname: details.columnname, groupBykey: details.groupBykey, groupBykey2: details.groupBykey2, workspaceId: details.workspaceId, startdate: details.startdate, enddate: details.enddate})
     console.log(response)
-    res.status(200).send(response)
+    res.status(200).send( { status: true, message: "successful", data: response } )
 })
 
 router.post('/analytics-manager/pieChart', async (req, res) => {
@@ -45,7 +45,7 @@ router.post('/analytics-manager/pieChart', async (req, res) => {
     let table = `${details.table}${details.workspaceId}`
     let response = await Dashboard.pieChart({TABLE_NAME: table, columnname: details.columnname, workspaceId: details.workspaceId, startdate: details.startdate, enddate: details.enddate})
     console.log(response)
-    res.status(200).send(response)
+    res.status(200).send( { status: true, message: "successful", data: response } )
 })
 
 router.post('/analytics-manager/table', async (req, res) => {
@@ -53,7 +53,7 @@ router.post('/analytics-manager/table', async (req, res) => {
     let table = `${details.table}${details.workspaceId}`
     let response = await Dashboard.table({TABLE_NAME: table, workspaceId: details.workspaceId, orderBykey: details.orderBykey, limit: details.limit, skipRowby: details.skipRrowby})
     console.log(response)
-    res.status(200).send(response)
+    res.status(200).send( { status: true, message: "successful", data: response } )
 })
 
 module.exports = router

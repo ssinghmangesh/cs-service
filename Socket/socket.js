@@ -21,6 +21,13 @@ io.of("/workspace").on("connection", (socket) => {
     })
 })
 
+io.of("/customer").on("connection", (socket) => {
+    console.log("customer connected");
+    socket.on('disconnect', () => {
+        console.log('disconnected');
+    })
+})
+
 http.listen(PORT, function() {
    console.log(`listening on localhost:${PORT}`);
 });
