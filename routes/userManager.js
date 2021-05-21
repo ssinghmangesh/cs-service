@@ -25,55 +25,59 @@ const router = express.Router()
 router.post('/user-manager/user/add', async function (req, res) {
     let response = await addUser(req.body)
     // let response = await insert("User", req.body)
+<<<<<<< HEAD
     return res.status(200).send({ status: 200, message: "successful", data: response })
+=======
+    return res.status(200).send( { status: true, message: "successful", data: response } )
+>>>>>>> 75257187e997f77619f0b5820c29b484bad291b2
 })
 
 router.post('/user-manager/user-to-workspace/add', async function (req, res) {
     let response = await addUserToWorkspace(req.body)
-    res.status(200).send(response)
+    res.status(200).send( { status: true, message: "successful", data: response } )
 })
 
 router.post('/user-manager/workspace/add', async function (req, res) {
     let response = await addWorkspace(req.body)
-    res.status(200).send(response)
+    res.status(200).send( { status: true, message: "successful", data: response } )
 })
 
 /***** DELETE *****/
 router.post('/user-manager/user/delete', async function (req, res) {
     let response = await deleteUser(req.body)
-    res.status(200).send(response)
+    res.status(200).send( { status: true, message: "successful", data: response } )
 })
 
 router.post('/user-manager/user-to-workspace/delete', async function (req, res) {
     let response = await deleteUserToWorkspace(req.body)
-    res.status(200).send(response)
+    res.status(200).send( { status: true, message: "successful", data: response } )
 })
 
 router.post('/user-manager/workspace/delete', async function (req, res) {
     let response = await deleteWorkspace(req.body)
-    res.status(200).send(response)
+    res.status(200).send( { status: true, message: "successful", data: response } )
 })
 
 /***** FETCH *****/
 router.post('/user-manager/user/fetch', async function (req, res) {
     let response = await fetchUser(req.body)
-    res.status(200).send(response)
+    res.status(200).send( { status: true, message: "successful", data: response } )
 })
 
 router.post('/user-manager/workspace/fetch', async function (req, res) {
     let response = await fetchWorkspace(req.body)
-    res.status(200).send(response)
+    res.status(200).send( { status: true, message: "successful", data: response } )
 })
 
 /***** FETCH-ALL *****/
 router.post('/user-manager/user/fetchAll', async function (req, res) {
     let response = await fetchAllUsers(req.body)
-    res.status(200).send(response)
+    res.status(200).send( { status: true, message: "successful", data: response } )
 })
 
 router.post('/user-manager/workspace/fetchAll', async function (req, res) {
     let response = await fetchAllWorkspaces(req.body)
-    res.status(200).send(response)
+    res.status(200).send( { status: true, message: "successful", data: response } )
 })
 
 module.exports = router
