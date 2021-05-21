@@ -24,8 +24,8 @@ const pageViewedColumns = require("../controller/DataManager/Setup/pageViewedCol
 const checkoutLineItemsColumns = require("../controller/DataManager/Setup/checkoutLineItemsColumns.json");
 
 router.get('/data-manager/customer/count', async (req, res) => {
-    console.log(req.headers);
-    const response = await Dashboard.Count({TABLE_NAME: CUSTOMER_TABLE_NAME, workspaceId: 1, startdate: '2000-01-01 11:49:40.765997+05:30', enddate: '2021-05-13 11:49:40.765997+05:30'})
+    const { workspaceId } = req.headers
+    const response = await Dashboard.Count({TABLE_NAME: CUSTOMER_TABLE_NAME, workspaceId, startdate: '2000-01-01 11:49:40.765997+05:30', enddate: '2021-05-13 11:49:40.765997+05:30'})
     res.status(200).send(response);
 })
 

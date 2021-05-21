@@ -3,9 +3,9 @@ const { addWorkspace, deleteWorkspace, fetchWorkspace, fetchAllWorkspaces } = re
 const { addUserToWorkspace, deleteUserToWorkspace } = require("./userToWorkspace");
 
 module.exports = {
-    createUser, 
-    createWorkspace, 
-    createUserToWorkspce,
+    // createUser, 
+    // createWorkspace, 
+    // createUserToWorkspce,
 
     addUser,
     addWorkspace,

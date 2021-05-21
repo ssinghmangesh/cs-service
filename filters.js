@@ -244,7 +244,7 @@ const typeBuild = (ptype, { columnName, filterType, dataType, values, type }) =>
 // AND (name IN ('hello', 'world', 'number', '1')) 
 // OR (amount IN (10,20,30))
 
-console.log(whereClause(filters, ''))
+// console.log(whereClause(filters, ''))
 module.exports = {
     whereClause
 }
