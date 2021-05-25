@@ -44,7 +44,7 @@ router.post('/analytics-manager/pieChart', async (req, res) => {
     const details = req.body
     let table = `${details.table}${details.workspaceId}`
     let response = await Dashboard.pieChart({TABLE_NAME: table, columnname: details.columnname, workspaceId: details.workspaceId, startdate: details.startdate, enddate: details.enddate})
-    console.log(response)
+    // console.log(response)
     res.status(200).send( { status: true, message: "successful", data: response } )
 })
 
