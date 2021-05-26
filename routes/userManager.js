@@ -25,11 +25,7 @@ const router = express.Router()
 router.post('/user-manager/user/add', async function (req, res) {
     let response = await addUser(req.body)
     // let response = await insert("User", req.body)
-<<<<<<< HEAD
-    return res.status(200).send({ status: 200, message: "successful", data: response })
-=======
     return res.status(200).send( { status: true, message: "successful", data: response } )
->>>>>>> 75257187e997f77619f0b5820c29b484bad291b2
 })
 
 router.post('/user-manager/user-to-workspace/add', async function (req, res) {
