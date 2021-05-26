@@ -26,35 +26,35 @@ class Dashboard {
         return abstractData(await PostgresqlDb.query(query), "single");
     }
 
-    static async sum({TABLE_NAME, columnname, workspaceId, startdate, enddate}) {
+    static async sum({TABLE_NAME, columnname, startdate, enddate}) {
         let query = ``
         query = `SELECT SUM(${columnname}) FROM ${TABLE_NAME} ${WHERE_CLAUSE({startdate, enddate})};`
         return abstractData(await PostgresqlDb.query(query), "single");
     }
 
-    static async lineGraph({TABLE_NAME, columnname, groupBykey = 'MONTH', workspaceId, startdate, enddate}) {
+    static async lineGraph({TABLE_NAME, columnname, groupBykey = 'MONTH', startdate, enddate, x = 'x', y = 'y'}) {
         let query = ``
-        query = `SELECT EXTRACT(${groupBykey} FROM created_at) AS Period, SUM(${columnname}) AS Revenue FROM ${TABLE_NAME} ${WHERE_CLAUSE({startdate, enddate})} GROUP BY Period ORDER BY Period;`
+        query = `SELECT EXTRACT(${groupBykey} FROM created_at) AS ${x}, SUM(${columnname}) AS ${y} FROM ${TABLE_NAME} ${WHERE_CLAUSE({startdate, enddate})} GROUP BY ${x} ORDER BY ${x};`
         // console.log(query);
         return abstractData(await PostgresqlDb.query(query));
     }
 
-    static async barGraph({TABLE_NAME, columnname, groupBykey = 'MONTH', groupBykey2 = 'os', workspaceId, startdate, enddate}) {
+    static async barGraph({TABLE_NAME, columnname, groupBykey = 'MONTH', groupBykey2 = 'os', startdate, enddate}) {
         let query = ``
         query = `SELECT EXTRACT(${groupBykey} FROM created_at) AS Period, ${groupBykey2}, SUM(${columnname}) AS Revenue FROM ${TABLE_NAME} ${WHERE_CLAUSE({startdate, enddate})} GROUP BY Period, ${groupBykey2} ORDER BY Period, ${groupBykey2};`
         // console.log(query);
         return abstractData(await PostgresqlDb.query(query));
     }
 
-    static async pieChart({TABLE_NAME, columnname, workspaceId, startdate, enddate}) {
+    static async pieChart({TABLE_NAME, columnname, startdate, enddate}) {
         let query = ``
         query = `SELECT ${columnname}, COUNT(${columnname}) AS Count FROM ${TABLE_NAME} ${WHERE_CLAUSE({startdate, enddate})} GROUP BY ${columnname};`
         return abstractData(await PostgresqlDb.query(query));
     }
 
-    static async table({TABLE_NAME, workspaceId, orderBykey, limit = 10, skipRowby = 0, filters = {}}) {
+    static async table({TABLE_NAME='order', workspaceId, orderBykey, limit = 10, skipRowby = 0, filters = {}}) {
         let query = ``
-        query = `SELECT * FROM ${TABLE_NAME} ${whereClause(filters)} ORDER BY ${orderBykey} LIMIT ${limit} OFFSET ${skipRowby};`
+        query = `SELECT * FROM ${TABLE_NAME} ORDER BY ${orderBykey} LIMIT ${limit} OFFSET ${skipRowby};`
         // console.log(query)
         return abstractData(await PostgresqlDb.query(query));
     }
