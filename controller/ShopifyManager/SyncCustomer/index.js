@@ -2,9 +2,11 @@ const Shopify = require('../Shopify')
 const {insert, del} = require("../../DataManager/index");
 const {CUSTOMER_TABLE_NAME} = require("../../DataManager/helper")
 const customerColumn = require('../../DataManager/Setup/customerColumns.json');
+const { socket } = require("../../../socket");
 
+// console.log(socket);
 
-const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0, workspaceId }) => {
+const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0, workspaceId, count, progress = 0 }) => {
     //call to shopify fetch one batch
 
     let response = await Shopify.fetchCustomer(shopName, accessToken, { since_id: sinceId, limit })
@@ -17,12 +19,17 @@ const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0, workspaceId
     }
     //call next batch
     if(response.data.customers.length < limit) {
-        console.log("SYNC complete..")
+        progress += response.data.customers.length
+        socket.emit("sync", `${progress} of ${count} done`)
+        console.log(`${progress} of ${count} done`);
     } else {
         //call next since id
+        progress += response.data.customers.length
+        socket.emit("sync", `${progress} of ${count} done`)
+        console.log(`${progress} of ${count} done`);
         let nextSinceId = response.data.customers[response.data.customers.length - 1].id;
         // console.log("nextSinceId", nextSinceId)
-        await SYNC({ shopName, accessToken, sinceId: nextSinceId, limit, workspaceId})
+        await SYNC({ shopName, accessToken, sinceId: nextSinceId, limit, workspaceId, count, progress })
     }
     return;
 }

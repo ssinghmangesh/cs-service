@@ -29,7 +29,7 @@ const {
 } = require("../helper");
 
 
-const { createTable } = require('./helper')
+const { createTable, deleteTable } = require('./helper')
 
 const setupWorkspace = async(workspaceId) => {
 
@@ -63,11 +63,18 @@ const setupWorkspace = async(workspaceId) => {
         status: true,
         message: "Successful"
     }
-
 }
 
+const deleteWorkspace = async (workspaceId) => {
+    await deleteTable(workspaceId)
 
-// createOrderTable(222)
+    return {
+        status: true,
+        message: "Successful"
+    }
+}
+
+// deleteWorkspace(222)
 // .then(console.log)
 // .catch(console.log)
 

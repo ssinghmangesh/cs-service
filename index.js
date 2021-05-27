@@ -1,11 +1,11 @@
 const express = require('express');
+const app = express()
 const allRoutes = require('./routes');
 const cors = require("cors");
-const port = 3000
+const port = 3000;
 
-const app = express()
 
-app.use(cors())
+app.use(cors());
 
 app.use(express.urlencoded({
     extended: true
@@ -23,3 +23,4 @@ Object.keys(allRoutes).forEach(key => {
 app.listen(port, () => {
     console.log('App listening on port ', port);
 });
+

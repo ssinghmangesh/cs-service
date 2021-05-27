@@ -1,11 +1,11 @@
-const { addUser, deleteUser } = require("./user")
-const { addWorkspace, deleteWorkspace } = require("./workspace")
+const { addUser, deleteUser, fetchUser, fetchAllUsers } = require("./user")
+const { addWorkspace, deleteWorkspace, fetchWorkspace, fetchAllWorkspaces } = require("./workspace")
 const { addUserToWorkspace, deleteUserToWorkspace } = require("./userToWorkspace");
 
 module.exports = {
-    createUser, 
-    createWorkspace, 
-    createUserToWorkspce,
+    // createUser, 
+    // createWorkspace, 
+    // createUserToWorkspce,
 
     addUser,
     addWorkspace,
@@ -18,6 +18,6 @@ module.exports = {
 
     fetchUser, 
     fetchWorkspace,
-    fetchAllUser,   //params workspaceid
-    fetchAllWorkspace //parms user id 
+    fetchAllUsers,   //params workspaceid
+    fetchAllWorkspaces //parms user id 
 }

@@ -30,7 +30,18 @@ const deleteUserToWorkspace = async (data) => {
     await del(params)
 }
 
+// const getUserToWorkspace = async (data) => {
+//     var params = {
+//             TableName: 'UserToWorkspace',
+//             Key:{
+//                 "id": data.id
+//             }
+//         }
+//     await fetch(params);
+// }
+
 module.exports = {
     addUserToWorkspace,
-    deleteUserToWorkspace
+    deleteUserToWorkspace,
+    // getUserToWorkspace
 }
