@@ -24,7 +24,7 @@ const createTable = async (columns, TABLE_NAME, workspaceId) => {
     }).join(", ")
 
     const query = `
-        CREATE TABLE "${TABLE_NAME(workspaceId)}"(
+        CREATE TABLE IF NOT EXISTS "${TABLE_NAME(workspaceId)}"(
             ${columnsQuery}
         );
     `

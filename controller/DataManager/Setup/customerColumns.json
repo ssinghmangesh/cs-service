@@ -1,8 +1,7 @@
 [
     {
         "columnName":"accepts_marketing",
-        "dataType": "boolean",
-        "primaryKey": true
+        "dataType": "boolean"
     },
     {
         "columnName":"accepts_marketing_updated_at",
@@ -38,7 +37,8 @@
     },
     {
         "columnName":"id",
-        "dataType": "numeric"
+        "dataType": "numeric",
+        "primaryKey": true
     },
     {
         "columnName":"last_order_id",

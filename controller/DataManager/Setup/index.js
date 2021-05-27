@@ -78,10 +78,13 @@ const deleteWorkspace = async (workspaceId) => {
 // .then(console.log)
 // .catch(console.log)
 
-
+// setupWorkspace(333)
+// .then(console.log)
+// .catch(console.log)
 
 
 
 module.exports = {
-    setupWorkspace
+    setupWorkspace,
+    deleteWorkspace
 }

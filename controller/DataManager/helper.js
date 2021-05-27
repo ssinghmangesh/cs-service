@@ -142,7 +142,7 @@ const CHECKOUTLINEITEMS_TABLE_NAME = (workspaceId) => {
 }
 
 const PAGEVIEWED_TABLE_NAME = (workspaceId) => {
-    return `checkoutlineitems${workspaceId}`
+    return `pageviewed${workspaceId}`
 }
 
 // const
