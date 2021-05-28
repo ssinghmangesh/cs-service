@@ -77,15 +77,14 @@ class Dashboard {
 
     static async timeline({workspaceId, customerId}) {
         let query1 = ``
-        query1 = `SELECT * FROM order${workspaceId} WHERE customer_id = ${customerId} limit 10;`
+        query1 = `SELECT * FROM order${workspaceId} WHERE customer_id = ${customerId} limit 2;`
         let query2 = ``
         query2 = `SELECT * FROM pageviewed${workspaceId} WHERE customer_id = ${customerId};`
-        // console.log(query1)
-        // console.log(query2)
         const data1 = abstractData(await PostgresqlDb.query(query1));
         const data2 = abstractData(await PostgresqlDb.query(query2));
-        data1.concat(data2)
-        return data1
+        const data = [...data1, ...data2]
+        // console.log('!!!!!!!!!', data)
+        return data
     }
 }
 
