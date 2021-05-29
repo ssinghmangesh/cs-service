@@ -43,10 +43,44 @@ class Customer {
         console.log(query);
         return abstractData(await PostgresqlDb.query(query));
     }
+
+    static async aggregate({customerId, workspaceId, aggregateDefinition}) {
+        let queryAggregate = `SELECT `
+        let queryNonAggregate = `SELECT `
+        let f = 0, g = 0
+        for(let i = 0; i < aggregateDefinition.length; i++) {
+            if(aggregateDefinition[i].aggregate === '') {
+                if(f) {
+                    queryNonAggregate += `, `
+                }
+                queryNonAggregate += `${aggregateDefinition[i].columnname}`
+                queryNonAggregate += ` AS ${aggregateDefinition[i].alias}`
+                f = 1
+            } else {
+                if(g) {
+                    queryAggregate += `, `
+                }
+                queryAggregate += `${aggregateDefinition[i].aggregate}(${aggregateDefinition[i].columnname})`
+                queryAggregate += ` AS ${aggregateDefinition[i].alias}`
+                g = 1
+            }
+        }
+        queryAggregate += ` FROM customeraggregate${workspaceId} ${WHERE_CLAUSE({customerId})};`
+        queryNonAggregate += ` FROM customeraggregate${workspaceId} ${WHERE_CLAUSE({customerId})};`
+        console.log('!!!!!', queryAggregate)
+        console.log('@@@@@', queryNonAggregate)
+        let dataAggregate = [], dataNonAggregate = []
+        if(g) dataNonAggregate = abstractData(await PostgresqlDb.query(queryNonAggregate));
+        if(f) dataAggregate = abstractData(await PostgresqlDb.query(queryAggregate));
+        // console.log('!!!!!!!!!!!!!!', dataNonAggregate)
+        // console.log('@@@@@@@@@@@@@@', dataAggregate)
+        const data = [...dataAggregate, ...dataNonAggregate]
+        return data
+    }
 }
 
 module.exports = Customer
 
-// Customer.orders({TABLE_NAME: 'order333', startdate: '2021-01-01 11:49:40.765997+05:30', enddate: '2021-05-13 11:49:40.765997+05:30', customerId: 0})
+// Customer.aggregate({customerId: 2861387415684, workspaceId: 333, aggregateDefinition: aggregateDefinition})
 // .then(console.log)
 // .catch(console.log)

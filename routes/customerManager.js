@@ -43,4 +43,45 @@ router.post('/customer-manager/page-viewed', async (req, res) => {
     res.status(200).send( { status: true, message: "successful", data: response } )
 })
 
+router.post('/customer-manager/customer-aggregate', async (req, res) => {
+    const details = req.body
+    const { 'x-workspace-id': workspaceId } = req.headers
+    let response = await Customer.aggregate({customerId: details.customerId, workspaceId: workspaceId, aggregateDefinition: details.aggregateDefinition})
+    console.log(response)
+    res.status(200).send( { status: true, message: "successful", data: response } )
+})
+
 module.exports = router
+
+// let aggregateDefinition = [
+//     {
+//         aggregate: 'count',
+//         columnname: 'total_order_count',
+//         alias: 'Total_Count'
+//     },
+//     {
+//         aggregate: 'sum',
+//         columnname: 'total_amount_spent',
+//         alias: 'Total_Spent'
+//     },
+//     {
+//         aggregate: 'avg',
+//         columnname: 'avg_order_price',
+//         alias: 'Average'
+//     },
+//     {
+//         aggregate: '',
+//         columnname: 'tags',
+//         alias: 'Tags'
+//     },
+//     {
+//         aggregate: '',
+//         columnname: 'first_order_at',
+//         alias: 'First_Order'
+//     },
+//     {
+//         aggregate: '',
+//         columnname: 'last_seen',
+//         alias: 'Last_Seen'
+//     }
+// ]

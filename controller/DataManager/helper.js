@@ -82,7 +82,6 @@ const getValues = ({ columnData, data }) => {
     return allRow
 }
 
-
 const getIds = (data) => {
     return `(${data.map((value) => {
         if(typeof value.id === 'string'){
@@ -145,6 +144,10 @@ const PAGEVIEWED_TABLE_NAME = (workspaceId) => {
     return `pageviewed${workspaceId}`
 }
 
+const CUSTOMERAGGREGATE_TABLE_NAME = (workspaceId) => {
+    return `customeraggregate${workspaceId}`
+}
+
 // const
 // getInsertQury(discount222, order)
 // .then(console.log)
@@ -166,5 +169,6 @@ module.exports={
     CARTLINEITEMS_TABLE_NAME,
     CHECKOUT_TABLE_NAME,
     CHECKOUTLINEITEMS_TABLE_NAME,
-    PAGEVIEWED_TABLE_NAME
+    PAGEVIEWED_TABLE_NAME,
+    CUSTOMERAGGREGATE_TABLE_NAME
 }
