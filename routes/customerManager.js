@@ -16,7 +16,7 @@ router.post('/customer-manager/orders', async (req, res) => {
                                             customerId: details.customerId, orderBykey: details.orderBykey, 
                                             orderByDirection: details.orderByDirection, limit: details.limit, 
                                             skipRowby: details.skipRowby})
-    console.log(response)
+    // console.log(response)
     res.status(200).send( { status: true, message: "successful", data: response } )
 })
 
@@ -28,7 +28,7 @@ router.post('/customer-manager/cart', async (req, res) => {
                                         customerId: details.customerId, orderBykey: details.orderBykey, 
                                         orderByDirection: details.orderByDirection, limit: details.limit, 
                                         skipRowby: details.skipRowby})
-    console.log(response)
+    // console.log(response)
     res.status(200).send( { status: true, message: "successful", data: response } )
 })
 
@@ -39,7 +39,7 @@ router.post('/customer-manager/page-viewed', async (req, res) => {
     let response = await Customer.pageViewed({TABLE_NAME: table, customerId: details.customerId, orderBykey: details.orderBykey, 
                                                 orderByDirection: details.orderByDirection, limit: details.limit, 
                                                 skipRowby: details.skipRowby})
-    console.log(response)
+    // console.log(response)
     res.status(200).send( { status: true, message: "successful", data: response } )
 })
 
@@ -47,7 +47,7 @@ router.post('/customer-manager/customer-aggregate', async (req, res) => {
     const details = req.body
     const { 'x-workspace-id': workspaceId } = req.headers
     let response = await Customer.aggregate({customerId: details.customerId, workspaceId: workspaceId, aggregateDefinition: details.aggregateDefinition})
-    console.log(response)
+    // console.log(response)
     res.status(200).send( { status: true, message: "successful", data: response } )
 })
 

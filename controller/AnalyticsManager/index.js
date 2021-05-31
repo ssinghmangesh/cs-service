@@ -25,7 +25,7 @@ class Dashboard {
     static async count({TABLE_NAME, startdate, enddate}) {
         let query = ``
         query = `SELECT COUNT(*) FROM ${TABLE_NAME} ${WHERE_CLAUSE({startdate, enddate})};`
-        console.log(query);
+        // console.log(query);
         return abstractData(await PostgresqlDb.query(query), "single");
     }
 
@@ -71,7 +71,7 @@ class Dashboard {
             }
         }
         query += ` FROM ${TABLE_NAME} LIMIT ${limit} OFFSET ${skipRowby};`
-        console.log(query)
+        // console.log(query)
         return abstractData(await PostgresqlDb.query(query), "single");
     }
 
