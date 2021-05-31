@@ -169,23 +169,15 @@ const typeBuild = (ptype, { columnName, filterType, dataType, values, type }) =>
         }
     } else if (dataType === 'varchar') {
         if (filterType === 'equal_to') {
-            query = `${prefix} (${columnName} = '${values}')`
+            query = `${prefix} (${columnName} = '${values[0]}')`
         } else if (filterType === 'not_equal_to') {
-            query = `${prefix} (${columnName} != '${values}')`
-        } else if (filterType === 'less_than') {
-            query = `${prefix} (${columnName} < '${values}')`
-        } else if (filterType === 'less_than_equal_to') {
-            query = `${prefix} (${columnName} <= '${values}')`
-        } else if (filterType === 'greater_than') {
-            query = `${prefix} (${columnName} > '${values}')`
-        } else if (filterType === 'greater_than_equal_to') {
-            query = `${prefix} (${columnName} >= '${values}')`
+            query = `${prefix} (${columnName} != '${values[0]}')`
         } else if (filterType === 'starts_with') {
-            query = `${prefix} (${columnName} like '%${values}')`
+            query = `${prefix} (${columnName} like '%${values[0]}')`
         } else if (filterType === 'ends_with') {
-            query = `${prefix} (${columnName} like '${values}%')`
+            query = `${prefix} (${columnName} like '${values[0]}%')`
         } else if (filterType === 'contains') {
-            query = `${prefix} (${columnName} like '%${values}%')`
+            query = `${prefix} (${columnName} like '%${values[0]}%')`
         }
     } else if (dataType === 'varchar[]') {
         if (filterType === 'in') {
