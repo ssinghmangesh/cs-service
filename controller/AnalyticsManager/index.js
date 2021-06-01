@@ -1,4 +1,4 @@
-
+const { whereClause } = require("../../filters")
 const PostgresqlDb = require('./../../db')
 // const { whereClause } = require('./../../filters.js')
 
@@ -56,8 +56,13 @@ class Dashboard {
     }
 
     static async table({TABLE_NAME = 'order', orderBykey, orderByDirection, limit = 10, skipRowby = 0, filters = {}}) {
+        let wc = whereClause(filters);
         let query = ``
-        query = `SELECT * FROM ${TABLE_NAME} ORDER BY ${orderBykey} ${orderByDirection} LIMIT ${limit} OFFSET ${skipRowby};`
+        query = `
+            SELECT * FROM ${TABLE_NAME}
+            ${wc ? 'WHERE '+wc : ''}
+            ORDER BY ${orderBykey} ${orderByDirection} 
+            LIMIT ${limit} OFFSET ${skipRowby};`
         console.log(query)
         return abstractData(await PostgresqlDb.query(query));
     }

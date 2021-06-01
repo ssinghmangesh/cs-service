@@ -14,3 +14,5 @@ router.post('/whereClause', async (req, res) => {
     // console.log(response)
     res.status(200).send( { status: true, message: "successful", data: response } )
 })
+
+module.exports = router;

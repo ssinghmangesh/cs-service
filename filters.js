@@ -3,7 +3,8 @@ let filters = {
     "relation": "AND",  //AND  OR
     conditions: [
         {
-            "relation": "AND",  //AND  OR
+            "relation": "AND",
+            'operator': 'Include/Exclude',  //AND  OR
             conditions: [{
                 type: "PRODUCT", //CUSTOMER. ORDER, Cart
                 columnName: "created_at",
@@ -145,17 +146,19 @@ const typeBuild = (ptype, { columnName, filterType, dataType, values, type }) =>
     let query = ''
     if (dataType === 'numeric') {
         if (filterType === 'equal_to') {
-            query = `${prefix} (${columnName} = ${values})`
+            query = `${prefix} (${columnName} = ${values[0]})`
         } else if (filterType === 'not_equal_to') {
-            query = `${prefix} (${columnName} != ${values})`
+            query = `${prefix} (${columnName} != ${values[0]})`
         } else if (filterType === 'less_than') {
-            query = `${prefix} (${columnName} < ${values})`
+            query = `${prefix} (${columnName} < ${values[0]})`
         } else if (filterType === 'less_than_equal_to') {
-            query = `${prefix} (${columnName} <= ${values})`
+            query = `${prefix} (${columnName} <= ${values[0]})`
         } else if (filterType === 'greater_than') {
-            query = `${prefix} (${columnName} > ${values})`
+            query = `${prefix} (${columnName} > ${values[0]})`
         } else if (filterType === 'greater_than_equal_to') {
-            query = `${prefix} (${columnName} >= ${values})`
+            query = `${prefix} (${columnName} >= ${values[0]})`
+        } else if (filterType === 'between') {
+            query = `${prefix} (${columnName} BETWEEN ${values[0]} AND ${values[1]})`
         }
     } else if (dataType === 'numeric[]') {
         if (filterType === 'in') {
@@ -172,20 +175,16 @@ const typeBuild = (ptype, { columnName, filterType, dataType, values, type }) =>
             query = `${prefix} (${columnName} = '${values}')`
         } else if (filterType === 'not_equal_to') {
             query = `${prefix} (${columnName} != '${values}')`
-        } else if (filterType === 'less_than') {
-            query = `${prefix} (${columnName} < '${values}')`
-        } else if (filterType === 'less_than_equal_to') {
-            query = `${prefix} (${columnName} <= '${values}')`
-        } else if (filterType === 'greater_than') {
-            query = `${prefix} (${columnName} > '${values}')`
-        } else if (filterType === 'greater_than_equal_to') {
-            query = `${prefix} (${columnName} >= '${values}')`
         } else if (filterType === 'starts_with') {
             query = `${prefix} (${columnName} like '%${values}')`
         } else if (filterType === 'ends_with') {
             query = `${prefix} (${columnName} like '${values}%')`
         } else if (filterType === 'contains') {
             query = `${prefix} (${columnName} like '%${values}%')`
+        } else if (filterType === 'is_known' ) {
+
+        } else if (filterType === 'is_unknown') {
+
         }
     } else if (dataType === 'varchar[]') {
         if (filterType === 'in') {
@@ -204,7 +203,9 @@ const typeBuild = (ptype, { columnName, filterType, dataType, values, type }) =>
             query = `${prefix} (${columnName} NOT BETWEEN '${values[0]}' AND '${values[1]}' )`
         }
     } else if (dataType === 'boolean') {
-        if (filterType === 'equal_to') {
+        // values = ['Yes', 'No']
+        // 'coloumnName = true OR coloumnName = false'
+        if (filterType === 'Yes') {
             query = `${prefix} (${columnName} = '${values}')`
         } else if (filterType === 'not_equal_to') {
             query = `${prefix} (${columnName} = '${values}')`
