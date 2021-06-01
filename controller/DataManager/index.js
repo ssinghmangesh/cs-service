@@ -1,7 +1,7 @@
 const PostgresqlDb = require('../../db')
 const customerAggregateColumn = require('./Setup/customerAggregateColumns.json')
 
-const {getColumnName, getValues, getIds, getValuesCustomerAggregate} =  require("./helper")
+const {getColumnName, getValues, getIds} =  require("./helper")
 const {
     CUSTOMER_TABLE_NAME,
     ORDER_TABLE_NAME,
@@ -22,41 +22,51 @@ const insert = async(TABLE_NAME, column, data, workspaceId) => {
         ${getColumnName({ columnData: column })}
         VALUES ${getValues({ columnData: column, data })}
     `
-    // console.log(query)
+    console.log(query)
     await PostgresqlDb.query(query)
 }
 
 const aggregate = async (workspaceId, customerId) => {
+    console.log('@@@@@@@@@@@')
     let data = await PostgresqlDb.query(`SELECT * FROM ${CUSTOMER_TABLE_NAME(workspaceId)} WHERE id = ${customerId};`)
     const customer = data.rows[0]
     data = await PostgresqlDb.query(`SELECT * FROM ${ORDER_TABLE_NAME(workspaceId)} WHERE customer_id = 0 ORDER BY created_at;`)
     const orders = data.rows
-    data = await PostgresqlDb.query(`SELECT * FROM ${LINEITEMS_TABLE_NAME(workspaceId)} WHERE customer_id = 2833709236356;`)
+    data = await PostgresqlDb.query(`SELECT * FROM ${LINEITEMS_TABLE_NAME(workspaceId)} WHERE customer_id = ${customerId};`)
     const lineitems = data.rows
     data = await PostgresqlDb.query(`SELECT * FROM ${REFUNDED_TABLE_NAME(workspaceId)} WHERE customer_id = ${customerId};`)
     const refunded = data.rows
     data = await PostgresqlDb.query(`SELECT * FROM ${CART_TABLE_NAME(workspaceId)} WHERE customer_id = ${customerId};`)
     const cart = data.rows
-    data = await PostgresqlDb.query(`SELECT * FROM ${PAGEVIEWED_TABLE_NAME(workspaceId)} WHERE customer_id = 0;`)
+    data = await PostgresqlDb.query(`SELECT * FROM ${PAGEVIEWED_TABLE_NAME(workspaceId)} WHERE customer_id = ${customerId};`)
     const pageviewed = data.rows
 
     let tamount = 0, avgAmount = 0, cancelledOrder = 0, uncancelledOrder = 0, unfulfilledOrder = 0, unrefundedOrder = 0
-    for(i = 0; i < orders.length; i++) {
-        tamount += Number(orders[i].total_price)
-        if(orders[i].cancelled_at != '') {
-            cancelledOrder++
+    let firstOrderAt, lastOrderAt
+    if(orders.length) {
+
+        for(i = 0; i < orders.length; i++) {
+            tamount += Number(orders[i].total_price)
+            if(orders[i].cancelled_at != '') {
+                cancelledOrder++
+            }
+            if(orders[i].cancelled_at === '') {
+                uncancelledOrder++
+            }
+            if(orders[i].fulfillment_status === '') {
+                unfulfilledOrder++
+            }
+            if(orders[i].financial_status != 'partially_refunded' && orders[i].financial_status != 'refunded') {
+                unrefundedOrder++
+            }
         }
-        if(orders[i].cancelled_at === '') {
-            uncancelledOrder++
-        }
-        if(orders[i].fulfillment_status === '') {
-            unfulfilledOrder++
-        }
-        if(orders[i].financial_status != 'partially_refunded' && orders[i].financial_status != 'refunded') {
-            unrefundedOrder++
-        }
+
+        firstOrderAt = orders[0].created_at
+        lastOrderAt = orders[orders.length - 1].created_at
+        // console.log('!!!!!!!!', firstOrderAt)
+
+        avgAmount = tamount / orders.length
     }
-    avgAmount = tamount / orders.length
 
     let productPurchased = [], abandonedCart = false
     for(let i = 0; i < lineitems.length; i++) {
@@ -71,30 +81,8 @@ const aggregate = async (workspaceId, customerId) => {
         productViewed.push(Number(pageviewed[i].page_id))
     }
 
-    let months = {
-        Jan: "01",
-        Feb: "02",
-        Mar: "03",
-        Apr: "04",
-        May: "05",
-        Jun: "06",
-        Jul: "07",
-        Aug: "08",
-        Sep: "09",
-        Oct: "10",
-        Nov: "11",
-        Dec: "12"
-      }
-    let str = orders[0].created_at + ''
-    let date = str.split(" ")
-    let timezone = date[5].split("+")
-    let firstOrderAt = date[3] + '-' + months[date[1]] + '-' + date[2] + ' ' + date[4] + '+' + timezone[1]
-    // console.log('!!!!!!', `${dateTime}`)
-    str = orders[orders.length - 1].updated_at + ''
-    date = str.split(" ")
-    timezone = date[5].split("+")
-    let lastOrderAt = date[3] + '-' + months[date[1]] + '-' + date[2] + ' ' + date[4] + '+' + timezone[1]
 
+    // last_seen pending
     const customerData = [{
         customer_id: customerId,
         name: customer.default_address.name,
@@ -120,7 +108,7 @@ const aggregate = async (workspaceId, customerId) => {
         zip_code: customer.default_address.zip
     }]
 
-    console.log(customerData)
+    // console.log(customerData)
 
     await insert(CUSTOMERAGGREGATE_TABLE_NAME, customerAggregateColumn, customerData, workspaceId)
 }
@@ -144,9 +132,9 @@ const del = async (TABLE_NAME, data, workspaceId) => {
 // .then(console.log)
 // .catch(console.log)
 
-// aggregate(333, 2861387415684)
-// .then(console.log)
-// .catch(console.log)
+aggregate(333, 2861387415684)
+.then(console.log)
+.catch(console.log)
 
 module.exports = {
     insert,

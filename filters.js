@@ -144,10 +144,7 @@ const typeBuild = (ptype, workspaceId, { columnName, filterType, dataType, value
         table = PRODUCT_TABLE_NAME(workspaceId)
     } else if(type === 'FULFILLMENT') {
         table = FULFILLMENT_TABLE_NAME(workspaceId)
-    } 
-    // else {
-    //     return;
-    // }
+    }
 
     if(ptype === 'CUSTOMER' && ptype != type) {
         prefix = `id IN (SELECT customer_id FROM ${table} WHERE `
@@ -168,9 +165,6 @@ const typeBuild = (ptype, workspaceId, { columnName, filterType, dataType, value
         // } else if(type === 'PRODUCT') {
         //     prefix = `id IN (SELECT product_id FROM ${table} WHERE `
         // }
-    }
-     else {
-        return;
     }
 
     let query = ''
@@ -233,34 +227,37 @@ const typeBuild = (ptype, workspaceId, { columnName, filterType, dataType, value
             query = `${prefix} (${columnName} NOT BETWEEN '${values[0]}' AND '${values[1]}' )`
         }
     } else if (dataType === 'boolean') {
-        // values = ['Yes', 'No']
-        // 'coloumnName = true OR coloumnName = false'
-        if (filterType === 'Yes') {
-            query = `${prefix} (${columnName} = '${values}')`
-        } else if (filterType === 'not_equal_to') {
-            query = `${prefix} (${columnName} = '${values}')`
+        query = `${prefix} (${columnName} = '${values[0]}'`
+        if(values[1] === '') {
+            query += ')'
+        } else {
+            query += ` OR ${columnName} = '${values[1]}')`
         }
     } else if (dataType === 'timestamptz') {
         // values = ['10', '']
-        const date  = new Date() - '10days';
-        if (filterType === 'equal_to') {
-            query = `${prefix} (${columnName} = '${date}')`
-        } else if (filterType === 'not_equal_to') {
-            query = `${prefix} (${columnName} != '${date}')`
-        } else if (filterType === 'less_than') {
-            query = `${prefix} (${columnName} < '${date}')`
-        } else if (filterType === 'less_than_equal_to') {
-            query = `${prefix} (${columnName} <= '${date}')`
-        } else if (filterType === 'greater_than') {
-            query = `${prefix} (${columnName} > '${date}')`
-        } else if (filterType === 'greater_than_equal_to') {
-            query = `${prefix} (${columnName} >= '${date}')`
+        let query = `${prefix} (DATE(${columnName}) `
+        if(values[1] != '') {
+            query += `BETWEEN CURRENT_DATE - ${Math.max(...values)} AND CURRENT_DATE - ${Math.min(...values)})`
+        } else {
+            if (filterType === 'equal_to') {
+                query = ` = CURRENT_DATE - ${values[0]})`
+            } else if (filterType === 'not_equal_to') {
+                query = ` != CURRENT_DATE - ${values[0]})`
+            } else if (filterType === 'less_than') {
+                query = `< CURRENT_DATE - ${values[0]})`
+            } else if (filterType === 'less_than_equal_to') {
+                query = `<= CURRENT_DATE - ${values[0]})`
+            } else if (filterType === 'greater_than') {
+                query = `> CURRENT_DATE - ${values[0]})`
+            } else if (filterType === 'greater_than_equal_to') {
+                query = `>= CURRENT_DATE - ${values[0]})`
+            }
         }
     } else if (dataType === 'timestamptz[]') {
         if (filterType === 'between') {
-            query = `${prefix} (${columnName} BETWEEN '${values[0]}' AND '${values[1]}')`
+            query = `${prefix} (DATE(${columnName}) BETWEEN CURRENT_DATE - ${Math.max(...values)} AND CURRENT_DATE - ${Math.min(...values)})`
         } else if (filterType === 'not_between') {
-            query = `${prefix} (${prefix} ${columnName} NOT BETWEEN '${values[0]}' AND '${values[1]}')`
+            query = `${prefix} (${prefix} DATE(${columnName}) NOT BETWEEN CURRENT_DATE - ${Math.max(...values)} AND CURRENT_DATE - ${Math.min(...values)})`
         }
     }
     // console.log(prefix, ptype);
