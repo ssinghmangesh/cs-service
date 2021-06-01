@@ -132,9 +132,9 @@ const del = async (TABLE_NAME, data, workspaceId) => {
 // .then(console.log)
 // .catch(console.log)
 
-aggregate(333, 2861387415684)
-.then(console.log)
-.catch(console.log)
+// aggregate(333, 2861387415684)
+// .then(console.log)
+// .catch(console.log)
 
 module.exports = {
     insert,

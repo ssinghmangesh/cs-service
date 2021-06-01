@@ -45,6 +45,9 @@ class Customer {
     }
 
     static async aggregate({customerId, workspaceId, aggregateDefinition}) {
+        if(typeof aggregateDefinition === 'undefined' || aggregateDefinition.length === 0) {
+            return
+        }
         let queryAggregate = `SELECT `
         let queryNonAggregate = `SELECT `
         let f = 0, g = 0
@@ -72,8 +75,6 @@ class Customer {
         let dataAggregate = [], dataNonAggregate = []
         if(g) dataNonAggregate = abstractData(await PostgresqlDb.query(queryNonAggregate));
         if(f) dataAggregate = abstractData(await PostgresqlDb.query(queryAggregate));
-        // console.log('!!!!!!!!!!!!!!', dataNonAggregate)
-        // console.log('@@@@@@@@@@@@@@', dataAggregate)
         const data = [...dataAggregate, ...dataNonAggregate]
         return data
     }
