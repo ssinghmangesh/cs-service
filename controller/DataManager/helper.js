@@ -5,6 +5,10 @@ const getColumnName = ({ columnData }) => {
     return query
 }
 
+const getDate = (date) => {
+    return new Date(date).toISOString()
+}
+
 const getValues = ({ columnData, data }) => {
 
     let allRow = data.map(value => {
@@ -51,7 +55,7 @@ const getValues = ({ columnData, data }) => {
                 }
             } else if(col.dataType === 'timestamp' || col.dataType === 'timestamptz' ) {
                 if(value[col.columnName]) {
-                    return `'${value[col.columnName]}'`
+                    return `'${getDate(value[col.columnName])}'`
                 } else {
                     return `NULL`
                 }

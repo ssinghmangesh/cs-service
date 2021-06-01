@@ -10,6 +10,18 @@ const WHERE_CLAUSE = ({startdate, enddate}) => {
     else return ''
 }
 
+const ORDER_BY = ({orderBykey, orderByDirection}) => {
+    if(orderBykey) {
+        if(orderByDirection) {
+            return `ORDER BY ${orderBykey} ${orderByDirection}`
+        } else {
+            return `ORDER BY ${orderBykey} asc`
+        }
+    } else {
+        return ''
+    }
+}
+
 const abstractData = (response, type) => {
     //extract only rows
     let res = null
@@ -61,7 +73,7 @@ class Dashboard {
         query = `
             SELECT * FROM ${TABLE_NAME}
             ${wc ? 'WHERE '+wc : ''}
-            ORDER BY ${orderBykey} ${orderByDirection} 
+            ${ORDER_BY(orderBykey, orderByDirection)}
             LIMIT ${limit} OFFSET ${skipRowby};`
         console.log(query)
         return abstractData(await PostgresqlDb.query(query));

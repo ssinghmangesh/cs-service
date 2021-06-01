@@ -81,11 +81,27 @@
         "dataType": "varchar"
     },
     {
-        "columnName":"default_address",
-        "dataType": "jsonb"
+        "columnName":"address1",
+        "dataType": "varchar"
     },
     {
-        "columnName":"zip_code",
+        "columnName":"address2",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"city",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"country",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"province",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"zip",
         "dataType": "numeric"
     }
 ]
