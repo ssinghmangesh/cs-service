@@ -128,13 +128,13 @@ const whereClause = (filters = filters1, workspaceId = 333, ptype) => {
             return whereClause(filter, workspaceId, ptype)
         }).join(` ${ filters.relation } `)} )`
     } else {
+        // console.log(JSON.stringify(filters, null, 4));
         return typeBuild(ptype, workspaceId, filters)
     }
 }
 
 const typeBuild = (ptype, workspaceId, { columnName, filterType, dataType, values, type }) => {
     let prefix = ''
-    console.log(ptype, type)
     let table = ''
     if(type === 'CUSTOMER') {
         table = CUSTOMER_TABLE_NAME(workspaceId)
@@ -144,9 +144,10 @@ const typeBuild = (ptype, workspaceId, { columnName, filterType, dataType, value
         table = PRODUCT_TABLE_NAME(workspaceId)
     } else if(type === 'FULFILLMENT') {
         table = FULFILLMENT_TABLE_NAME(workspaceId)
-    } else {
-        return;
-    }
+    } 
+    // else {
+    //     return;
+    // }
 
     if(ptype === 'CUSTOMER' && ptype != type) {
         prefix = `id IN (SELECT customer_id FROM ${table} WHERE `
@@ -157,7 +158,7 @@ const typeBuild = (ptype, workspaceId, { columnName, filterType, dataType, value
     } else if(ptype === 'FULFILLMENT' && ptype != type) {
         prefix = `id IN (SELECT fulfillment_id FROM ${table} WHERE `
     } else if(typeof ptype === 'undefined' || ptype === type) {
-        prefix = `id IN (SELECT id FROM ${table} WHERE `
+        // prefix = `id IN (SELECT id FROM ${table} WHERE `
         // if(type === 'CUSTOMER') {
         //     prefix = `id IN (SELECT customer_id FROM ${table} WHERE `
         // } else if(type === 'ORDER') {
@@ -167,7 +168,8 @@ const typeBuild = (ptype, workspaceId, { columnName, filterType, dataType, value
         // } else if(type === 'PRODUCT') {
         //     prefix = `id IN (SELECT product_id FROM ${table} WHERE `
         // }
-    } else {
+    }
+     else {
         return;
     }
 
@@ -261,7 +263,7 @@ const typeBuild = (ptype, workspaceId, { columnName, filterType, dataType, value
             query = `${prefix} (${prefix} ${columnName} NOT BETWEEN '${values[0]}' AND '${values[1]}')`
         }
     }
-
+    // console.log(prefix, ptype);
     if(prefix) {
         query += ')'
     }

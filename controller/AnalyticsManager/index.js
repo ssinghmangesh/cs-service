@@ -22,9 +22,10 @@ const abstractData = (response, type) => {
 }
 
 class Dashboard {
-    static async count({TABLE_NAME, startdate, enddate}) {
+    static async count({TABLE_NAME, filters = {}}) {
         let query = ``
-        query = `SELECT COUNT(*) FROM ${TABLE_NAME} ${WHERE_CLAUSE({startdate, enddate})};`
+        let wc = whereClause(filters);
+        query = `SELECT COUNT(*) FROM ${TABLE_NAME} ${wc ? 'WHERE '+wc : ''};`
         // console.log(query);
         return abstractData(await PostgresqlDb.query(query), "single");
     }
@@ -55,7 +56,7 @@ class Dashboard {
         return abstractData(await PostgresqlDb.query(query));
     }
 
-    static async table({TABLE_NAME = 'order', orderBykey, orderByDirection, limit = 10, skipRowby = 0, filters = {}}) {
+    static async table({TABLE_NAME = 'order', orderBykey, orderByDirection = 'asc', limit = 10, skipRowby = 0, filters = {}}) {
         let wc = whereClause(filters);
         let query = ``
         query = `
