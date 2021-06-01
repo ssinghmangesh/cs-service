@@ -71,7 +71,29 @@ const aggregate = async (workspaceId, customerId) => {
         productViewed.push(Number(pageviewed[i].page_id))
     }
 
-    // console.log('!!!!!!', `'${orders[0].created_at}'`)
+    let months = {
+        Jan: "01",
+        Feb: "02",
+        Mar: "03",
+        Apr: "04",
+        May: "05",
+        Jun: "06",
+        Jul: "07",
+        Aug: "08",
+        Sep: "09",
+        Oct: "10",
+        Nov: "11",
+        Dec: "12"
+      }
+    let str = orders[0].created_at + ''
+    let date = str.split(" ")
+    let timezone = date[5].split("+")
+    let firstOrderAt = date[3] + '-' + months[date[1]] + '-' + date[2] + ' ' + date[4] + '+' + timezone[1]
+    // console.log('!!!!!!', `${dateTime}`)
+    str = orders[orders.length - 1].updated_at + ''
+    date = str.split(" ")
+    timezone = date[5].split("+")
+    let lastOrderAt = date[3] + '-' + months[date[1]] + '-' + date[2] + ' ' + date[4] + '+' + timezone[1]
 
     const customerData = [{
         customer_id: customerId,
@@ -90,9 +112,9 @@ const aggregate = async (workspaceId, customerId) => {
         unrefunded_order_count: unrefundedOrder,
         uncancelled_order_count: uncancelledOrder,
         abandoned_cart: abandonedCart,
-        first_order_at: '2019-12-12 00:26:43+05:30',
-        last_order_at: '2019-12-12 00:26:43+05:30',
-        last_seen: '2019-12-12 00:26:43+05:30',
+        first_order_at: firstOrderAt,
+        last_order_at: lastOrderAt,
+        last_seen: '2000-01-01 00:00:00+05:30',
         tags: customer.tags,
         default_address: customer.default_address,
         zip_code: customer.default_address.zip
