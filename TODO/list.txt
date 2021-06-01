@@ -34,3 +34,22 @@ socket.on('connect_error', onError )
 socket.on('workspace', (message) => {
   console.log(message);
 })
+
+ // "default_address": {
+    //     "address1": "Chestnut Street 92",
+    //     "address2": "Apartment 2",
+    //     "city": "Louisville",
+    //     "country": "united states",
+    //     "province": "Kentucky",
+    //     "zip": "40202",
+    //   }
+
+
+    1. greater_than 10
+    2. less_than 10
+    3. between 10 to 20
+    
+    15 feb
+    1. 6,7,8,...
+    2. 5,4,3,...
+    3. 26 ,... , 4

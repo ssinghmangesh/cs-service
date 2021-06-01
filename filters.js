@@ -211,18 +211,20 @@ const typeBuild = (ptype, { columnName, filterType, dataType, values, type }) =>
             query = `${prefix} (${columnName} = '${values}')`
         }
     } else if (dataType === 'timestamptz') {
+        // values = ['10', '']
+        const date  = new Date() - '10days';
         if (filterType === 'equal_to') {
-            query = `${prefix} (${columnName} = '${values}')`
+            query = `${prefix} (${columnName} = '${date}')`
         } else if (filterType === 'not_equal_to') {
-            query = `${prefix} (${columnName} != '${values}')`
+            query = `${prefix} (${columnName} != '${date}')`
         } else if (filterType === 'less_than') {
-            query = `${prefix} (${columnName} < '${values}')`
+            query = `${prefix} (${columnName} < '${date}')`
         } else if (filterType === 'less_than_equal_to') {
-            query = `${prefix} (${columnName} <= '${values}')`
+            query = `${prefix} (${columnName} <= '${date}')`
         } else if (filterType === 'greater_than') {
-            query = `${prefix} (${columnName} > '${values}')`
+            query = `${prefix} (${columnName} > '${date}')`
         } else if (filterType === 'greater_than_equal_to') {
-            query = `${prefix} (${columnName} >= '${values}')`
+            query = `${prefix} (${columnName} >= '${date}')`
         }
     } else if (dataType === 'timestamptz[]') {
         if (filterType === 'between') {
