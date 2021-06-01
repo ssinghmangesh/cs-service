@@ -4,7 +4,10 @@ const PostgresqlDb = require('./../../db')
 
 
 const WHERE_CLAUSE = ({startdate, enddate}) => {
-    return ` WHERE created_at >= '${startdate}' AND created_at <= '${enddate}'`
+    if(startdate && enddate) {
+        return ` WHERE created_at >= '${startdate}' AND created_at <= '${enddate}'`
+    }
+    else return ''
 }
 
 const abstractData = (response, type) => {
@@ -22,7 +25,7 @@ class Dashboard {
     static async count({TABLE_NAME, startdate, enddate}) {
         let query = ``
         query = `SELECT COUNT(*) FROM ${TABLE_NAME} ${WHERE_CLAUSE({startdate, enddate})};`
-        console.log(query);
+        // console.log(query);
         return abstractData(await PostgresqlDb.query(query), "single");
     }
 
@@ -52,16 +55,40 @@ class Dashboard {
         return abstractData(await PostgresqlDb.query(query));
     }
 
-    static async table({TABLE_NAME='order', workspaceId, orderBykey, limit = 10, skipRowby = 0, filters = {}}) {
+    static async table({TABLE_NAME = 'order', orderBykey, orderByDirection, limit = 10, skipRowby = 0, filters = {}}) {
         let query = ``
-        query = `SELECT * FROM ${TABLE_NAME} ORDER BY ${orderBykey} LIMIT ${limit} OFFSET ${skipRowby};`
-        // console.log(query)
+        query = `SELECT * FROM ${TABLE_NAME} ORDER BY ${orderBykey} ${orderByDirection} LIMIT ${limit} OFFSET ${skipRowby};`
+        console.log(query)
         return abstractData(await PostgresqlDb.query(query));
+    }
+
+    static async stats({TABLE_NAME = 'order333', limit = 10, skipRowby = 0, filters = {}, statsDefinition} = []) {
+        let query = `SELECT `
+        for(let i = 0; i < statsDefinition.length; i++) {
+            query += `${statsDefinition[i].aggregate}(${statsDefinition[i].columnname}) AS ${statsDefinition[i].alias}`
+            if(i < statsDefinition.length - 1) {
+                query += `, `
+            }
+        }
+        query += ` FROM ${TABLE_NAME} LIMIT ${limit} OFFSET ${skipRowby};`
+        // console.log(query)
+        return abstractData(await PostgresqlDb.query(query), "single");
+    }
+
+    static async timeline({workspaceId, customerId}) {
+        let query1 = ``
+        query1 = `SELECT * FROM order${workspaceId} WHERE customer_id = ${customerId} limit 2;`
+        let query2 = ``
+        query2 = `SELECT * FROM pageviewed${workspaceId} WHERE customer_id = ${customerId};`
+        const data1 = abstractData(await PostgresqlDb.query(query1));
+        const data2 = abstractData(await PostgresqlDb.query(query2));
+        const data = [...data1, ...data2]
+        // console.log('!!!!!!!!!', data)
+        return data
     }
 }
 
 module.exports = Dashboard
-
 
 // Dashboard.Ordertaxamount({workspaceId: 333, startdate: '2021-01-01 11:49:40.765997+05:30', enddate: '2021-05-13 11:49:40.765997+05:30'})
 // .then(console.log)

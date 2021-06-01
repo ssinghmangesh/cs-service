@@ -38,6 +38,41 @@ const Dashboard = require('./index.js')
 // .then(console.log)
 // .catch(console.log)
 
+statsDefinition = [
+    {
+        aggregate: 'sum',
+        columnname: 'total_price',
+        alias: 'Total'
+    },
+    {
+        aggregate: 'count',
+        columnname: 'total_price',
+        alias: 'Total_Count'
+    },
+    {
+        aggregate: 'avg',
+        columnname: 'total_price',
+        alias: 'Average'
+    },
+    {
+        aggregate: 'max',
+        columnname: 'total_price',
+        alias: 'Maximum'
+    },
+    {
+        aggregate: 'min',
+        columnname: 'total_price',
+        alias: 'Minimum'
+    }
+]
+
+// Dashboard.stats({TABLE_NAME: 'order333', workspaceId: 333, limit: 5, skipRowby: 0, statsDefinition: statsDefinition})
+// .then(console.log)
+// .catch(console.log)
+
+// Dashboard.timeline({workspaceId: 333, customerId: 0})
+// .then(console.log)
+// .catch(console.log)
 
 /*
     1. x-axis = datetime, y-axis = revenue

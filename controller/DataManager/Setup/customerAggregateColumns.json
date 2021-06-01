@@ -1,0 +1,91 @@
+[
+    {
+        "columnName":"customer_id",
+        "dataType": "numeric",
+        "primaryKey": true
+    },
+    {
+        "columnName":"name",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"first_name",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"last_name",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"email",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"total_order_count",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"total_amount_spent",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"avg_order_price",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"product_purchased",
+        "dataType": "numeric[]"
+    },
+    {
+        "columnName":"product_viewed",
+        "dataType": "numeric[]"
+    },
+    {
+        "columnName":"refunded_order_count",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"cancelled_order_count",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"unfulfilled_order_count",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"unrefunded_order_count",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"uncancelled_order_count",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"abandoned_cart",
+        "dataType": "boolean"
+    },
+    {
+        "columnName":"first_order_at",
+        "dataType": "timestamptz"
+    },
+    {
+        "columnName":"last_order_at",
+        "dataType": "timestamptz"
+    },
+    {
+        "columnName":"last_seen",
+        "dataType": "timestamptz"
+    },
+    {
+        "columnName":"tags",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"default_address",
+        "dataType": "jsonb"
+    },
+    {
+        "columnName":"zip_code",
+        "dataType": "numeric"
+    }
+]
