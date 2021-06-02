@@ -1,17 +1,19 @@
+const PostgresqlDb = require('../db')
+const { aggregate } = require('../controller/DataManager/index.js')
+const { CUSTOMER_TABLE_NAME } = require("../controller/DataManager/helper");
 
-
-const main  = async (workspaceId) => {
-    let customers  = [] // ftech all customer
-
+const main = async (workspaceId) => {
+    let data = await PostgresqlDb.query(`SELECT id FROM ${CUSTOMER_TABLE_NAME(workspaceId)};`)
+    const customers = data.rows
 
     await customers.map(async customer => {
-        await aggrgate(customer.id, workspaceId)
+        await aggregate(workspaceId, customer.id)
     })
 
     console.log("successful")
 }
 
 
-main()
-.then(console.log)
-.catch(console.log)
+// main(333)
+// .then(console.log)
+// .catch(console.log)

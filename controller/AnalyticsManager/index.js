@@ -96,7 +96,7 @@ class Dashboard {
         let query1 = ``
         query1 = `SELECT * FROM order${workspaceId} WHERE customer_id = ${customerId} limit 2;`
         let query2 = ``
-        query2 = `SELECT * FROM pageviewed${workspaceId} WHERE customer_id = ${customerId};`
+        query2 = `SELECT * FROM event${workspaceId} WHERE customer_id = ${customerId};`
         const data1 = abstractData(await PostgresqlDb.query(query1));
         const data2 = abstractData(await PostgresqlDb.query(query2));
         const data = [...data1, ...data2]

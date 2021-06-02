@@ -37,7 +37,7 @@ class Customer {
         return abstractData(await PostgresqlDb.query(query));
     }
 
-    static async pageViewed({TABLE_NAME, customerId, orderBykey = 'page_id', orderByDirection = 'asc', limit = 5, skipRowby = 0}) {
+    static async event({TABLE_NAME, customerId, orderBykey = 'page_id', orderByDirection = 'asc', limit = 5, skipRowby = 0}) {
         let query = ``
         query = `SELECT * FROM ${TABLE_NAME} ${WHERE_CLAUSE({customerId})} ORDER BY ${orderBykey} ${orderByDirection} LIMIT ${limit} OFFSET ${skipRowby};`
         // console.log(query);
