@@ -12,7 +12,7 @@ const {
     CART_TABLE_NAME,
     CARTLINEITEMS_TABLE_NAME,
     CHECKOUT_TABLE_NAME,
-    PAGEVIEWED_TABLE_NAME,
+    EVENT_TABLE_NAME,
     CHECKOUTLINEITEMS_TABLE_NAME,
     CUSTOMERAGGREGATE_TABLE_NAME
 } = require("../helper");
@@ -45,7 +45,7 @@ const deleteTable = async (workspaceId) => {
             ${CART_TABLE_NAME(workspaceId)}, 
             ${CARTLINEITEMS_TABLE_NAME(workspaceId)}, 
             ${CHECKOUT_TABLE_NAME(workspaceId)}, 
-            ${PAGEVIEWED_TABLE_NAME(workspaceId)}, 
+            ${EVENT_TABLE_NAME(workspaceId)}, 
             ${CHECKOUTLINEITEMS_TABLE_NAME(workspaceId)},
             ${CUSTOMERAGGREGATE_TABLE_NAME(workspaceId)}`
 

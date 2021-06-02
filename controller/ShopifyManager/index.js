@@ -20,6 +20,10 @@ const syncAll = async ({ shopName, accessToken, limit,workspaceId }) => {
     console.log("discount")
     const { data: { count: discountCount } } = await Shopify.fetchDiscountCount(shopName, accessToken);
     await discountSync({ shopName, accessToken, limit, workspaceId, count: discountCount });
+
+    console.log("cart")
+    const { data: { count: cartCount } } = await Shopify.fetchCartCount(shopName, accessToken);
+    await discountSync({ shopName, accessToken, limit, workspaceId, count: cartCount });
     
     return {status: 200, message: "Successful"};
 }
