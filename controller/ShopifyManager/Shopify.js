@@ -84,7 +84,26 @@ class Shopify {
         })
     }
     
+    static fetchCart(shopName, accessToken, option) {
+        const { since_id, limit } = option
+        return axios({
+            method: 'GET',
+            url: `https://${shopName}/admin/api/2021-04/checkouts.json?status=any&since_id=${since_id}&limit=${limit}`,
+            headers:  {
+                'X-Shopify-Access-Token': accessToken,
+            }
+        })
+    }
 
+    static fetchCartCount(shopName, accessToken) {
+        return axios({
+            method: 'GET',
+            url: `https://${shopName}/admin/api/2021-04/checkouts/count.json?status=any`,
+            headers:  {
+                'X-Shopify-Access-Token': accessToken,
+            }
+        })
+    }
 }
 
 

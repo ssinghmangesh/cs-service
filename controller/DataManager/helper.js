@@ -5,6 +5,10 @@ const getColumnName = ({ columnData }) => {
     return query
 }
 
+const getDate = (date) => {
+    return new Date(date).toISOString()
+}
+
 const getValues = ({ columnData, data }) => {
 
     let allRow = data.map(value => {
@@ -51,7 +55,7 @@ const getValues = ({ columnData, data }) => {
                 }
             } else if(col.dataType === 'timestamp' || col.dataType === 'timestamptz' ) {
                 if(value[col.columnName]) {
-                    return `'${value[col.columnName]}'`
+                    return `'${getDate(value[col.columnName])}'`
                 } else {
                     return `NULL`
                 }
@@ -140,8 +144,8 @@ const CHECKOUTLINEITEMS_TABLE_NAME = (workspaceId) => {
     return `checkoutlineitems${workspaceId}`
 }
 
-const PAGEVIEWED_TABLE_NAME = (workspaceId) => {
-    return `pageviewed${workspaceId}`
+const EVENT_TABLE_NAME = (workspaceId) => {
+    return `event${workspaceId}`
 }
 
 const CUSTOMERAGGREGATE_TABLE_NAME = (workspaceId) => {
@@ -169,6 +173,6 @@ module.exports={
     CARTLINEITEMS_TABLE_NAME,
     CHECKOUT_TABLE_NAME,
     CHECKOUTLINEITEMS_TABLE_NAME,
-    PAGEVIEWED_TABLE_NAME,
+    EVENT_TABLE_NAME,
     CUSTOMERAGGREGATE_TABLE_NAME
 }

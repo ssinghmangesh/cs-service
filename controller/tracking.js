@@ -45,7 +45,7 @@ trackCS = async function(_tenantId, _appClientId) {
         if(path.substring(1,6) === 'blogs'){
             return "blog_view";
         }
-        return "page_view";
+        return "event";
     }
 
     
@@ -83,13 +83,13 @@ trackCS = async function(_tenantId, _appClientId) {
     async function syncAPI(){
         console.log(csData)
         return await jQuery.ajax({
-                        url: "http://localhost:3000/data-manager/page-viewed/add",
+                        url: "http://localhost:3000/data-manager/event/add",
                         type: "POST",
                         dataType: "json",
                         cache: 0,
                         data: {
                             workspaceId: 1,
-                            page_viewed: csData
+                            event: csData
                         }
                     })
     }

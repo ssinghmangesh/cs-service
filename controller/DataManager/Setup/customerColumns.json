@@ -12,6 +12,22 @@
         "dataType": "jsonb[]"
     },
     {
+        "columnName":"address1",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"address2",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"city",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"country",
+        "dataType": "varchar"
+    },
+    {
         "columnName":"currency",
         "dataType": "varchar"
     },
@@ -65,6 +81,10 @@
         "dataType": "varchar"
     },
     {
+        "columnName":"province",
+        "dataType": "varchar"
+    },
+    {
         "columnName":"state",
         "dataType": "varchar"
     },
@@ -87,5 +107,9 @@
     {
         "columnName":"verified_email",
         "dataType": "boolean"
+    },
+    {
+        "columnName":"zip",
+        "dataType": "numeric"
     }
 ]

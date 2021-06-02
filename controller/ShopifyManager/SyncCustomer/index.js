@@ -12,10 +12,17 @@ const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0, workspaceId
     let response = await Shopify.fetchCustomer(shopName, accessToken, { since_id: sinceId, limit })
     // console.log(response.data.customers.length)
 
+    let customers = response.data.customers.map((customer) => {
+        return {
+            ...customer['default_address'],
+            ...customer,
+        }
+    })
+    
     //insert
     if(response.data.customers.length){
-        await del(CUSTOMER_TABLE_NAME, response.data.customers, workspaceId)
-        await insert(CUSTOMER_TABLE_NAME, customerColumn, response.data.customers, workspaceId)
+        await del(CUSTOMER_TABLE_NAME, customers, workspaceId)
+        await insert(CUSTOMER_TABLE_NAME, customerColumn, customers, workspaceId)
     }
     //call next batch
     if(response.data.customers.length < limit) {

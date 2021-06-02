@@ -17,12 +17,6 @@ nimish
 devashish
 1. 4. 5
 
-o. workspaceId from header (devashish) (DONE)
-1. sync status via socket use workspaceId (which is passed from frontend)  (devashish) (DONE)
-2. barGraph query (nimish)  (DONE)
-3. analytics-manager api   (DONE)
-4. all api should give a response as (data, message , status) (nimish and devashish)
-5. create customer socket in tracking script.  (isonline/offline) (nimish and devashish)
 
 
 
@@ -94,3 +88,44 @@ sales generated
 
 
 
+<<<<<<< HEAD
+const io = require("socket.io-client");
+const socket = io.connect("http://localhost:4000/");
+function onError(message)
+{
+    console.log(message);
+}
+socket.on("connect", () => {
+  axios.post("http://localhost:4000/shopify-manager/sync", {workspaceId: 1, iop:"frontend"})
+    console.log(socket.id); // x8WIv7-mJelg7on_ALbx
+  });
+
+socket.on('connect_error', onError )
+socket.on('workspace', (message) => {
+  console.log(message);
+})
+
+ // "default_address": {
+    //     "address1": "Chestnut Street 92",
+    //     "address2": "Apartment 2",
+    //     "city": "Louisville",
+    //     "country": "united states",
+    //     "province": "Kentucky",
+    //     "zip": "40202",
+    //   }
+
+
+    1. greater_than 10
+    2. less_than 10
+    3. between 10 to 20
+    
+    15 feb
+    1. 6,7,8,...
+    2. 5,4,3,...
+<<<<<<< HEAD
+    3. 26 ,... , 4
+=======
+>>>>>>> 3242c7c64854f33e75090601867e91767e453042
+=======
+    3. 26 ,... , 4
+>>>>>>> db77d32e5ec33f193dfeee235038093664a63320

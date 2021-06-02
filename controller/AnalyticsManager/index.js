@@ -1,4 +1,4 @@
-
+const { whereClause } = require("../../filters")
 const PostgresqlDb = require('./../../db')
 // const { whereClause } = require('./../../filters.js')
 
@@ -8,6 +8,18 @@ const WHERE_CLAUSE = ({startdate, enddate}) => {
         return ` WHERE created_at >= '${startdate}' AND created_at <= '${enddate}'`
     }
     else return ''
+}
+
+const ORDER_BY = ({orderBykey, orderByDirection}) => {
+    if(orderBykey) {
+        if(orderByDirection) {
+            return `ORDER BY ${orderBykey} ${orderByDirection}`
+        } else {
+            return `ORDER BY ${orderBykey} asc`
+        }
+    } else {
+        return ''
+    }
 }
 
 const abstractData = (response, type) => {
@@ -56,8 +68,13 @@ class Dashboard {
     }
 
     static async table({TABLE_NAME = 'order', orderBykey, orderByDirection, limit = 10, skipRowby = 0, filters = {}}) {
+        let wc = whereClause(filters);
         let query = ``
-        query = `SELECT * FROM ${TABLE_NAME} ORDER BY ${orderBykey} ${orderByDirection} LIMIT ${limit} OFFSET ${skipRowby};`
+        query = `
+            SELECT * FROM ${TABLE_NAME}
+            ${wc ? 'WHERE '+wc : ''}
+            ${ORDER_BY(orderBykey, orderByDirection)}
+            LIMIT ${limit} OFFSET ${skipRowby};`
         console.log(query)
         return abstractData(await PostgresqlDb.query(query));
     }
@@ -79,7 +96,7 @@ class Dashboard {
         let query1 = ``
         query1 = `SELECT * FROM order${workspaceId} WHERE customer_id = ${customerId} limit 2;`
         let query2 = ``
-        query2 = `SELECT * FROM pageviewed${workspaceId} WHERE customer_id = ${customerId};`
+        query2 = `SELECT * FROM event${workspaceId} WHERE customer_id = ${customerId};`
         const data1 = abstractData(await PostgresqlDb.query(query1));
         const data2 = abstractData(await PostgresqlDb.query(query2));
         const data = [...data1, ...data2]

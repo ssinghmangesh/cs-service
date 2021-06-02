@@ -11,13 +11,9 @@ const PostgresqlDb = require('../db')
 
 router.post('/whereClause', async (req, res) => {
     const details = req.body
-    // const { 'x-workspace-id': workspaceId } = req.headers
-    let query = `SELECT * FROM ${details.tableName}333 WHERE `
-    query += `${whereClause()};`
-    console.log(query)
-    const response = await PostgresqlDb.query(query)
-    console.log(response)
-    res.status(200).send( { status: true, message: "successful"} )
+    response = whereClause(details.filters, '')
+    // console.log(response)
+    res.status(200).send( { status: true, message: "successful", data: response } )
 })
 
-module.exports = router
+module.exports = router;
