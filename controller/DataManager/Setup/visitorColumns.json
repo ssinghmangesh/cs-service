@@ -1,0 +1,26 @@
+[
+    {
+        "columnName": "customer_id",
+        "dataType": "numeric"
+    },
+    {
+        "columnName": "visitor_id",
+        "dataType": "numeric"
+    },
+    {
+        "columnName": "type",
+        "dataType": "varchar"
+    },
+    {
+        "columnName": "first_page_viewed",
+        "dataType": "varchar"
+    },
+    {
+        "columnName": "last_page_viewed",
+        "dataType": "varchar"
+    },
+    {
+        "columnName": "os",
+        "dataType": "varchar"
+    }
+]
