@@ -10,10 +10,10 @@ const main = async (workspaceId) => {
         await aggregate(workspaceId, customer.id)
     })
 
-    console.log("successful")
+    return "successful"
 }
 
 
-// main(333)
+// main(1)
 // .then(console.log)
 // .catch(console.log)

@@ -22,7 +22,7 @@ const insert = async(TABLE_NAME, column, data, workspaceId) => {
         ${getColumnName({ columnData: column })}
         VALUES ${getValues({ columnData: column, data })}
     `
-    console.log(query)
+    // console.log(query)
     await PostgresqlDb.query(query)
 }
 
@@ -99,9 +99,9 @@ const aggregate = async (workspaceId, customerId) => {
     }
 
     lastSeen = new Date()
-    if(event) {
-        lastSeen = event[0].created_at
-    }
+    // if(event) {
+    //     lastSeen = event[0].created_at
+    // }
 
     // last_seen pending
     const customerData = [{
