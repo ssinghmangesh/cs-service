@@ -12,6 +12,8 @@ trackCS = async function(_tenantId, _appClientId) {
     const socket = window.io("http://localhost:4000/customer");
 
     let csData = {}
+
+    csData.created_at = new Date()
     csData.path = window.location.pathname
     csData.href = window.location.href
     csData.os = navigator.platform

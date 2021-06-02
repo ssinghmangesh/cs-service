@@ -24,3 +24,73 @@ o. workspaceId from header (devashish) (DONE)
 4. all api should give a response as (data, message , status) (nimish and devashish)
 5. create customer socket in tracking script.  (isonline/offline) (nimish and devashish)
 
+
+
+
+#######################################################################
+###
+product list filter
+
+##### Devashish
+1. create a visitor table 
+2. if a user join via socket add him in visitor table.
+3. if he disconnects remove him from visitor table.
+
+
+### Nimish
+1. change the name of pageview Table to event table. ()
+2. add created_at column in event table Date.now() ()
+
+
+customer_id
+visitor_id: cart_id
+type: customer/visitor
+first_page_viewed
+last_page_viewed
+
+### sync from shopify Nimish
+1. sync cart. (use is checkout api)
+2. sync draft order
+3. sync inventory items,  inventory level, and location
+
+### Nimish
+whenever a order is add
+we have to remove it related carts.
+
+
+
+
+
+
+
+
+
+
+
+
+### 
+oauth
+
+
+
+
+
+
+
+
+
+
+
+####
+product agggregate
+product id
+variant id
+quantity sold
+quantity refund
+sales generated
+
+
+
+
+
+
