@@ -98,13 +98,13 @@ const whereClause = (filters = filters1, workspaceId = 333, ptype) => {
             return whereClause(filter, workspaceId, ptype)
         }).join(` ${ filters.relation } `)} )`
     } else {
+        // console.log(JSON.stringify(filters, null, 4));
         return typeBuild(ptype, workspaceId, filters)
     }
 }
 
 const typeBuild = (ptype, workspaceId, { columnName, filterType, dataType, values, type }) => {
     let prefix = ''
-    console.log(ptype, type)
     let table = ''
     if(type === 'CUSTOMER') {
         table = `${CUSTOMER_TABLE_NAME(workspaceId)}`
@@ -127,7 +127,7 @@ const typeBuild = (ptype, workspaceId, { columnName, filterType, dataType, value
     } else if(ptype === 'FULFILLMENT' && ptype != type) {
         prefix = `id IN (SELECT fulfillment_id FROM ${table} WHERE `
     } else if(typeof ptype === 'undefined' || ptype === type) {
-        prefix = `id IN (SELECT id FROM ${table} WHERE `
+        // prefix = `id IN (SELECT id FROM ${table} WHERE `
     }
 
     let query = ''
@@ -159,15 +159,15 @@ const typeBuild = (ptype, workspaceId, { columnName, filterType, dataType, value
         }
     } else if (dataType === 'varchar') {
         if (filterType === 'equal_to') {
-            query = `${prefix} (${columnName} = '${values}')`
+            query = `${prefix} (${columnName} = '${values[0]}')`
         } else if (filterType === 'not_equal_to') {
-            query = `${prefix} (${columnName} != '${values}')`
+            query = `${prefix} (${columnName} != '${values[0]}')`
         } else if (filterType === 'starts_with') {
-            query = `${prefix} (${columnName} like '%${values}')`
+            query = `${prefix} (${columnName} like '%${values[0]}')`
         } else if (filterType === 'ends_with') {
-            query = `${prefix} (${columnName} like '${values}%')`
+            query = `${prefix} (${columnName} like '${values[0]}%')`
         } else if (filterType === 'contains') {
-            query = `${prefix} (${columnName} like '%${values}%')`
+            query = `${prefix} (${columnName} like '%${values[0]}%')`
         } else if (filterType === 'is_known' ) {
 
         } else if (filterType === 'is_unknown') {
@@ -222,7 +222,7 @@ const typeBuild = (ptype, workspaceId, { columnName, filterType, dataType, value
             query = `${prefix} (${prefix} DATE(${columnName}) NOT BETWEEN CURRENT_DATE - ${Math.max(...values)} AND CURRENT_DATE - ${Math.min(...values)})`
         }
     }
-
+    // console.log(prefix, ptype);
     if(prefix) {
         query += ')'
     }

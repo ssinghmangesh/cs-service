@@ -12,6 +12,7 @@ const checkoutColumns = require('./checkoutColumns.json')
 const eventColumns = require('./eventColumns.json')
 const checkoutLineItemsColumns = require("./checkoutLineItemsColumns.json");
 const customerAggregateColumns = require("./customerAggregateColumns.json");
+const visitorColumns = require("./visitorColumns.json");
 
 const {
     CUSTOMER_TABLE_NAME, 
@@ -27,7 +28,8 @@ const {
     CHECKOUT_TABLE_NAME,
     EVENT_TABLE_NAME,
     CHECKOUTLINEITEMS_TABLE_NAME,
-    CUSTOMERAGGREGATE_TABLE_NAME
+    CUSTOMERAGGREGATE_TABLE_NAME,
+    VISITOR_TABLE_NAME,
 } = require("../helper");
 
 
@@ -63,6 +65,8 @@ const setupWorkspace = async(workspaceId) => {
 
     await createTable(customerAggregateColumns, CUSTOMERAGGREGATE_TABLE_NAME, workspaceId)
 
+    await createTable(visitorColumns, VISITOR_TABLE_NAME, 1);
+
     return {
         status: true,
         message: "Successful"
@@ -85,8 +89,7 @@ const deleteWorkspace = async (workspaceId) => {
 // setupWorkspace(333)
 // .then(console.log)
 // .catch(console.log)
-
-
+// createTable(visitorColumns, VISITOR_TABLE_NAME, 1);
 
 module.exports = {
     setupWorkspace,

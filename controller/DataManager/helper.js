@@ -152,6 +152,9 @@ const CUSTOMERAGGREGATE_TABLE_NAME = (workspaceId) => {
     return `customeraggregate${workspaceId}`
 }
 
+const VISITOR_TABLE_NAME = (workspaceId) => {
+    return `visitor${workspaceId}`
+}
 // const
 // getInsertQury(discount222, order)
 // .then(console.log)
@@ -174,5 +177,6 @@ module.exports={
     CHECKOUT_TABLE_NAME,
     CHECKOUTLINEITEMS_TABLE_NAME,
     EVENT_TABLE_NAME,
-    CUSTOMERAGGREGATE_TABLE_NAME
+    CUSTOMERAGGREGATE_TABLE_NAME,
+    VISITOR_TABLE_NAME,
 }

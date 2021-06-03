@@ -17,6 +17,7 @@
   },
   "scripts": {
     "start": "nodemon index.js",
+    "socket": "nodemon ./Socket/socket.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

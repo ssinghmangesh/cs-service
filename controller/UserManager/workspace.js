@@ -4,8 +4,7 @@ const addWorkspace = async (data) => {
     const params = {
             TableName: "Workspace",
             Item:{
-                "workspace_id": data.workspaceId,
-                "workspace_name": data.workspaceName
+                ...data
             }
     }
     return await insert(params);
@@ -30,11 +29,11 @@ const deleteWorkspace = async (data) => {
 
 const fetchWorkspace = async (data) => {
     var params = {
-            TableName: 'Workspace',
-            Key:{
-                "workspace_id": data.id
-            }
-        }
+        TableName: 'Workspace',
+        Key: {
+            ...data
+        }    
+    }
     return await fetch(params);
 }
 

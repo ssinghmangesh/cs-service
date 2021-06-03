@@ -1,5 +1,4 @@
-
-trackCS = async function(_tenantId, _appClientId) {
+trackCS = async function(workspaceId) {
     function sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
       }
@@ -9,6 +8,7 @@ trackCS = async function(_tenantId, _appClientId) {
     document.body.appendChild(x);
     
     await sleep(500);
+
     const socket = window.io("http://localhost:4000/customer");
 
     let csData = {}
@@ -18,12 +18,11 @@ trackCS = async function(_tenantId, _appClientId) {
     csData.href = window.location.href
     csData.os = navigator.platform
     csData.previous_page = document.referrer
+    csData.cart_id = ShopifyAnalytics.lib.user().traits().uniqToken
+
 
     if(ShopifyAnalytics && ShopifyAnalytics.meta && ShopifyAnalytics.meta.page && ShopifyAnalytics.meta.page.customerId) {
         csData.customer_id = ShopifyAnalytics.meta.page.customerId
-    }
-    if(ShopifyAnalytics && ShopifyAnalytics.meta && ShopifyAnalytics.meta.cart_event_id) {
-        csData.cart_id = ShopifyAnalytics.meta.cart_event_id
     }
     if(ShopifyAnalytics && ShopifyAnalytics.meta && ShopifyAnalytics.meta.page_view_event_id) {
         csData.page_id = ShopifyAnalytics.meta.page_view_event_id
@@ -73,6 +72,9 @@ trackCS = async function(_tenantId, _appClientId) {
     
 
     csData.event_name = getEventName(csData.path)
+    
+    socket.emit("add-visitor", csData, workspaceId);
+
     if(csData.event_name === 'cart_view'){
         await cartChanges();
     }
@@ -105,14 +107,13 @@ trackCS = async function(_tenantId, _appClientId) {
     })
         
     
-
     // console.log("csData : ", csData)
-    const res = await syncAPI()
-    console.log(res)
+    // const res = await syncAPI()
+    // console.log(res)
 }
 
 
-trackCS('', '')
+trackCS(1)
 
 
 
