@@ -4,9 +4,7 @@ const addUserToWorkspace = async (data) => {
     const params = {
             TableName: "UserToWorkspace",
             Item:{
-                "id": data.id,
-                "workspace_id": data.workspaceId,
-                "user_id": data.userId
+                ...data
             }
     }
     await insert(params);

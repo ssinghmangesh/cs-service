@@ -180,6 +180,9 @@ const DISCOUNTAPPLICATION_TABLE_NAME = (workspaceId) => {
     return `discountapplication${workspaceId}`
 }
 
+const VISITOR_TABLE_NAME = (workspaceId) => {
+    return `visitor${workspaceId}`
+}
 // const
 // getInsertQury(discount222, order)
 // .then(console.log)
@@ -209,5 +212,6 @@ module.exports={
     LOCATION_TABLE_NAME,
     DRAFTORDERLINEITEMS_TABLE_NAME,
     TAX_TABLE_NAME,
-    DISCOUNTAPPLICATION_TABLE_NAME
+    DISCOUNTAPPLICATION_TABLE_NAME,
+    VISITOR_TABLE_NAME,
 }

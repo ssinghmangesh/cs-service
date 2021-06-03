@@ -4,10 +4,7 @@ const addUser = async (data) => {
     const params = {
             TableName: "User",
             Item:{
-                "user_id": data.userId,
-                "name": data.name,
-                "password": data.password,
-                "email": data.email
+                ...data
         }
     }
     return await insert(params);
@@ -34,11 +31,11 @@ const deleteUser = async (data) => {
 
 const fetchUser = async (data) => {
     var params = {
-            TableName: 'User',
-            Key:{
-                "user_id": data.userId
-            }
+        TableName: 'User',
+        Key: {
+            ...data
         }
+    }
     return await fetch(params)
 }
 

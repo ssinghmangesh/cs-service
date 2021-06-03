@@ -45,9 +45,10 @@ const abstractData = (response, type) => {
 }
 
 class Dashboard {
-    static async count({TABLE_NAME, startdate, enddate}) {
+    static async count({TABLE_NAME, filters = {}}) {
         let query = ``
-        query = `SELECT COUNT(*) FROM ${TABLE_NAME} ${WHERE_CLAUSE({startdate, enddate})};`
+        let wc = whereClause(filters);
+        query = `SELECT COUNT(*) FROM ${TABLE_NAME} ${wc ? 'WHERE '+wc : ''};`
         // console.log(query);
         return abstractData(await PostgresqlDb.query(query), "single");
     }

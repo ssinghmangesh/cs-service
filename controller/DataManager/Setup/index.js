@@ -19,6 +19,7 @@ const locationColumns = require("./locationColumns.json");
 const draftOrderLineItemsColumns = require("./draftOrderLineItemsColumns.json");
 const taxColumns = require("./taxColumns.json");
 const discountApplicationsColumns = require("./discountApplicationsColumns.json");
+const visitorColumns = require("./visitorColumns.json");
 
 const {
     CUSTOMER_TABLE_NAME, 
@@ -41,7 +42,8 @@ const {
     LOCATION_TABLE_NAME,
     DRAFTORDERLINEITEMS_TABLE_NAME,
     TAX_TABLE_NAME,
-    DISCOUNTAPPLICATION_TABLE_NAME
+    DISCOUNTAPPLICATION_TABLE_NAME,
+    VISITOR_TABLE_NAME,
 } = require("../helper");
 
 
@@ -90,6 +92,7 @@ const setupWorkspace = async(workspaceId) => {
     await createTable(taxColumns, TAX_TABLE_NAME, workspaceId)
 
     await createTable(discountApplicationsColumns, DISCOUNTAPPLICATION_TABLE_NAME, workspaceId)
+    await createTable(visitorColumns, VISITOR_TABLE_NAME, 1);
 
     return {
         status: true,
@@ -113,8 +116,7 @@ const deleteWorkspace = async (workspaceId) => {
 // setupWorkspace(333)
 // .then(console.log)
 // .catch(console.log)
-
-
+// createTable(visitorColumns, VISITOR_TABLE_NAME, 1);
 
 module.exports = {
     setupWorkspace,
