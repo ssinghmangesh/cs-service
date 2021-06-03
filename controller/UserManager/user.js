@@ -31,14 +31,11 @@ const deleteUser = async (data) => {
 
 const fetchUser = async (data) => {
     var params = {
-        ExpressionAttributeValues: {
-            ':v': data.email
-        },
-            TableName: 'User',
-            IndexName: 'email-index',
-            KeyConditionExpression: "email = :v",
-            
+        TableName: 'User',
+        Key: {
+            ...data
         }
+    }
     return await fetch(params)
 }
 

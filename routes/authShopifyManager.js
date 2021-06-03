@@ -10,7 +10,7 @@ const cookie = require('cookie');
 const nonce = require('nonce')();
 const querystring = require('querystring');
 const axios = require('axios');
-const { addWorkspace, fetchWorkspace, fetchUser, addUser } = require("../controller/UserManager");
+const { addWorkspace, fetchWorkspace, fetchUser, addUser, addUserToWorkspace } = require("../controller/UserManager");
 
 const shopifyApiPublicKey = 'eb6b044f4a8cf434a8100f85cac58205';
 const shopifyApiSecretKey = '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';
@@ -87,11 +87,12 @@ router.get('/callback', async (req, res) => {
         // console.log("shopData: ", shopData.data.shop)
 
         const fetchedWorkspace = await fetchWorkspace({ workspace_id: shopData.data.shop.id })
-        if (fetchedWorkspace.Items.length === 0) {
+        if (Object.keys(fetchedWorkspace).length === 0) {
             const workspace = {
                 workspace_id: shopData.data.shop.id,
                 access_token: tokenResponseData.access_token,
                 shop: shopData.data.shop,
+                shop_name: shopData.data.shop.name,
                 scope: tokenResponseData.scope,
                 created_at: Date.now(),
                 updated_at: Date.now()
@@ -99,17 +100,22 @@ router.get('/callback', async (req, res) => {
             await addWorkspace(workspace);
         }
         
-        const fetchedUser = await fetchUser({ email: shopData.data.shop.email })
-        if (fetchedUser.Items.length === 0) {
+        const fetchedUser = await fetchUser({ user_id: shopData.data.shop.email })
+        if (Object.keys(fetchedUser).length === 0) {
             const user = {
-                user_id: Date.now(),
-                email: shopData.data.shop.email,
+                user_id: shopData.data.shop.email,
                 name: shopData.data.shop.shop_owner,
                 created_at: Date.now(),
                 updated_at: Date.now()
             }
             await addUser(user);
         }
+
+        const userToWorkspace = {
+            user_id: shopData.data.shop.email,
+            workspace_id: shopData.data.shop.id
+        }
+        await addUserToWorkspace(userToWorkspace);
         
         res.redirect('https://customsegment.com/');
 

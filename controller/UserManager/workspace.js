@@ -29,13 +29,11 @@ const deleteWorkspace = async (data) => {
 
 const fetchWorkspace = async (data) => {
     var params = {
-        ExpressionAttributeValues: {
-            ':v': data.workspace_id
-        },
-            TableName: 'Workspace',
-            KeyConditionExpression: "workspace_id = :v",
-            
-        }
+        TableName: 'Workspace',
+        Key: {
+            ...data
+        }    
+    }
     return await fetch(params);
 }
 
