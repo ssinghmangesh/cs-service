@@ -75,10 +75,6 @@ trackCS = async function(workspaceId) {
     
     socket.emit("add-visitor", csData, workspaceId);
 
-    socket.on('disconnect', () => {
-        socket.emit("delete-visitor", workspaceId, csData.cart_id);
-    })
-
     if(csData.event_name === 'cart_view'){
         await cartChanges();
     }
