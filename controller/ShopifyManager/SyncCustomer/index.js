@@ -2,27 +2,41 @@ const Shopify = require('../Shopify')
 const {insert, del} = require("../../DataManager/index");
 const {CUSTOMER_TABLE_NAME} = require("../../DataManager/helper")
 const customerColumn = require('../../DataManager/Setup/customerColumns.json');
+const { socket } = require("../../../socket");
 
+// console.log(socket);
 
-const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0, workspaceId }) => {
+const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0, workspaceId, count, progress = 0 }) => {
     //call to shopify fetch one batch
 
     let response = await Shopify.fetchCustomer(shopName, accessToken, { since_id: sinceId, limit })
     // console.log(response.data.customers.length)
 
+    let customers = response.data.customers.map((customer) => {
+        return {
+            ...customer['default_address'],
+            ...customer,
+        }
+    })
+    
     //insert
     if(response.data.customers.length){
-        await del(CUSTOMER_TABLE_NAME, response.data.customers, workspaceId)
-        await insert(CUSTOMER_TABLE_NAME, customerColumn, response.data.customers, workspaceId)
+        await del(CUSTOMER_TABLE_NAME, customers, workspaceId)
+        await insert(CUSTOMER_TABLE_NAME, customerColumn, customers, workspaceId)
     }
     //call next batch
     if(response.data.customers.length < limit) {
-        console.log("SYNC complete..")
+        progress += response.data.customers.length
+        socket.emit("sync", `${progress} of ${count} done`)
+        console.log(`${progress} of ${count} done`);
     } else {
         //call next since id
+        progress += response.data.customers.length
+        socket.emit("sync", `${progress} of ${count} done`)
+        console.log(`${progress} of ${count} done`);
         let nextSinceId = response.data.customers[response.data.customers.length - 1].id;
         // console.log("nextSinceId", nextSinceId)
-        await SYNC({ shopName, accessToken, sinceId: nextSinceId, limit, workspaceId})
+        await SYNC({ shopName, accessToken, sinceId: nextSinceId, limit, workspaceId, count, progress })
     }
     return;
 }

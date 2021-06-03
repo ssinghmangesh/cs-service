@@ -1,0 +1,164 @@
+[
+    {
+        "columnName":"id",
+        "dataType":"numeric",
+        "primaryKey": true
+    },
+    {
+        "columnName":"token",
+        "dataType":"varchar"
+    },
+    {
+        "columnName":"cart_token",
+        "dataType":"varchar"
+    },
+    {
+        "columnName":"email",
+        "dataType":"varchar"
+    },
+    {
+        "columnName":"gateway",
+        "dataType":"varchar"
+    },
+    {
+        "columnName":"buyer_accepts_marketing",
+        "dataType":"boolean"
+    },
+    {
+        "columnName":"created_at",
+        "dataType":"timestamptz"
+    },
+    {
+        "columnName":"updated_at",
+        "dataType":"timestamptz"
+    },
+    {
+        "columnName":"landing_site",
+        "dataType":"varchar"
+    },
+    {
+        "columnName":"note",
+        "dataType":"varchar"
+    },  
+    {
+        "columnName":"note_attributes",
+        "dataType":"jsonb[]"
+    },
+    {
+        "columnName":"referring_site",
+        "dataType":"varchar"
+    },
+    {
+        "columnName":"shipping_lines",
+        "dataType": "jsonb"
+    },
+    {
+        "columnName":"taxes_included",
+        "dataType": "boolean"
+    },
+    {
+        "columnName":"total_weight",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"currency",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"completed_at",
+        "dataType": "timestamptz"
+    },
+    {
+        "columnName":"closed_at",
+        "dataType": "timestamptz"
+    },
+    {
+        "columnName":"user_id",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"location_id",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"source_identifier",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"source_url",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"device_id",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"phone",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"name",
+        "dataType": "varchar"
+    },
+    {
+        "columnName": "source",
+        "dataType": "varchar"
+    },
+    {
+        "columnName": "abandoned_checkout_url",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"discount_codes",
+        "dataType": "jsonb[]"
+    },
+    {
+        "columnName":"tax_lines",
+        "dataType": "jsonb"
+    },
+    {
+        "columnName":"source_name",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"presentment_currency",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"total_discounts",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"total_line_items_price",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"total_price",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"total_tax",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"subtotal_price",
+        "dataType": "numeric"
+    },
+    {
+        "columnName": "total_duties",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"billing_address",
+        "dataType": "jsonb"
+    },
+    {
+        "columnName":"shipping_address",
+        "dataType": "jsonb"
+    },
+    {
+        "columnName": "customer_id",
+        "dataType": "numeric"
+    }
+
+]

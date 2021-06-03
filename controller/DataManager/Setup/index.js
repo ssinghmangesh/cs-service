@@ -6,6 +6,13 @@ const fulfillmentsColumns = require('./fulfillmentsColumns')
 const lineItemsColumns = require('./lineItemsColumns')
 const refundedColumns = require('./refundedColumns')
 const variantColumns = require('./variantColumns')
+const cartColumns = require('./cartColumns.json')
+const cartLineItemsColumns = require('./cartLineItemColumns.json')
+const checkoutColumns = require('./checkoutColumns.json')
+const eventColumns = require('./eventColumns.json')
+const checkoutLineItemsColumns = require("./checkoutLineItemsColumns.json");
+const customerAggregateColumns = require("./customerAggregateColumns.json");
+
 const {
     CUSTOMER_TABLE_NAME, 
     ORDER_TABLE_NAME,
@@ -14,11 +21,17 @@ const {
     FULFILLMENT_TABLE_NAME,
     LINEITEMS_TABLE_NAME,
     REFUNDED_TABLE_NAME,
-    VARIANT_TABLE_NAME
+    VARIANT_TABLE_NAME,
+    CART_TABLE_NAME,
+    CARTLINEITEMS_TABLE_NAME,
+    CHECKOUT_TABLE_NAME,
+    EVENT_TABLE_NAME,
+    CHECKOUTLINEITEMS_TABLE_NAME,
+    CUSTOMERAGGREGATE_TABLE_NAME
 } = require("../helper");
 
 
-const { createTable } = require('./helper')
+const { createTable, deleteTable } = require('./helper')
 
 const setupWorkspace = async(workspaceId) => {
 
@@ -38,22 +51,44 @@ const setupWorkspace = async(workspaceId) => {
 
     await createTable(variantColumns, VARIANT_TABLE_NAME, workspaceId)
 
+    await createTable(cartColumns, CART_TABLE_NAME, workspaceId)
+
+    await createTable(cartLineItemsColumns, CARTLINEITEMS_TABLE_NAME, workspaceId)
+
+    await createTable(checkoutColumns, CHECKOUT_TABLE_NAME, workspaceId)
+
+    await createTable(eventColumns, EVENT_TABLE_NAME, workspaceId)
+
+    // await createTable(checkoutLineItemsColumns, CHECKOUTLINEITEMS_TABLE_NAME, workspaceId)
+
+    await createTable(customerAggregateColumns, CUSTOMERAGGREGATE_TABLE_NAME, workspaceId)
+
     return {
         status: true,
         message: "Successful"
     }
-
 }
 
+const deleteWorkspace = async (workspaceId) => {
+    await deleteTable(workspaceId)
 
-// createOrderTable(222)
+    return {
+        status: true,
+        message: "Successful"
+    }
+}
+
+// deleteWorkspace(222)
+// .then(console.log)
+// .catch(console.log)
+
+// setupWorkspace(333)
 // .then(console.log)
 // .catch(console.log)
 
 
 
-
-
 module.exports = {
-    setupWorkspace
+    setupWorkspace,
+    deleteWorkspace
 }

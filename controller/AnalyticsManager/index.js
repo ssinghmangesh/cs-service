@@ -1,15 +1,116 @@
+const { whereClause } = require("../../filters")
+const PostgresqlDb = require('./../../db')
+// const { whereClause } = require('./../../filters.js')
 
-const axios = require("axios")
 
+const WHERE_CLAUSE = ({startdate, enddate}) => {
+    if(startdate && enddate) {
+        return ` WHERE created_at >= '${startdate}' AND created_at <= '${enddate}'`
+    }
+    else return ''
+}
 
-class Dashboard {
-    static orderCount(workspaceId, condition) {
-        let query = ``
-        let WHERE_CLAUES = ``
-
-        //run
+const ORDER_BY = ({orderBykey, orderByDirection}) => {
+    if(orderBykey) {
+        if(orderByDirection) {
+            return `ORDER BY ${orderBykey} ${orderByDirection}`
+        } else {
+            return `ORDER BY ${orderBykey} asc`
+        }
+    } else {
+        return ''
     }
 }
+
+const abstractData = (response, type) => {
+    //extract only rows
+    let res = null
+    if(type === "single") {
+        res = response.rows[0]
+    } else {
+        res = response.rows
+    }
+    return res
+}
+
+class Dashboard {
+    static async count({TABLE_NAME, startdate, enddate}) {
+        let query = ``
+        query = `SELECT COUNT(*) FROM ${TABLE_NAME} ${WHERE_CLAUSE({startdate, enddate})};`
+        // console.log(query);
+        return abstractData(await PostgresqlDb.query(query), "single");
+    }
+
+    static async sum({TABLE_NAME, columnname, startdate, enddate}) {
+        let query = ``
+        query = `SELECT SUM(${columnname}) FROM ${TABLE_NAME} ${WHERE_CLAUSE({startdate, enddate})};`
+        return abstractData(await PostgresqlDb.query(query), "single");
+    }
+
+    static async lineGraph({TABLE_NAME, columnname, groupBykey = 'MONTH', startdate, enddate, x = 'x', y = 'y'}) {
+        let query = ``
+        query = `SELECT EXTRACT(${groupBykey} FROM created_at) AS ${x}, SUM(${columnname}) AS ${y} FROM ${TABLE_NAME} ${WHERE_CLAUSE({startdate, enddate})} GROUP BY ${x} ORDER BY ${x};`
+        // console.log(query);
+        return abstractData(await PostgresqlDb.query(query));
+    }
+
+    static async barGraph({TABLE_NAME, columnname, groupBykey = 'MONTH', groupBykey2 = 'os', startdate, enddate}) {
+        let query = ``
+        query = `SELECT EXTRACT(${groupBykey} FROM created_at) AS Period, ${groupBykey2}, SUM(${columnname}) AS Revenue FROM ${TABLE_NAME} ${WHERE_CLAUSE({startdate, enddate})} GROUP BY Period, ${groupBykey2} ORDER BY Period, ${groupBykey2};`
+        // console.log(query);
+        return abstractData(await PostgresqlDb.query(query));
+    }
+
+    static async pieChart({TABLE_NAME, columnname, startdate, enddate}) {
+        let query = ``
+        query = `SELECT ${columnname}, COUNT(${columnname}) AS Count FROM ${TABLE_NAME} ${WHERE_CLAUSE({startdate, enddate})} GROUP BY ${columnname};`
+        return abstractData(await PostgresqlDb.query(query));
+    }
+
+    static async table({TABLE_NAME = 'order', orderBykey, orderByDirection, limit = 10, skipRowby = 0, filters = {}}) {
+        let wc = whereClause(filters);
+        let query = ``
+        query = `
+            SELECT * FROM ${TABLE_NAME}
+            ${wc ? 'WHERE '+wc : ''}
+            ${ORDER_BY(orderBykey, orderByDirection)}
+            LIMIT ${limit} OFFSET ${skipRowby};`
+        console.log(query)
+        return abstractData(await PostgresqlDb.query(query));
+    }
+
+    static async stats({TABLE_NAME = 'order333', limit = 10, skipRowby = 0, filters = {}, statsDefinition} = []) {
+        let query = `SELECT `
+        for(let i = 0; i < statsDefinition.length; i++) {
+            query += `${statsDefinition[i].aggregate}(${statsDefinition[i].columnname}) AS ${statsDefinition[i].alias}`
+            if(i < statsDefinition.length - 1) {
+                query += `, `
+            }
+        }
+        query += ` FROM ${TABLE_NAME} LIMIT ${limit} OFFSET ${skipRowby};`
+        // console.log(query)
+        return abstractData(await PostgresqlDb.query(query), "single");
+    }
+
+    static async timeline({workspaceId, customerId}) {
+        let query1 = ``
+        query1 = `SELECT * FROM order${workspaceId} WHERE customer_id = ${customerId} limit 2;`
+        let query2 = ``
+        query2 = `SELECT * FROM event${workspaceId} WHERE customer_id = ${customerId};`
+        const data1 = abstractData(await PostgresqlDb.query(query1));
+        const data2 = abstractData(await PostgresqlDb.query(query2));
+        const data = [...data1, ...data2]
+        // console.log('!!!!!!!!!', data)
+        return data
+    }
+}
+
+module.exports = Dashboard
+
+// Dashboard.Ordertaxamount({workspaceId: 333, startdate: '2021-01-01 11:49:40.765997+05:30', enddate: '2021-05-13 11:49:40.765997+05:30'})
+// .then(console.log)
+// .catch(console.log)
+
 
 
 /*
@@ -33,7 +134,7 @@ Dashboard API
 startdate = 
 enddate = 
 let WHERE_CLAUSE = ''
-if(startdate && enddat) {
+if(startdate  &&  enddat) {
     WHERE_CLAUSE = ``
 }
 let query = `

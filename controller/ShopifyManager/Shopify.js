@@ -84,7 +84,26 @@ class Shopify {
         })
     }
     
+    static fetchCart(shopName, accessToken, option) {
+        const { since_id, limit } = option
+        return axios({
+            method: 'GET',
+            url: `https://${shopName}/admin/api/2021-04/checkouts.json?status=any&since_id=${since_id}&limit=${limit}`,
+            headers:  {
+                'X-Shopify-Access-Token': accessToken,
+            }
+        })
+    }
 
+    static fetchCartCount(shopName, accessToken) {
+        return axios({
+            method: 'GET',
+            url: `https://${shopName}/admin/api/2021-04/checkouts/count.json?status=any`,
+            headers:  {
+                'X-Shopify-Access-Token': accessToken,
+            }
+        })
+    }
 }
 
 
@@ -93,7 +112,10 @@ class Shopify {
 // shopName = grofers-orders.myshopify.com
 
 // Shopify.fetchCustomerCount('grofers-orders.myshopify.com', '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', {since_id: 0, limit: 2})
-// .then(console.log)
+// .then(res => {
+//     const {data:{count}} = res;
+//     console.log(count)
+// })
 // .catch(console.log)
 
 

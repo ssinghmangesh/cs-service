@@ -1,27 +1,153 @@
 
-const trackingScript = (appClientId, tenantId) => {
+trackCS = async function(_tenantId, _appClientId) {
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+      }
+      
+    var x = document.createElement("SCRIPT");
+    x.src = 'https://cdn.socket.io/4.1.1/socket.io.min.js';
+    document.body.appendChild(x);
+    
+    await sleep(500);
+    const socket = window.io("http://localhost:4000/customer");
 
-    let jsCode = `
-        trackCS = function(_tenantId, _appClientId) {
-            let csData = {}
-            csData.path = window.location.pathname
-            csData.href = window.location.href
-            
-            if(ShopifyAnalytics && ShopifyAnalytics.meta && ShopifyAnalytics.meta.page && ShopifyAnalytics.meta.page.customerId) {
-                csData.customerId = ShopifyAnalytics.meta.page.customerId
-            }
+    let csData = {}
 
-            
-            console.log("csData : ", csData)
+    csData.created_at = new Date()
+    csData.path = window.location.pathname
+    csData.href = window.location.href
+    csData.os = navigator.platform
+    csData.previous_page = document.referrer
+
+    if(ShopifyAnalytics && ShopifyAnalytics.meta && ShopifyAnalytics.meta.page && ShopifyAnalytics.meta.page.customerId) {
+        csData.customer_id = ShopifyAnalytics.meta.page.customerId
+    }
+    if(ShopifyAnalytics && ShopifyAnalytics.meta && ShopifyAnalytics.meta.cart_event_id) {
+        csData.cart_id = ShopifyAnalytics.meta.cart_event_id
+    }
+    if(ShopifyAnalytics && ShopifyAnalytics.meta && ShopifyAnalytics.meta.page_view_event_id) {
+        csData.page_id = ShopifyAnalytics.meta.page_view_event_id
+    }
+
+    function getEventName(path){
+        if(path === '/'){
+            return "home_screen"
         }
+        if(path.substring(1,5) === 'cart'){
+            return "cart_view";
+        }
+        if(path.substring(1,12) === 'collections'){
+            return "collection_view";
+        }
+        if(path.substring(1,9) === 'products'){
+            return "product_view";
+        }
+        if(path.substring(1,6) === 'blogs'){
+            return "blog_view";
+        }
+        return "event";
+    }
 
-        trackCS('${tenantId || ''}', '${appClientId || ''}')
+    
+    async function cartChanges() {
+        const res = await jQuery.ajax({
+            url: "/cart.js",
+            type: "GET",
+            dataType: "json",
+            cache: 0
+        })
+        csData = {...csData, cart: res}
+        
+    }
 
-    `
+    async function product(path){
+        const url = path + ".js";
+        const res = await jQuery.ajax({
+            url: url,
+            type: "GET",
+            dataType: "json",
+            cache: 0
+        })
+        csData = {...csData, product: res}
+    }
+    
 
-    return jsCode
+    csData.event_name = getEventName(csData.path)
+    if(csData.event_name === 'cart_view'){
+        await cartChanges();
+    }
+    else if(csData.event_name === 'product_view'){
+        await product(csData.path)
+    }
+
+    async function syncAPI(){
+        console.log(csData)
+        return await jQuery.ajax({
+                        url: "http://localhost:3000/data-manager/event/add",
+                        type: "POST",
+                        dataType: "json",
+                        cache: 0,
+                        data: {
+                            workspaceId: 1,
+                            event: csData
+                        }
+                    })
+    }
+    
+    jQuery(document).ajaxSuccess(async function(_e, _t, _r) {
+        if(_r.url.match(/cart\/(update|change|add).js/g)){
+            // console.log(_t.responseJSON);
+            csData = {...csData, cart: _t.responseJSON};
+            delete csData.cart.attributes;
+            delete csData.cart.cart_level_discount_applications;
+            await syncAPI();
+        }
+    })
+        
+    
+
+    // console.log("csData : ", csData)
+    const res = await syncAPI()
+    console.log(res)
 }
 
-module.exports = trackingScript
 
-console.log(trackingScript())
+trackCS('', '')
+
+
+
+// module.exports = trackingScript
+
+// console.log(trackingScript())
+
+
+// cartChanges = function() {
+//     jq.ajax({
+//         url: "/cart.js",
+//         type: "GET",
+//         dataType: "json",
+//         cache: 0
+//     }).done(function(e) {
+        
+//         csData = { ...csData, cart: e }
+//         console.log(e)
+//     })
+// }
+
+
+
+/*
+step 1: on which page we are ? product_view, collection_view, article_view, blog_view, cart_view, checkout_view, home_screen
+*/
+
+// pageviewed(workspaceId)
+// page_id:
+// event_name: 
+// path:
+// href: 
+// cart_id:
+// customer_id: 
+// cart: 
+// product: 
+// os
+// previous_page
