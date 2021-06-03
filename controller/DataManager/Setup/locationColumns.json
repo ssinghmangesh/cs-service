@@ -1,0 +1,71 @@
+[
+    {
+        "columnName":"id",
+        "dataType": "numeric",
+        "primaryKey": true
+    },
+    {
+        "columnName":"active",
+        "dataType": "boolean"
+    },
+    {
+        "columnName":"address1",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"address2",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"city",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"country",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"country_code",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"created_at",
+        "dataType": "timestamptz"
+    },
+    {
+        "columnName":"legacy",
+        "dataType": "boolean"
+    },
+    {
+        "columnName":"name",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"phone",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"province",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"province_code",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"updated_at",
+        "dataType": "timestamptz"
+    },
+    {
+        "columnName":"zip",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"localized_country_name",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"localized_province_name",
+        "dataType": "varchar"
+    }
+]

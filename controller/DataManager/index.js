@@ -22,7 +22,7 @@ const insert = async(TABLE_NAME, column, data, workspaceId) => {
         ${getColumnName({ columnData: column })}
         VALUES ${getValues({ columnData: column, data })}
     `
-    console.log(query)
+    // console.log(query)
     await PostgresqlDb.query(query)
 }
 
@@ -99,9 +99,9 @@ const aggregate = async (workspaceId, customerId) => {
     }
 
     lastSeen = new Date()
-    if(event) {
-        lastSeen = event[0].created_at
-    }
+    // if(event) {
+    //     lastSeen = event[0].created_at
+    // }
 
     // last_seen pending
     const customerData = [{
@@ -138,14 +138,14 @@ const aggregate = async (workspaceId, customerId) => {
 // ${getColumnName({ columnData: customerAggregateColumn })}
 // VALUES (3, '{ "address": "line" }', 10, 11, 12, array[1, 2, 3], array[4, 5, 6], 13, 14, 15, 16, 17, true, '2021-05-13 11:49:40.765997+05:30', '2021-05-13 11:49:40.765997+05:30', '2021-05-13 11:49:40.765997+05:30', 'ttaaggss', '{ "default_address": "real_address" }', 324005);
 
-const del = async (TABLE_NAME, data, workspaceId) => {
+const del = async (TABLE_NAME, data, workspaceId, id = 'id') => {
     if(data.length == 0){
         return;
     }
-    const query = `DELETE FROM ${TABLE_NAME(workspaceId)} WHERE id IN ${getIds(data)}`
-    // // console.log(query);
+    const query = `DELETE FROM ${TABLE_NAME(workspaceId)} WHERE ${id} IN ${getIds(data, id)}`
+    // console.log(query);
     let response =  await PostgresqlDb.query(query);
-    // // console.log(response);
+    // console.log(response);
 }
 
 // const order = require('../Order/order.json')

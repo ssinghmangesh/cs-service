@@ -2,9 +2,14 @@ const {SYNC: customerSync} = require("./SyncCustomer/index")
 const {SYNC: orderSync} = require("./SyncOrder/index")
 const {SYNC: productSync} = require("./SyncProduct/index")
 const {SYNC: discountSync} = require("./SyncDiscount/index")
+const {SYNC: cartSync} = require("./SyncCart/index")
+const {SYNC: draftOrderSync} = require("./SyncDraftOrder/index")
+const {SYNC: inventoryItemSync} = require("./SyncInventoryItem/index")
+const {SYNC: inventoryLevelSync} = require("./SyncInventoryLevel/index")
+const {SYNC: locationSync} = require("./SyncLocation/index")
 const Shopify = require("./Shopify");
 
-const syncAll = async ({ shopName, accessToken, limit,workspaceId }) => {
+const syncAll = async ({ shopName, accessToken, limit, workspaceId }) => {
     console.log("Customer");
     const { data: { count: customerCount } } = await Shopify.fetchCustomerCount(shopName, accessToken);
     await customerSync({ shopName, accessToken, limit, workspaceId, count: customerCount });
@@ -21,9 +26,29 @@ const syncAll = async ({ shopName, accessToken, limit,workspaceId }) => {
     const { data: { count: discountCount } } = await Shopify.fetchDiscountCount(shopName, accessToken);
     await discountSync({ shopName, accessToken, limit, workspaceId, count: discountCount });
 
-    console.log("cart")
-    const { data: { count: cartCount } } = await Shopify.fetchCartCount(shopName, accessToken);
-    await discountSync({ shopName, accessToken, limit, workspaceId, count: cartCount });
+    // console.log("cart")
+    // const { data: { count: cartCount } } = await Shopify.fetchCartCount(shopName, accessToken);
+    // await cartSync({ shopName, accessToken, limit, workspaceId, count: cartCount });
+
+    console.log("draftOrder")
+    const { data: { count: draftOrderCount } } = await Shopify.fetchDraftOrderCount(shopName, accessToken);
+    // console.log('!!!!!!!!!!!', draftOrderCount)
+    await draftOrderSync({ shopName, accessToken, limit, workspaceId, count: draftOrderCount });
+
+    // console.log("inventoryItem")
+    // // const { data: { count: inventoryItemCount } } = await Shopify.fetchinventoryItemCount(shopName, accessToken);
+    // // console.log('!!!!!!!!!!!', inventoryItemCount)
+    // await inventoryItemSync({ shopName, accessToken, limit, workspaceId, count: 0 });
+
+    // console.log("inventoryLevel")
+    // // const { data: { count: inventoryLevelCount } } = await Shopify.fetchinventoryLevelCount(shopName, accessToken);
+    // // console.log('!!!!!!!!!!!', inventoryLevelCount)
+    // await inventoryLevelSync({ shopName, accessToken, limit, workspaceId, count: 0 });
+
+    console.log("location")
+    const { data: { count: locationCount } } = await Shopify.fetchLocationCount(shopName, accessToken);
+    // console.log('!!!!!!!!!!!', locationCount)
+    await locationSync({ shopName, accessToken, limit, workspaceId, count: locationCount });
     
     return {status: 200, message: "Successful"};
 }
@@ -31,6 +56,6 @@ const syncAll = async ({ shopName, accessToken, limit,workspaceId }) => {
 module.exports={
     syncAll
 }
-// syncAll({ shopName: 'grofers-orders.myshopify.com', accessToken: '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',  limit: 50, workspaceId: 1 })
+// syncAll({ shopName: 'grofers-orders.myshopify.com', accessToken: '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',  limit: 50, workspaceId: 333 })
 // .then(console.log)
 // .catch(console.log)

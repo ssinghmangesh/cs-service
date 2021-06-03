@@ -22,7 +22,7 @@ const getValues = ({ columnData, data }) => {
                     return `''`
                 }
             } else if(col.dataType === 'varchar[]') {
-                if(value[col.columnName].length) {
+                if(value[col.columnName] && value[col.columnName].length) {
                     let q = value[col.columnName].map(str => {
                         return `'${str}'`
                     }).join(", ")
@@ -86,13 +86,13 @@ const getValues = ({ columnData, data }) => {
     return allRow
 }
 
-const getIds = (data) => {
+const getIds = (data, name) => {
     return `(${data.map((value) => {
-        if(typeof value.id === 'string'){
+        if(typeof value[name] === 'string'){
             return `'${value.id}'`
         }
         // if(typeof value.id === '')
-        return value.id
+        return value[name]
     }).join(",")})`
 }
 
@@ -152,6 +152,34 @@ const CUSTOMERAGGREGATE_TABLE_NAME = (workspaceId) => {
     return `customeraggregate${workspaceId}`
 }
 
+const DRAFTORDER_TABLE_NAME = (workspaceId) => {
+    return `draftorder${workspaceId}`
+}
+
+const INVENTORYITEM_TABLE_NAME = (workspaceId) => {
+    return `inventoryitem${workspaceId}`
+}
+
+const INVENTORYLEVEL_TABLE_NAME = (workspaceId) => {
+    return `inventorylevel${workspaceId}`
+}
+
+const LOCATION_TABLE_NAME = (workspaceId) => {
+    return `location${workspaceId}`
+}
+
+const DRAFTORDERLINEITEMS_TABLE_NAME = (workspaceId) => {
+    return `draftorderlineitems${workspaceId}`
+}
+
+const TAX_TABLE_NAME = (workspaceId) => {
+    return `tax${workspaceId}`
+}
+
+const DISCOUNTAPPLICATION_TABLE_NAME = (workspaceId) => {
+    return `discountapplication${workspaceId}`
+}
+
 // const
 // getInsertQury(discount222, order)
 // .then(console.log)
@@ -174,5 +202,12 @@ module.exports={
     CHECKOUT_TABLE_NAME,
     CHECKOUTLINEITEMS_TABLE_NAME,
     EVENT_TABLE_NAME,
-    CUSTOMERAGGREGATE_TABLE_NAME
+    CUSTOMERAGGREGATE_TABLE_NAME,
+    DRAFTORDER_TABLE_NAME,
+    INVENTORYITEM_TABLE_NAME,
+    INVENTORYLEVEL_TABLE_NAME,
+    LOCATION_TABLE_NAME,
+    DRAFTORDERLINEITEMS_TABLE_NAME,
+    TAX_TABLE_NAME,
+    DISCOUNTAPPLICATION_TABLE_NAME
 }
