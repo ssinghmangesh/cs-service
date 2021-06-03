@@ -10,6 +10,7 @@ const cookie = require('cookie');
 const nonce = require('nonce')();
 const querystring = require('querystring');
 const axios = require('axios');
+const { addWorkspace, fetchWorkspace, fetchUser, addUser } = require("../controller/UserManager");
 
 const shopifyApiPublicKey = 'eb6b044f4a8cf434a8100f85cac58205';
 const shopifyApiSecretKey = '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';
@@ -82,16 +83,33 @@ router.get('/callback', async (req, res) => {
         }
         
         const shopData = await fetchShopData(shop, access_token)
-        console.log("tokenResponse : ", tokenResponseData)
-        addWorkspace({
-            id: Date.now(), 
-            access_token, 
-            shop,
-            scope,
-            created_at: Date.now(),
-            updated_at: Date.now()
-        })
-        //save data (shop, access_token, workspaceId, shopData)
+        // console.log("tokenResponse : ", tokenResponseData)
+        // console.log("shopData: ", shopData.data.shop)
+
+        const fetchedWorkspace = await fetchWorkspace({ workspace_id: shopData.data.shop.id })
+        if (fetchedWorkspace.Items.length === 0) {
+            const workspace = {
+                workspace_id: shopData.data.shop.id,
+                access_token: tokenResponseData.access_token,
+                shop: shopData.data.shop,
+                scope: tokenResponseData.scope,
+                created_at: Date.now(),
+                updated_at: Date.now()
+            }
+            await addWorkspace(workspace);
+        }
+        
+        const fetchedUser = await fetchUser({ email: shopData.data.shop.email })
+        if (fetchedUser.Items.length === 0) {
+            const user = {
+                user_id: Date.now(),
+                email: shopData.data.shop.email,
+                name: shopData.data.shop.shop_owner,
+                created_at: Date.now(),
+                updated_at: Date.now()
+            }
+            await addUser(user);
+        }
         
         res.redirect('https://customsegment.com/');
 
