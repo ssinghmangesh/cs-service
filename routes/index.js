@@ -2,6 +2,7 @@ const routes = require('express').Router();
 const userManager = require("./userManager") 
 const dataManager = require("./dataManager") 
 const shopifyManager = require("./shopifyManager")
+const authManager = require("./authManger")
 
 routes.get('/', (req, res) => {
   res.status(200).json({ message: 'Connected!' });
@@ -9,9 +10,11 @@ routes.get('/', (req, res) => {
 
 
 
+
 module.exports = {
   routes,
   userManager,
   dataManager,
-  shopifyManager
+  shopifyManager,
+  authManager
 };
