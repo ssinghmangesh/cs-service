@@ -83,9 +83,17 @@ router.get('/callback', async (req, res) => {
         
         const shopData = await fetchShopData(shop, access_token)
         console.log("tokenResponse : ", tokenResponseData)
+        addWorkspace({
+            id: Date.now(), 
+            access_token, 
+            shop,
+            scope,
+            created_at: Date.now(),
+            updated_at: Date.now()
+        })
         //save data (shop, access_token, workspaceId, shopData)
         
-        res.redirect('http://google.com/');
+        res.redirect('https://customsegment.com/');
 
     } catch (err) {
         console.log(err)

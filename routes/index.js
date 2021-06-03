@@ -3,6 +3,7 @@ const userManager = require("./userManager")
 const dataManager = require("./dataManager") 
 const shopifyManager = require("./shopifyManager")
 const authManager = require("./authManger")
+const authShopifyManager = require("./authShopifyManager")
 const analyticsManager = require("./analyticsManager")
 const customerManager = require("./customerManager")
 const whereClause = require('./whereClause');
@@ -21,6 +22,7 @@ module.exports = {
   shopifyManager,
   authManager,
   analyticsManager,
+  authShopifyManager,
   customerManager,
   whereClause,
 };
