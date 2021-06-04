@@ -76,7 +76,7 @@ class Dashboard {
             ${wc ? 'WHERE '+wc : ''}
             ${ORDER_BY(orderBykey, orderByDirection)}
             LIMIT ${limit} OFFSET ${skipRowby};`
-        console.log(query)
+        // console.log(query)
         return abstractData(await PostgresqlDb.query(query));
     }
 

@@ -1,4 +1,4 @@
-const { insert, del, fetch, fetchAll } = require("../../aws/index");
+const { insert, del, fetch, fetchAll, update } = require("../../aws/index");
 
 const addUser = async (data) => {
     const params = {
@@ -18,6 +18,13 @@ const addUser = async (data) => {
 // }
 
 // addUser(data);
+const updateUser = async (data) => {
+    const params = {
+        TableName: 'User',
+        ...data,
+    }
+    return await update(params);
+}
 
 const deleteUser = async (data) => {
     var params = {
@@ -50,5 +57,6 @@ module.exports = {
     addUser,
     deleteUser,
     fetchUser,
-    fetchAllUsers
+    fetchAllUsers,
+    updateUser,
 }
