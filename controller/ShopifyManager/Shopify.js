@@ -88,7 +88,7 @@ class Shopify {
         const { since_id, limit } = option
         return axios({
             method: 'GET',
-            url: `https://${shopName}/admin/api/2021-04/checkouts.json?status=any&since_id=${since_id}&limit=${limit}`,
+            url: `https://${shopName}/admin/api/2021-04/checkouts.json?since_id=${since_id}&limit=${limit}`,
             headers:  {
                 'X-Shopify-Access-Token': accessToken,
             }
@@ -98,7 +98,7 @@ class Shopify {
     static fetchCartCount(shopName, accessToken) {
         return axios({
             method: 'GET',
-            url: `https://${shopName}/admin/api/2021-04/checkouts/count.json?status=any`,
+            url: `https://${shopName}/admin/api/2021-04/checkouts/count.json`,
             headers:  {
                 'X-Shopify-Access-Token': accessToken,
             }
