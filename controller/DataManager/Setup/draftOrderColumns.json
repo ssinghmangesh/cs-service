@@ -1,0 +1,111 @@
+[
+    {
+        "columnName":"id",
+        "dataType": "numeric",
+        "primaryKey": true
+    },
+    {
+        "columnName":"order_id",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"name",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"customer",
+        "dataType": "jsonb"
+    },
+    {
+        "columnName":"shipping_address",
+        "dataType": "jsonb"
+    },
+    {
+        "columnName":"billing_address",
+        "dataType": "jsonb"
+    },
+    {
+        "columnName":"note",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"note_attributes",
+        "dataType": "jsonb[]"
+    },
+    {
+        "columnName":"email",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"currency",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"invoice_sent_at",
+        "dataType": "timestamptz"
+    },
+    {
+        "columnName":"invoice_url",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"line_items",
+        "dataType": "jsonb"
+    },
+    {
+        "columnName":"shipping_line",
+        "dataType": "jsonb"
+    },
+    {
+        "columnName":"tags",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"tax_exempt",
+        "dataType": "boolean"
+    },
+    {
+        "columnName":"tax_exemptions",
+        "dataType": "varchar[]"
+    },
+    {
+        "columnName":"tax_lines",
+        "dataType": "jsonb[]"
+    },
+    {
+        "columnName":"applied_discount",
+        "dataType": "jsonb"
+    },
+    {
+        "columnName":"taxes_included",
+        "dataType": "boolean"
+    },
+    {
+        "columnName":"total_tax",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"subtotal_price",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"total_price",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"completed_at",
+        "dataType": "timestamptz"
+    },
+    {
+        "columnName":"created_at",
+        "dataType": "timestamptz"
+    },
+    {
+        "columnName":"updated_at",
+        "dataType": "timestamptz"
+    },
+    {
+        "columnName":"status",
+        "dataType": "varchar"
+    }
+]

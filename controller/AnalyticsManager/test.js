@@ -38,33 +38,47 @@ const Dashboard = require('./index.js')
 // .then(console.log)
 // .catch(console.log)
 
-statsDefinition = [
-    {
-        aggregate: 'sum',
-        columnname: 'total_price',
-        alias: 'Total'
-    },
-    {
-        aggregate: 'count',
-        columnname: 'total_price',
-        alias: 'Total_Count'
-    },
-    {
-        aggregate: 'avg',
-        columnname: 'total_price',
-        alias: 'Average'
-    },
-    {
-        aggregate: 'max',
-        columnname: 'total_price',
-        alias: 'Maximum'
-    },
-    {
-        aggregate: 'min',
-        columnname: 'total_price',
-        alias: 'Minimum'
-    }
-]
+// statsDefinition = [
+//     {
+//         aggregate: 'sum',
+//         columnname: 'total_price',
+//         alias: 'Total'
+//     },
+//     {
+//         aggregate: 'count',
+//         columnname: 'total_price',
+//         alias: 'Total_Count'
+//     },
+//     {
+//         aggregate: '',
+//         columnname: 'email',
+//         alias: 'Email'
+//     },
+//     {
+//         aggregate: 'avg',
+//         columnname: 'total_price',
+//         alias: 'Average'
+//     },
+//     {
+//         aggregate: 'max',
+//         columnname: 'total_price',
+//         alias: 'Maximum'
+//     },
+//     {
+//         aggregate: 'min',
+//         columnname: 'total_price',
+//         alias: 'Minimum'
+//     },
+//     {
+//         aggregate: '',
+//         columnname: 'id',
+//         alias: 'ID'
+//     }
+// ]
+
+// Dashboard.tableGroupBy({groupBykey: ['fulfillment_status', 'buyer_accepts_marketing'], statsDefinition: statsDefinition})
+// .then(console.log)
+// .catch(console.log)
 
 // Dashboard.stats({TABLE_NAME: 'order333', workspaceId: 333, limit: 5, skipRowby: 0, statsDefinition: statsDefinition})
 // .then(console.log)

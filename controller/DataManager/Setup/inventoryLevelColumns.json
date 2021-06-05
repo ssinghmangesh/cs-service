@@ -1,0 +1,19 @@
+[
+    {
+        "columnName":"inventory_item_id",
+        "dataType": "numeric",
+        "primaryKey": true
+    },
+    {
+        "columnName":"available",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"location_id",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"updated_at",
+        "dataType": "timestamptz"
+    }
+]

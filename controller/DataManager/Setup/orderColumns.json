@@ -1,5 +1,10 @@
 [
     {
+        "columnName":"id",
+        "dataType": "numeric",
+        "primaryKey": true
+    },
+    {
         "columnName":"app_id",
         "dataType": "numeric"
     },
@@ -86,11 +91,6 @@
     {
         "columnName":"gateway",
         "dataType": "varchar"
-    },
-    {
-        "columnName":"id",
-        "dataType": "numeric",
-        "primaryKey": true
     },
     {
         "columnName":"landing_site",

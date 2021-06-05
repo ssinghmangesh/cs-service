@@ -12,6 +12,13 @@ const checkoutColumns = require('./checkoutColumns.json')
 const eventColumns = require('./eventColumns.json')
 const checkoutLineItemsColumns = require("./checkoutLineItemsColumns.json");
 const customerAggregateColumns = require("./customerAggregateColumns.json");
+const draftOrderColumns = require("./draftOrderColumns.json");
+const inventoryitemColumns = require("./inventoryItemColumns.json");
+const inventorylevelColumns = require("./inventoryLevelColumns.json");
+const locationColumns = require("./locationColumns.json");
+const draftOrderLineItemsColumns = require("./draftOrderLineItemsColumns.json");
+const taxColumns = require("./taxColumns.json");
+const discountApplicationsColumns = require("./discountApplicationsColumns.json");
 const visitorColumns = require("./visitorColumns.json");
 
 const {
@@ -29,6 +36,13 @@ const {
     EVENT_TABLE_NAME,
     CHECKOUTLINEITEMS_TABLE_NAME,
     CUSTOMERAGGREGATE_TABLE_NAME,
+    DRAFTORDER_TABLE_NAME,
+    INVENTORYITEM_TABLE_NAME,
+    INVENTORYLEVEL_TABLE_NAME,
+    LOCATION_TABLE_NAME,
+    DRAFTORDERLINEITEMS_TABLE_NAME,
+    TAX_TABLE_NAME,
+    DISCOUNTAPPLICATION_TABLE_NAME,
     VISITOR_TABLE_NAME,
 } = require("../helper");
 
@@ -65,6 +79,19 @@ const setupWorkspace = async(workspaceId) => {
 
     await createTable(customerAggregateColumns, CUSTOMERAGGREGATE_TABLE_NAME, workspaceId)
 
+    await createTable(draftOrderColumns, DRAFTORDER_TABLE_NAME, workspaceId)
+
+    await createTable(inventoryitemColumns, INVENTORYITEM_TABLE_NAME, workspaceId)
+
+    await createTable(inventorylevelColumns, INVENTORYLEVEL_TABLE_NAME, workspaceId)
+
+    await createTable(locationColumns, LOCATION_TABLE_NAME, workspaceId)
+
+    await createTable(draftOrderLineItemsColumns, DRAFTORDERLINEITEMS_TABLE_NAME, workspaceId)
+
+    await createTable(taxColumns, TAX_TABLE_NAME, workspaceId)
+
+    await createTable(discountApplicationsColumns, DISCOUNTAPPLICATION_TABLE_NAME, workspaceId)
     await createTable(visitorColumns, VISITOR_TABLE_NAME, 1);
 
     return {
@@ -82,7 +109,7 @@ const deleteWorkspace = async (workspaceId) => {
     }
 }
 
-// deleteWorkspace(222)
+// deleteWorkspace(333)
 // .then(console.log)
 // .catch(console.log)
 

@@ -30,7 +30,7 @@ router.post('/analytics-manager/line-graph', async (req, res) => {
     const details = req.body
     const { 'x-workspace-id': workspaceId } = req.headers
     let table = `${details.table}${workspaceId}`
-    let response = await Dashboard.lineGraph({TABLE_NAME: table, columnname: details.columnname, groupBykey: details.groupBykey, startdate: details.startdate, enddate: details.enddate})
+    let response = await Dashboard.lineGraph({TABLE_NAME: table, columnname: details.columnname, groupBykey: details.groupBykey, startdate: details.startdate, enddate: details.enddate, statsDefinition: details.statsDefinition})
     // console.log(response)
     res.status(200).send( { status: true, message: "successful", data: response } )
 })
@@ -49,7 +49,7 @@ router.post('/analytics-manager/pie-chart', async (req, res) => {
     const { 'x-workspace-id': workspaceId } = req.headers
     let table = `${details.table}${workspaceId}`
     let response = await Dashboard.pieChart({TABLE_NAME: table, columnname: details.columnname, startdate: details.startdate, enddate: details.enddate})
-    // console.log(response)
+    console.log(response)
     res.status(200).send( { status: true, message: "successful", data: response } )
 })
 

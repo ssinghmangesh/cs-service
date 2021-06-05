@@ -1,10 +1,17 @@
 const Shopify = require('../Shopify')
 const {insert, del} = require("../../DataManager/index");
-const {ORDER_TABLE_NAME, LINEITEMS_TABLE_NAME, REFUNDED_TABLE_NAME, FULFILLMENT_TABLE_NAME} = require("../../DataManager/helper")
+const {ORDER_TABLE_NAME, 
+        LINEITEMS_TABLE_NAME, 
+        REFUNDED_TABLE_NAME, 
+        FULFILLMENT_TABLE_NAME, 
+        TAX_TABLE_NAME, 
+        DISCOUNTAPPLICATION_TABLE_NAME } = require("../../DataManager/helper")
 const orderColumns = require("../../DataManager/Setup/orderColumns.json");
 const fulfillmentColumns = require("../../DataManager/Setup/fulfillmentsColumns.json");
 const lineitemsColumns = require("../../DataManager/Setup/lineItemsColumns.json");
 const refundedColumns = require("../../DataManager/Setup/refundedColumns.json");
+const taxColumns = require("../../DataManager/Setup/taxColumns.json");
+const discountApplicationsColumns = require("../../DataManager/Setup/discountApplicationsColumns.json");
 const { socket } = require("../../../socket");
 
 
@@ -13,6 +20,37 @@ const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0 , workspaceI
     let response = await Shopify.fetchOrder(shopName, accessToken, { since_id: sinceId, limit })
     // console.log(response.data.orders.length)
 
+    let discount_applications = []
+    response.data.orders.map(order => {
+        const { customer } = order
+        order.discount_applications.map(discount_application => {
+            discount_applications.push({
+                ...discount_application,
+                current_total_discounts: order.current_total_discounts,
+                order_id: order.id,
+                order_name: order.name,
+                customer_id: customer ? customer.id : null,
+                financial_status: order.financial_status,
+                created_at: order.created_at
+            })
+        }) 
+    })
+
+    let taxes = []
+    response.data.orders.map(order => {
+        const { customer } = order
+        order.tax_lines.map(tax_line => {
+            taxes.push({
+                ...tax_line,
+                current_total_tax: order.current_total_tax,
+                order_id: order.id,
+                order_name: order.name,
+                customer_id: customer ? customer.id : null,
+                financial_status: order.financial_status,
+                created_at: order.created_at
+            })
+        }) 
+    })
 
     let line_items = []
     response.data.orders.map(order => {
@@ -70,6 +108,12 @@ const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0 , workspaceI
         await del(REFUNDED_TABLE_NAME, refunds, workspaceId);
         await insert(REFUNDED_TABLE_NAME, refundedColumns, refunds, workspaceId);
         // console.log("refunded complete");
+
+        await del(TAX_TABLE_NAME, taxes, workspaceId, 'order_id');
+        await insert(TAX_TABLE_NAME, taxColumns, taxes, workspaceId);
+
+        await del(DISCOUNTAPPLICATION_TABLE_NAME, discount_applications, workspaceId, 'order_id');
+        await insert(DISCOUNTAPPLICATION_TABLE_NAME, discountApplicationsColumns, discount_applications, workspaceId);
     }
     
     //call next batch
