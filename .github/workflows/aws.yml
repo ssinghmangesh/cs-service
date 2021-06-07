@@ -80,4 +80,4 @@ jobs:
         task-definition: ${{ steps.task-def.outputs.task-definition }}
         service: sample-app-service
         cluster: default
-        wait-for-service-stability: false
+        wait-for-service-stability: true
