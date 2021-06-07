@@ -1,7 +1,6 @@
 const express = require('express')
 const router = express.Router()
 
-
 ///////////// Initial Setup /////////////
 
 const dotenv = require('dotenv').config();
@@ -24,6 +23,10 @@ const buildRedirectUri = () => `${appUrl}/callback`;
 
 const buildInstallUrl = (shop, state, redirectUri) => `https://${shop}/admin/oauth/authorize?client_id=${shopifyApiPublicKey}&scope=${scopes}&state=${state}&redirect_uri=${redirectUri}`;
 
+module.exports = {
+    buildInstallUrl,
+    buildRedirectUri
+}
 const buildAccessTokenRequestUrl = (shop) => `https://${shop}/admin/oauth/access_token`;
 
 const buildShopDataRequestUrl = (shop) => `https://${shop}/admin/shop.json`;
@@ -46,18 +49,20 @@ const fetchShopData = async (shop, accessToken) => await axios(buildShopDataRequ
 
 router.get('/install', async (req, res) => {
     const shop = req.query.shop;
-
+    console.log(shop);
     if (!shop) { return res.status(400).send('no shop') }
 
     const state = nonce();
-
     const installShopUrl = buildInstallUrl(shop, state, buildRedirectUri())
 
     res.cookie('state', state)
+    res.header('Access-Control-Allow-Origin', '*');
     res.redirect(installShopUrl);
+
 })
 
 router.get('/callback', async (req, res) => {
+    console.log('callback');
     const { shop, code, state } = req.query;
     const stateCookie = cookie.parse(req.headers.cookie).state;
 
@@ -92,15 +97,20 @@ router.get('/callback', async (req, res) => {
                 workspace_id: shopData.data.shop.id,
                 access_token: tokenResponseData.access_token,
                 shop: shopData.data.shop,
-                shop_name: shopData.data.shop.name,
+                shop_name: shopData.data.shop.myshopify_domain,
                 scope: tokenResponseData.scope,
                 created_at: Date.now(),
                 updated_at: Date.now()
             }
             await addWorkspace(workspace);
         }
-        
+
+        let flag = false;
+
         const fetchedUser = await fetchUser({ user_id: shopData.data.shop.email })
+        if( !fetchedUser.Item || !fetchedUser.Item.password ){
+            flag = true;
+        }
         if (Object.keys(fetchedUser).length === 0) {
             const user = {
                 user_id: shopData.data.shop.email,
@@ -116,9 +126,11 @@ router.get('/callback', async (req, res) => {
             workspace_id: shopData.data.shop.id
         }
         await addUserToWorkspace(userToWorkspace);
-        
-        res.redirect('https://customsegment.com/');
-
+        if (flag) {
+            res.redirect(`http://localhost:8080/pages/authentication/reset-password-v1?user_id=${shopData.data.shop.email}`)
+        } else {        
+            res.redirect('http://localhost:8080/apps/customers');
+        }
     } catch (err) {
         console.log(err)
         res.status(500).send('something went wrong')
