@@ -29,7 +29,7 @@
       "memoryReservation": 128,
       "volumesFrom": [],
       "stopTimeout": null,
-      "image": "832340934261.dkr.ecr.ap-south-1.amazonaws.com/custom-docker-repository:a30e5569e166d28c2612ffcf4ae536e183b86ac4",
+      "image": "832340934261.dkr.ecr.ap-south-1.amazonaws.com/custom-docker-repository:7a7b853c28016475b303db275e27fc8d65d9b3b2",
       "startTimeout": null,
       "firelensConfiguration": null,
       "dependsOn": null,
@@ -57,8 +57,8 @@
   "compatibilities": [
     "EC2"
   ],
-  "taskDefinitionArn": "arn:aws:ecs:ap-south-1:832340934261:task-definition/custom-segment-task-defination:1",
-  "family": "custom-segment-task-defination",
+  "taskDefinitionArn": "arn:aws:ecs:ap-south-1:832340934261:task-definition/custom-segment-task-defination-2:1",
+  "family": "custom-segment-task-defination-2",
   "requiresAttributes": [
     {
       "targetId": null,
