@@ -1,77 +1,55 @@
 {
-  "ipcMode": null,
-  "executionRoleArn": "arn:aws:iam::832340934261:role/ecsTaskExecutionRole",
-  "containerDefinitions": [
-    {
-      "dnsSearchDomains": null,
-      "environmentFiles": null,
-      "logConfiguration": {
-        "logDriver": "awslogs",
-        "secretOptions": null,
-        "options": {
-          "awslogs-group": "/ecs/first-run-task-definition",
-          "awslogs-region": "ap-south-1",
-          "awslogs-stream-prefix": "ecs"
-        }
-      },
-      "entryPoint": [
-        "sh",
-        "-c"
+  "taskDefinition": {
+      "taskDefinitionArn": "arn:aws:ecs:ap-south-1:832340934261:task-definition/first-run-task-definition:9",
+      "containerDefinitions": [
+          {
+              "name": "cs-service",
+              "image": "832340934261.dkr.ecr.ap-south-1.amazonaws.com/cs-service:latest",
+              "cpu": 0,
+              "portMappings": [
+                  {
+                      "containerPort": 3000,
+                      "hostPort": 3000,
+                      "protocol": "tcp"
+                  }
+              ],
+              "essential": true,
+              "environment": [],
+              "mountPoints": [],
+              "volumesFrom": []
+          }
       ],
-      "portMappings": [
-        {
-          "hostPort": 3000,
-          "protocol": "tcp",
-          "containerPort": 3000
-        }
+      "family": "first-run-task-definition",
+      "executionRoleArn": "arn:aws:iam::832340934261:role/ecsTaskExecutionRole",
+      "networkMode": "awsvpc",
+      "revision": 9,
+      "volumes": [],
+      "status": "ACTIVE",
+      "requiresAttributes": [
+          {
+              "name": "com.amazonaws.ecs.capability.ecr-auth"
+          },
+          {
+              "name": "ecs.capability.execution-role-ecr-pull"
+          },
+          {
+              "name": "com.amazonaws.ecs.capability.docker-remote-api.1.18"
+          },
+          {
+              "name": "ecs.capability.task-eni"
+          }
       ],
-      "command": [],
-      "linuxParameters": null,
-      "cpu": 256,
-      "environment": [],
-      "resourceRequirements": null,
-      "ulimits": null,
-      "dnsServers": null,
-      "mountPoints": [],
-      "workingDirectory": null,
-      "secrets": null,
-      "dockerSecurityOptions": null,
-      "memory": null,
-      "memoryReservation": 512,
-      "volumesFrom": [],
-      "stopTimeout": null,
-      "image": "httpd:2.4",
-      "startTimeout": null,
-      "firelensConfiguration": null,
-      "dependsOn": null,
-      "disableNetworking": null,
-      "interactive": null,
-      "healthCheck": null,
-      "essential": true,
-      "links": [],
-      "hostname": null,
-      "extraHosts": null,
-      "pseudoTerminal": null,
-      "user": null,
-      "readonlyRootFilesystem": null,
-      "dockerLabels": null,
-      "systemControls": null,
-      "privileged": null,
-      "name": "sample-app"
-    }
-  ],
-  "placementConstraints": [],
-  "memory": "512",
-  "taskRoleArn": null,
-  "family": "first-run-task-definition",
-  "pidMode": null,
-  "requiresCompatibilities": [
-    "FARGATE"
-  ],
-  "networkMode": "awsvpc",
-  "cpu": "256",
-  "inferenceAccelerators": null,
-  "proxyConfiguration": null,
-  "volumes": []
+      "placementConstraints": [],
+      "compatibilities": [
+          "EC2",
+          "FARGATE"
+      ],
+      "requiresCompatibilities": [
+          "FARGATE"
+      ],
+      "cpu": "256",
+      "memory": "512",
+      "registeredAt": "2021-06-07T16:40:47.097000+05:30",
+      "registeredBy": "arn:aws:iam::832340934261:user/deva.sahab.25@gmail.com"
+  }
 }
-
