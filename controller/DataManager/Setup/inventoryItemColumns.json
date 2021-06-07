@@ -1,0 +1,47 @@
+[
+    {
+        "columnName":"id",
+        "dataType": "numeric",
+        "primaryKey": true
+    },
+    {
+        "columnName":"cost",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"country_code_of_origin",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"country_harmonized_system_codes",
+        "dataType": "jsonb[]"
+    },
+    {
+        "columnName":"created_at",
+        "dataType": "timestamptz"
+    },
+    {
+        "columnName":"harmonized_system_code",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"province_code_of_origin",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"sku",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"tracked",
+        "dataType": "boolean"
+    },
+    {
+        "columnName":"updated_at",
+        "dataType": "timestamptz"
+    },
+    {
+        "columnName":"requires_shipping",
+        "dataType": "boolean"
+    }
+]

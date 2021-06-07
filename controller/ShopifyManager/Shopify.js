@@ -88,7 +88,7 @@ class Shopify {
         const { since_id, limit } = option
         return axios({
             method: 'GET',
-            url: `https://${shopName}/admin/api/2021-04/checkouts.json?status=any&since_id=${since_id}&limit=${limit}`,
+            url: `https://${shopName}/admin/api/2021-04/checkouts.json?since_id=${since_id}&limit=${limit}`,
             headers:  {
                 'X-Shopify-Access-Token': accessToken,
             }
@@ -98,7 +98,93 @@ class Shopify {
     static fetchCartCount(shopName, accessToken) {
         return axios({
             method: 'GET',
-            url: `https://${shopName}/admin/api/2021-04/checkouts/count.json?status=any`,
+            url: `https://${shopName}/admin/api/2021-04/checkouts/count.json`,
+            headers:  {
+                'X-Shopify-Access-Token': accessToken,
+            }
+        })
+    }
+
+    static fetchDraftOrder(shopName, accessToken, option) {
+        const { since_id, limit } = option
+        return axios({
+            method: 'GET',
+            url: `https://${shopName}/admin/api/2021-04/draft_orders.json?since_id=${since_id}&limit=${limit}`,
+            headers:  {
+                'X-Shopify-Access-Token': accessToken,
+            }
+        })
+    }
+
+    static fetchDraftOrderCount(shopName, accessToken) {
+        return axios({
+            method: 'GET',
+            url: `https://${shopName}/admin/api/2021-04/draft_orders/count.json`,
+            headers:  {
+                'X-Shopify-Access-Token': accessToken,
+            }
+        })
+    }
+
+    static fetchInventoryItem(shopName, accessToken, option) {
+        const { since_id, limit } = option
+        return axios({
+            method: 'GET',
+            url: `https://${shopName}/admin/api/2021-04/inventory_items.json?`,
+            headers:  {
+                'X-Shopify-Access-Token': accessToken,
+            }
+        })
+    }
+
+    // static fetchInventoryItemCount(shopName, accessToken) {
+    //     return axios({
+    //         method: 'GET',
+    //         url: `https://${shopName}/admin/api/2021-04/draft_orders/count.json?status=any`,
+    //         headers:  {
+    //             'X-Shopify-Access-Token': accessToken,
+    //         }
+    //     })
+    // }
+
+    static fetchInventoryLevel(shopName, accessToken, option) {
+        const { location_ids } = option
+        console.log(option)
+        let Url = `https://${shopName}/admin/api/2021-04/inventory_levels.json?location_ids=${location_ids}&limit=50`
+        console.log('Url: ', Url)
+        return axios({
+            method: 'GET',
+            url: Url,
+            headers:  {
+                'X-Shopify-Access-Token': accessToken,
+            }
+        })
+    }
+
+    // static fetchInventoryLevelCount(shopName, accessToken) {
+    //     return axios({
+    //         method: 'GET',
+    //         url: `https://${shopName}/admin/api/2021-04/draft_orders/count.json?status=any`,
+    //         headers:  {
+    //             'X-Shopify-Access-Token': accessToken,
+    //         }
+    //     })
+    // }
+
+    static fetchLocation(shopName, accessToken) {
+        return axios({
+            method: 'GET',
+            url: `https://${shopName}/admin/api/2021-04/locations.json`,
+            headers:  {
+                'X-Shopify-Access-Token': accessToken,
+            }
+        })
+    }
+
+    static fetchLocationCount(shopName, accessToken) {
+        return axios({
+            method: 'GET',
+            url: `https://${shopName}/admin/api/2021-04/locations/count.json`,
             headers:  {
                 'X-Shopify-Access-Token': accessToken,
             }

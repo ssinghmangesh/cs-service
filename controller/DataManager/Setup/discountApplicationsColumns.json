@@ -1,0 +1,62 @@
+[
+    {
+        "columnName":"current_total_discounts",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"type",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"title",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"description",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"value",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"value_type",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"allocation_method",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"target_selection",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"target_type",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"code",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"order_id",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"order_name",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"customer_id",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"created_at",
+        "dataType": "timestamptz"
+    },
+    {
+        "columnName":"financial_status",
+        "dataType": "varchar"
+    }
+]

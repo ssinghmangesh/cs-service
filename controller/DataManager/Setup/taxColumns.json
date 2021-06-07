@@ -1,0 +1,38 @@
+[
+    {
+        "columnName":"current_total_tax",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"price",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"rate",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"title",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"order_id",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"order_name",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"customer_id",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"created_at",
+        "dataType": "timestamptz"
+    },
+    {
+        "columnName":"financial_status",
+        "dataType": "varchar"
+    }
+]
