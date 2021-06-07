@@ -29,7 +29,7 @@
       "memoryReservation": 128,
       "volumesFrom": [],
       "stopTimeout": null,
-      "image": "832340934261.dkr.ecr.ap-south-1.amazonaws.com/custom-docker-repository:latest",
+      "image": "832340934261.dkr.ecr.ap-south-1.amazonaws.com/custom-docker-repository:a30e5569e166d28c2612ffcf4ae536e183b86ac4",
       "startTimeout": null,
       "firelensConfiguration": null,
       "dependsOn": null,
