@@ -3,6 +3,7 @@ const { addVisitor, deleteVisitor } = require("./controller/Websocket/index");
 const socket = io("http://localhost:4000/workspace");
 const customer = io("http://localhost:4000/customer");
 
+
 socket.on("connect", () => {
     socket.emit("workspaceId","1", "connected")
     // console.log("connected");
