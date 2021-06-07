@@ -12,6 +12,9 @@ routes.get('/', (req, res) => {
   res.status(200).json({ message: 'Connected!' });
 });
 
+routes.get('/health2', (re, res) => {
+  res.status(200).send('working');
+})
 
 routes.get('/health', (req, res) => {
   res.status(200).json({ message: 'Connected!' });
