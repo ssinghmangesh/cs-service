@@ -79,6 +79,5 @@
     "status": "ACTIVE",
     "inferenceAccelerators": null,
     "proxyConfiguration": null,
-    "volumes": [],
-    "name": "sample-app-service"
+    "volumes": []
   }
