@@ -78,6 +78,6 @@ jobs:
       uses: aws-actions/amazon-ecs-deploy-task-definition@v1
       with:
         task-definition: ${{ steps.task-def.outputs.task-definition }}
-        service: custom-segment-service-2
-        cluster: custom-segment-cluster-2
+        service: custom-segment-service
+        cluster: custom-segment-cluster
         wait-for-service-stability: true
