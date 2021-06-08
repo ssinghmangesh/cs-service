@@ -9,7 +9,7 @@ const customerManager = require("./customerManager")
 const whereClause = require('./whereClause');
 
 routes.get('/', (req, res) => {
-  res.status(200).json({ message: 'Connected!' });
+  res.status(200).json({ message: 'it works!' });
 });
 
 routes.get('/health3', (re, res) => {
