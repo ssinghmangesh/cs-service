@@ -109,4 +109,9 @@ router.get('/data-manager/checkout/delete',async (req, res) => {
     res.status(200).send("")
 })
 
+router.post('/webhooks/:workspaceId/:event/:type',async (req, res) => {
+    await update(req.params, req.body);
+    res.status(200).send("")
+})
+
 module.exports = router

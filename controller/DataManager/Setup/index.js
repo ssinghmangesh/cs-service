@@ -92,7 +92,8 @@ const setupWorkspace = async(workspaceId) => {
     await createTable(taxColumns, TAX_TABLE_NAME, workspaceId)
 
     await createTable(discountApplicationsColumns, DISCOUNTAPPLICATION_TABLE_NAME, workspaceId)
-    await createTable(visitorColumns, VISITOR_TABLE_NAME, 1);
+    
+    await createTable(visitorColumns, VISITOR_TABLE_NAME, workspaceId);
 
     return {
         status: true,

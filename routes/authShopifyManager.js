@@ -12,6 +12,7 @@ const axios = require('axios');
 const { addWorkspace, fetchWorkspace, fetchUser, addUser, addUserToWorkspace } = require("../controller/UserManager");
 const { setupWorkspace } = require('../controller/DataManager/Setup')
 const { syncAll } = require("../controller/ShopifyManager/index");
+const { createWebhooks } = require("../controller/ShopifyManager/Webhooks/index");
 
 const shopifyApiPublicKey = 'eb6b044f4a8cf434a8100f85cac58205';
 const shopifyApiSecretKey = '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';
@@ -94,7 +95,6 @@ router.get('/callback', async (req, res) => {
         // console.log("shopData: ", shopData.data.shop)
 
         const fetchedWorkspace = await fetchWorkspace({ workspace_id: shopData.data.shop.id })
-        console.log(fetchedWorkspace);
         if (Object.keys(fetchedWorkspace).length === 0) {
             const workspace = {
                 workspace_id: shopData.data.shop.id,
@@ -105,16 +105,18 @@ router.get('/callback', async (req, res) => {
                 created_at: Date.now(),
                 updated_at: Date.now()
             }
-            await addWorkspace(workspace);
-            console.log('workspace added');
-            await setupWorkspace(workspace.workspace_id);
-            console.log('workspace setup done');
-            await syncAll({ 
-                shopName: workspace.shop_name, 
-                accessToken: workspace.access_token,  
-                limit: 50, 
-                workspaceId: workspace.workspace_id 
-            });
+            // await addWorkspace(workspace);
+            // console.log('workspace added');
+            // await setupWorkspace(workspace.workspace_id);
+            // console.log('workspace setup done');
+            await createWebhooks(workspace.shop_name, workspace.access_token, workspace.workspace_id)
+            console.log('webhooks created');
+        //     await syncAll({ 
+        //         shopName: workspace.shop_name, 
+        //         accessToken: workspace.access_token,  
+        //         limit: 50, 
+        //         workspaceId: workspace.workspace_id 
+        //     });
         }
 
         let flag = false;
