@@ -6,7 +6,11 @@
       "dnsSearchDomains": null,
       "environmentFiles": null,
       "logConfiguration": {
-        "logDriver": "awslog"
+        "logDriver": "awslog",
+        "options": {
+          "awslogs-group": "Custom-Segment-Service",
+          "awslogs-region": "ap-south-1"
+        }
       },
       "entryPoint": null,
       "portMappings": [
