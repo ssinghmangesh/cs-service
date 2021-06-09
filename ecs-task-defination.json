@@ -6,7 +6,7 @@
       "dnsSearchDomains": null,
       "environmentFiles": null,
       "logConfiguration": {
-        "LogDriver": "awslog"
+        "logDriver": "awslog"
       },
       "entryPoint": null,
       "portMappings": [
