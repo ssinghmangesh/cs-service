@@ -17,7 +17,28 @@
       "command": null,
       "linuxParameters": null,
       "cpu": 0,
-      "environment": [],
+      "environment": [
+        {
+          "name":"POSTGRES_USER",
+          "value": "postgres"
+        },
+        {
+          "name": "POSTGRES_HOST",
+          "value": "postgresdb2.ceazulz4uh0d.ap-south-1.rds.amazonaws.com"
+        },
+        {
+          "name": "POSTGRES_DATABASE",
+          "value": "postgres"
+        },
+        {
+          "name": "POSTGRES_PASSWORD",
+          "value": "customSegmentPostgres"
+        },
+        {
+          "name": "POSTGRES_PORT",
+          "value": "5432"
+        }
+      ],
       "resourceRequirements": null,
       "ulimits": null,
       "dnsServers": null,

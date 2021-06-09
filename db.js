@@ -7,11 +7,11 @@ const pgConfig = () => {
     
     const env = 'local'
     return {
-        user: 'postgres',
-        host: 'localhost',
-        database: 'cs-service', 
-        password: '25032000',
-        port: 5432
+        user: process.env.POSTGRES_USER,
+        host: process.env.POSTGRES_HOST,
+        database: process.env.POSTGRES_DATABASE, 
+        password: process.env.POSTGRES_PASSWORD,
+        port: process.env.POSTGRES_PORT
 	}
 
 }
