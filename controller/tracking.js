@@ -85,7 +85,7 @@ trackCS = async function(workspaceId) {
     async function syncAPI(){
         console.log(csData)
         return await jQuery.ajax({
-                        url: "http://localhost:3000/data-manager/event/add",
+                        url: "https://custom-segment-service.herokuapp.com/data-manager/event/add",
                         type: "POST",
                         dataType: "json",
                         cache: 0,
@@ -107,13 +107,13 @@ trackCS = async function(workspaceId) {
     })
         
     
-    // console.log("csData : ", csData)
-    // const res = await syncAPI()
-    // console.log(res)
+    console.log("csData : ", csData)
+    const res = await syncAPI()
+    console.log(res)
 }
 
 
-trackCS(1)
+trackCS(56788582584)
 
 
 

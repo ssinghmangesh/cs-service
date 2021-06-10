@@ -100,7 +100,7 @@ router.post('/data-manager/event/add',async (req, res) => {
     const { event } = req.body;
     const { 'x-workspace-id': workspaceId } = req.headers
     console.log(event);
-    // const response = await update(EVENT_TABLE_NAME, eventColumns, [event], workspaceId);
+    const response = await update(EVENT_TABLE_NAME, eventColumns, [event], workspaceId);
 
     console.log("event done");
     res.status(200).send({ message: "working" })
