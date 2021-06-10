@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const { setupWorkspace } = require('../controller/DataManager/Setup')
-const { update } = require("../controller/ShopifyManager/Webhooks/index");
+const { updateEvent } = require("../controller/ShopifyManager/Webhooks/helper");
 const {
     CUSTOMER_TABLE_NAME, 
     ORDER_TABLE_NAME, 
@@ -9,8 +9,7 @@ const {
     CART_TABLE_NAME,
     CARTLINEITEMS_TABLE_NAME,
     CHECKOUT_TABLE_NAME,
-    CHECKOUTLINEITEMS_TABLE_NAME,
-    EVENT_TABLE_NAME
+    CHECKOUTLINEITEMS_TABLE_NAME
 } = require("../controller/DataManager/helper");
 const Dashboard  = require("../controller/AnalyticsManager/index"); 
 
@@ -20,7 +19,6 @@ const productColumns = require("../controller/DataManager/Setup/productColumns.j
 const cartColumns = require("../controller/DataManager/Setup/cartColumns.json");
 const cartLineItemsColumns = require("../controller/DataManager/Setup/cartLineItemColumns.json");
 const checkoutColumns = require("../controller/DataManager/Setup/checkoutColumns.json");
-const eventColumns = require("../controller/DataManager/Setup/eventColumns.json");
 const checkoutLineItemsColumns = require("../controller/DataManager/Setup/checkoutLineItemsColumns.json");
 const { default: axios } = require('axios');
 
@@ -100,7 +98,7 @@ router.post('/data-manager/event/add',async (req, res) => {
     const { event } = req.body;
     const { 'x-workspace-id': workspaceId } = req.headers
     console.log(event);
-    const response = await update(EVENT_TABLE_NAME, eventColumns, [event], workspaceId);
+    const response = await updateEvent(event, workspaceId);
 
     console.log("event done");
     res.status(200).send({ message: "working" })

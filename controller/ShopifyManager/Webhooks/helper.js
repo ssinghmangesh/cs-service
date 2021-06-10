@@ -1,4 +1,11 @@
 const {del, insert} = require("../../DataManager/index");
+const { EVENT_TABLE_NAME } = require("../../DataManager/helper");
+const eventColumn = require("../../DataManager/Setup/eventColumns.json");
+
+const updateEvent = async (data, workspaceId) => {
+    await del(EVENT_TABLE_NAME, [data], workspaceId)
+    await insert(EVENT_TABLE_NAME, eventColumn, [data], workspaceId)
+}
 
 const updateTable = async (TABLE_NAME, column, data, workspaceId, type) => {
     switch(type) {
@@ -19,4 +26,4 @@ const updateTable = async (TABLE_NAME, column, data, workspaceId, type) => {
     }
 }
 
-module.exports = updateTable;
+module.exports = {updateTable, updateEvent};
