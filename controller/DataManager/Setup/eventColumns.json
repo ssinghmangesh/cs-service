@@ -1,8 +1,12 @@
 [
     {
-        "columnName":"page_id",
+        "columnName":"id",
         "dataType": "varchar",
         "primaryKey": true
+    },
+    {
+        "columnName":"page_id",
+        "dataType": "varchar"
     },
     {
         "columnName":"event_name",
