@@ -1,7 +1,7 @@
 [
     {
         "columnName":"page_id",
-        "dataType": "numeric",
+        "dataType": "varchar",
         "primaryKey": true
     },
     {
@@ -18,7 +18,7 @@
     },
     {
         "columnName":"cart_id",
-        "dataType": "numeric"
+        "dataType": "varchar"
     },
     {
         "columnName":"created_at",
