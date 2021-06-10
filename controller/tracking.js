@@ -89,8 +89,10 @@ trackCS = async function(workspaceId) {
                         type: "POST",
                         dataType: "json",
                         cache: 0,
+                        headers:{
+                            'x-workspace-id': workspaceId
+                        },
                         data: {
-                            workspaceId: 1,
                             event: csData
                         }
                     })
