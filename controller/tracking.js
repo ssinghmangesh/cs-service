@@ -101,7 +101,7 @@ trackCS = async function(workspaceId) {
                     })
     }
     
-    jQuery(document).ajaxSuccess(async function(_e, _t, _r) {
+    $(document).ajaxSuccess(async function(_e, _t, _r) {
         if(_r.url.match(/cart\/(update|change|add).js/g)){
             // console.log(_t.responseJSON);
             csData = {...csData, cart: _t.responseJSON};
