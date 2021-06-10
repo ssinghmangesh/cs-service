@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const { setupWorkspace } = require('../controller/DataManager/Setup')
 const { updateEvent } = require("../controller/ShopifyManager/Webhooks/helper");
+const { update } = require("../controller/ShopifyManager/Webhooks/index");
 const {
     CUSTOMER_TABLE_NAME, 
     ORDER_TABLE_NAME, 
@@ -97,7 +98,7 @@ router.post('/data-manager/checkout/add',async (req, res) => {
 router.post('/data-manager/event/add',async (req, res) => {
     const { event } = req.body;
     const { 'x-workspace-id': workspaceId } = req.headers
-    event.id = String(Date.now());
+    event.id = event.page_id;
     const response = await updateEvent(event, workspaceId);
 
     console.log("event added");
