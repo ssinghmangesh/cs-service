@@ -1,18 +1,18 @@
 trackCS = async function(workspaceId) {
-    function sleep(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
-      }
-    const script = document.createElement('script');
-    script.src = "https://code.jquery.com/jquery-3.6.0.min.js";
-    document.getElementsByTagName('head')[0].appendChild(script);
+    // function sleep(ms) {
+    //     return new Promise(resolve => setTimeout(resolve, ms));
+    //   }
+    // const script = document.createElement('script');
+    // script.src = "https://code.jquery.com/jquery-3.6.0.min.js";
+    // document.getElementsByTagName('head')[0].appendChild(script);
 
-    const x = document.createElement("SCRIPT");
-    x.src = 'https://cdn.socket.io/4.1.1/socket.io.min.js';
-    document.getElementsByTagName('head')[0].appendChild(x);
+    // const x = document.createElement("SCRIPT");
+    // x.src = 'https://cdn.socket.io/4.1.1/socket.io.min.js';
+    // document.getElementsByTagName('head')[0].appendChild(x);
     
-    await sleep(500);
+    // await sleep(500);
 
-    const socket = window.io("http://localhost:4000/customer");
+    const socket = io("http://localhost:4000/customer");
 
     let csData = {}
 

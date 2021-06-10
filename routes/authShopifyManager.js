@@ -111,6 +111,10 @@ router.get('/callback', async (req, res) => {
             console.log('workspace added');
             await Shopify.fetchTrackingScript(workspace.shop_name, workspace.access_token, workspace.workspace_id)
             console.log('tracking script inserted')
+            await Shopify.addSocket(workspace.shop_name, workspace.access_token)
+            console.log('socket cdn added')
+            await Shopify.addJquery(workspace.shop_name, workspace.access_token)
+            console.log('jQuery added')
             await setupWorkspace(workspace.workspace_id);
             console.log('workspace setup done');
             await createWebhooks(workspace.shop_name, workspace.access_token, workspace.workspace_id)
