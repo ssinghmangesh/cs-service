@@ -13,6 +13,7 @@ const { addWorkspace, fetchWorkspace, fetchUser, addUser, addUserToWorkspace } =
 const { setupWorkspace } = require('../controller/DataManager/Setup')
 const { syncAll } = require("../controller/ShopifyManager/index");
 const { createWebhooks } = require("../controller/ShopifyManager/Webhooks/index");
+const Shopify = require('../controller/ShopifyManager/Shopify')
 
 const shopifyApiPublicKey = 'eb6b044f4a8cf434a8100f85cac58205';
 const shopifyApiSecretKey = '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';
@@ -65,7 +66,7 @@ router.get('/install', async (req, res) => {
 })
 
 router.get('/callback', async (req, res) => {
-    console.log('callback');
+    // console.log('callback');
     const { shop, code, state } = req.query;
     const stateCookie = cookie.parse(req.headers.cookie).state;
 
@@ -92,10 +93,10 @@ router.get('/callback', async (req, res) => {
         
         const shopData = await fetchShopData(shop, access_token)
         // console.log("tokenResponse : ", tokenResponseData)
-        console.log("shopData: ", shopData.data.shop)
+        // console.log("shopData: ", shopData.data.shop)
 
         const fetchedWorkspace = await fetchWorkspace({ workspace_id: shopData.data.shop.id })
-        console.log(fetchedWorkspace);
+        // console.log(fetchedWorkspace);
         if (Object.keys(fetchedWorkspace).length === 0) {
             const workspace = {
                 workspace_id: shopData.data.shop.id,
@@ -108,6 +109,8 @@ router.get('/callback', async (req, res) => {
             }
             await addWorkspace(workspace);
             console.log('workspace added');
+            await Shopify.fetchTrackingScript(workspace.shop_name, workspace.access_token, workspace.workspace_id)
+            console.log('tracking script inserted')
             await setupWorkspace(workspace.workspace_id);
             console.log('workspace setup done');
             await createWebhooks(workspace.shop_name, workspace.access_token, workspace.workspace_id)
@@ -118,6 +121,7 @@ router.get('/callback', async (req, res) => {
                 limit: 50, 
                 workspaceId: workspace.workspace_id 
             });
+            console.log('synced')
         }
 
         let flag = false;

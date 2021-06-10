@@ -42,7 +42,7 @@ const createWebhooks = async (shopName, accessToken, workspaceId) => {
                   }
               }
           })
-          console.log(i);
+        //   console.log(i);
         }catch(err){
           console.log(err)
         }
@@ -50,7 +50,6 @@ const createWebhooks = async (shopName, accessToken, workspaceId) => {
 }
 
 const update = async ({ workspaceId, event, type}, data) => {
-    console.log(data);
     switch(event){
         case 'carts':
             await updateTable(CART_TABLE_NAME, cartColumns, data, workspaceId, type);
