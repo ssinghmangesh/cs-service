@@ -110,9 +110,9 @@ const deleteWorkspace = async (workspaceId) => {
     }
 }
 
-deleteWorkspace(56788582584)
-.then(console.log)
-.catch(console.log)
+// deleteWorkspace(56788582584)
+// .then(console.log)
+// .catch(console.log)
 
 // setupWorkspace(333)
 // .then(console.log)
