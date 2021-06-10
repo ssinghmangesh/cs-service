@@ -201,7 +201,7 @@ class Shopify {
             data: {
                 "script_tag": {
                     "event": "onload",
-                    "src": `https://cdn.jsdelivr.net/gh/ssinghmangesh/cs-service@main/controller/tracking.js?workspaceid=${workspaceId}`
+                    "src": `https://cdn.jsdelivr.net/gh/ssinghmangesh/cs-service@master/controller/tracking.js?workspaceid=${workspaceId}`
                 }
             }
         })
