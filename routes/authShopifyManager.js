@@ -92,9 +92,10 @@ router.get('/callback', async (req, res) => {
         
         const shopData = await fetchShopData(shop, access_token)
         // console.log("tokenResponse : ", tokenResponseData)
-        // console.log("shopData: ", shopData.data.shop)
+        console.log("shopData: ", shopData.data.shop)
 
         const fetchedWorkspace = await fetchWorkspace({ workspace_id: shopData.data.shop.id })
+        console.log(fetchedWorkspace);
         if (Object.keys(fetchedWorkspace).length === 0) {
             const workspace = {
                 workspace_id: shopData.data.shop.id,
