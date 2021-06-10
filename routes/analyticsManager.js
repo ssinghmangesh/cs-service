@@ -30,7 +30,7 @@ router.post('/analytics-manager/line-graph', async (req, res) => {
     const details = req.body
     const { 'x-workspace-id': workspaceId } = req.headers
     let table = `${details.table}${workspaceId}`
-    let response = await Dashboard.lineGraph({TABLE_NAME: table, columnname: details.columnname, groupBykey: details.groupBykey, startdate: details.startdate, enddate: details.enddate, statsDefinition: details.statsDefinition})
+    let response = await Dashboard.lineGraph({TABLE_NAME: table, groupBykey: details.groupBykey, startdate: details.startdate, enddate: details.enddate, statsDefinition: details.statsDefinition, prevstartdate: details.prevstartdate, prevenddate: details.prevenddate})
     // console.log(response)
     res.status(200).send( { status: true, message: "successful", data: response } )
 })
@@ -39,7 +39,7 @@ router.post('/analytics-manager/bar-graph', async (req, res) => {
     const details = req.body
     const { 'x-workspace-id': workspaceId } = req.headers
     let table = `${details.table}${workspaceId}`
-    let response = await Dashboard.barGraph({TABLE_NAME: table, columnname: details.columnname, groupBykey: details.groupBykey, groupBykey2: details.groupBykey2, startdate: details.startdate, enddate: details.enddate})
+    let response = await Dashboard.barGraph({TABLE_NAME: table, columnname: details.columnname, groupBykey: details.groupBykey, groupBykey2: details.groupBykey2, startdate: details.startdate, enddate: details.enddate, statsDefinition: details.statsDefinition, prevstartdate: details.prevstartdate, prevenddate: details.prevenddate})
     // console.log(response)
     res.status(200).send( { status: true, message: "successful", data: response } )
 })
@@ -48,8 +48,18 @@ router.post('/analytics-manager/pie-chart', async (req, res) => {
     const details = req.body
     const { 'x-workspace-id': workspaceId } = req.headers
     let table = `${details.table}${workspaceId}`
-    let response = await Dashboard.pieChart({TABLE_NAME: table, columnname: details.columnname, startdate: details.startdate, enddate: details.enddate})
-    console.log(response)
+    let response = await Dashboard.pieChart({TABLE_NAME: table, columnname: details.columnname, startdate: details.startdate, enddate: details.enddate, statsDefinition: details.statsDefinition, orderByDirection: details.orderByDirection})
+    // console.log(response)
+    res.status(200).send( { status: true, message: "successful", data: response } )
+})
+
+router.post('/analytics-manager/table-groupby', async (req, res) => {
+    const details = req.body
+    // console.log(details.filters);
+    const { 'x-workspace-id': workspaceId } = req.headers
+    let table = `${details.table}${workspaceId}`
+    let response = await Dashboard.tableGroupBy({TABLE_NAME: table, groupBykey: details.groupBykey, statsDefinition: details.statsDefinition, limit: details.limit, skipRowby: details.skipRowby})
+    // console.log(response)
     res.status(200).send( { status: true, message: "successful", data: response } )
 })
 
