@@ -3,9 +3,9 @@ trackCS = async function(workspaceId) {
         return new Promise(resolve => setTimeout(resolve, ms));
       }
       
-    var x = document.createElement("SCRIPT");
-    x.src = 'https://cdn.socket.io/4.1.1/socket.io.min.js';
-    document.body.appendChild(x);
+    var script = document.createElement("SCRIPT");
+    script.src = 'https://cdn.socket.io/4.1.1/socket.io.min.js';
+    document.getElementsByTagName('head')[0].appendChild(script);
     
     await sleep(500);
 
