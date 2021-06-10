@@ -106,11 +106,11 @@ router.get('/callback', async (req, res) => {
                 updated_at: Date.now()
             }
             await addWorkspace(workspace);
-            // console.log('workspace added');
+            console.log('workspace added');
             await setupWorkspace(workspace.workspace_id);
-            // console.log('workspace setup done');
+            console.log('workspace setup done');
             await createWebhooks(workspace.shop_name, workspace.access_token, workspace.workspace_id)
-            // console.log('webhooks created');
+            console.log('webhooks created');
             await syncAll({ 
                 shopName: workspace.shop_name, 
                 accessToken: workspace.access_token,  
