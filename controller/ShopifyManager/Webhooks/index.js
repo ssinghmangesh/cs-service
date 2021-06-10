@@ -37,7 +37,7 @@ const createWebhooks = async (shopName, accessToken, workspaceId) => {
               data: {
                   "webhook": {
                       "topic": `${event}/${type}`,
-                      "address": `https://13.232.190.78:3000/webhooks/${workspaceId}/${event}/${type}`,
+                      "address": `https://custom-segment-service.herokuapp.com/webhooks/${workspaceId}/${event}/${type}`,
                       "format": "json"
                   }
               }
