@@ -24,15 +24,7 @@ const eventColumns = require("../controller/DataManager/Setup/eventColumns.json"
 const checkoutLineItemsColumns = require("../controller/DataManager/Setup/checkoutLineItemsColumns.json");
 const { default: axios } = require('axios');
 
-var nodemailer = require('nodemailer');
 
-var transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: 'dev.gupta.2503@gmail.com',
-    pass: 'reptile@2503'
-  }
-});
 
 
 
@@ -123,28 +115,8 @@ router.get('/data-manager/checkout/delete',async (req, res) => {
 })
 
 router.post('/webhooks/:workspaceId/:event/:type',async (req, res) => {
-    // await update(req.params, req.body);
-    let data = {
-        ...req.params,
-        body: req.body,
-    }
-
-    var mailOptions = {
-        from: 'dev.gupta.2503@gmail.com',
-        to: 'deva.sahab.25@gmail.com',
-        subject: 'Webhook',
-        text: JSON.stringify(data)
-      };
-      
-      transporter.sendMail(mailOptions, function(error, info){
-        if (error) {
-          console.log(error);
-        } else {
-          console.log('Email sent: ' + info.response);
-        }
-      });
-
-    res.status(200).send(data)
+    await update(req.params, req.body);
+    res.status(200).send("done")
 })
 
 module.exports = router
