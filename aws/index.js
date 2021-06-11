@@ -75,7 +75,6 @@ const fetch = async (params) => {
 // }
 
 const fetchAll = async (params) => {
-    console.log("Scanning Movies table.");
     return await docClient.scan(params).promise();
 }
 
