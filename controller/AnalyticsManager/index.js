@@ -59,10 +59,9 @@ class Dashboard {
         return abstractData(await PostgresqlDb.query(query), "single");
     }
 
-    static async lineGraph({TABLE_NAME, groupBykey = 'MONTH', startdate, enddate, x = 'x', y = 'y', statsDefinition = {}}) {
+    static async lineGraph({TABLE_NAME, groupBykey = 'MONTH', startdate, enddate, x = 'x', y = 'y', statsDefinition = { aggregate: "count", columnname: "*"}}) {
         let query = ``
         query = `SELECT EXTRACT(${groupBykey} FROM created_at) ${groupBykey === 'dow' ? ' + 1' : ''} AS ${x}, ${statsDefinition["aggregate"]}(${statsDefinition["columnname"]}) AS ${y} FROM ${TABLE_NAME} ${WHERE_CLAUSE({startdate, enddate})} GROUP BY ${x} ORDER BY ${x};`
-        // console.log(query);
         return abstractData(await PostgresqlDb.query(query));
     }
 
@@ -108,7 +107,7 @@ class Dashboard {
             ${wc ? 'WHERE '+wc : ''}
             ${ORDER_BY(orderBykey, orderByDirection)}
             LIMIT ${limit} OFFSET ${skipRowby};`
-        // console.log(query)
+        console.log(query)
         return abstractData(await PostgresqlDb.query(query));
     }
 
