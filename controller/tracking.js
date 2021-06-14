@@ -12,7 +12,7 @@ trackCS = async function(workspaceId) {
     
     // await sleep(500);
 
-    const socket = io("http://localhost:4000/customer");
+    const socket = io("https://custom-segment-socket.herokuapp.com/customer");
 
     let csData = {}
 

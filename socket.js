@@ -1,11 +1,12 @@
 const io = require("socket.io-client");
 const { addVisitor, deleteVisitor } = require("./controller/Websocket/index");
-const socket = io("http://localhost:4000/workspace");
-const customer = io("http://localhost:4000/customer");
+const socket = io("https://custom-segment-socket.herokuapp.com/workspace");
+const customer = io("https://custom-segment-socket.herokuapp.com/customer");
 
 
 socket.on("connect", () => {
-    socket.emit("workspaceId","1", "connected")
+    console.log('workspace connected');
+    // socket.emit("workspaceId", "1")
     // console.log("connected");
 })
 
