@@ -92,12 +92,31 @@ const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0 , workspaceI
         }) 
     })
 
+
+    let orders = []
+    response.data.orders.map(order => {
+        const { customer } = order
+        orders.push({
+            shipping_country: order.shipping_address && order.shipping_address.country,
+            shipping_state: order.shipping_address && order.shipping_address.state,
+            shipping_city: order.shipping_address && order.shipping_address.city,
+            shipping_province: order.shipping_address && order.shipping_address.province,
+            shipping_zip: order.shipping_address && order.shipping_address.zip,
+            shipping_latitude: order.shipping_address && order.shipping_address.latitude,
+            shipping_longitude: order.shipping_address && order.shipping_address.longitude,
+            ...order,
+            order_id: order.id,
+            order_name: order.name,
+            customer_id: customer ? customer.id : null 
+        })
+    })
+
     // console.log(refunds.length);
 
     //insert
     if(response.data.orders.length){
         await del(ORDER_TABLE_NAME, response.data.orders, workspaceId);
-        await insert(ORDER_TABLE_NAME, orderColumns, response.data.orders, workspaceId);
+        await insert(ORDER_TABLE_NAME, orderColumns, orders, workspaceId);
         // console.log("order complete");
         await del(LINEITEMS_TABLE_NAME, line_items, workspaceId);
         await insert(LINEITEMS_TABLE_NAME, lineitemsColumns, line_items, workspaceId);

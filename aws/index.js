@@ -16,6 +16,16 @@ const insert = async (params) => {
     }
 }
 
+const update = async (params) => {
+    try{
+        return await docClient.update(params).promise();
+    }
+    catch(err){
+        console.log(err.message);
+        return err.message
+    }
+}
+
 // var params = {
 //     TableName: "User",
     // Item:{
@@ -80,5 +90,6 @@ module.exports = {
     insert,
     del,
     fetch,
-    fetchAll
+    fetchAll,
+    update,
 }

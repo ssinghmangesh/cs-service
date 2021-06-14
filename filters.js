@@ -163,9 +163,9 @@ const typeBuild = (ptype, workspaceId, { columnName, filterType, dataType, value
         } else if (filterType === 'not_equal_to') {
             query = `${prefix} (${columnName} != '${values[0]}')`
         } else if (filterType === 'starts_with') {
-            query = `${prefix} (${columnName} like '%${values[0]}')`
-        } else if (filterType === 'ends_with') {
             query = `${prefix} (${columnName} like '${values[0]}%')`
+        } else if (filterType === 'ends_with') {
+            query = `${prefix} (${columnName} like '%${values[0]}')`
         } else if (filterType === 'contains') {
             query = `${prefix} (${columnName} like '%${values[0]}%')`
         } else if (filterType === 'is_known' ) {
