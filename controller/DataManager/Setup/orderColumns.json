@@ -223,5 +223,22 @@
     {
         "columnName":"order_status_url",
         "dataType": "varchar"
+    },
+    {
+        "columnName":"shipping_country",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"shipping_state",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"shipping_city",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"shipping_province",
+        "dataType": "varchar"
     }
+
 ]
