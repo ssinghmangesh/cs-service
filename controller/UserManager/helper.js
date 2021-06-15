@@ -7,7 +7,7 @@ const editUser = async (file, data) => {
         Key:{
             "user_id": data.user_id
         },
-        UpdateExpression: "set #name = :name, #role = :role, #status = :status, #company = :company, #username = :username, src = :src, updated_at = :updated_at",
+        UpdateExpression: `set #name = :name, #role = :role, #status = :status, #company = :company, #username = :username,${Location ? 'src = :src,' : ''} updated_at = :updated_at`,
         ExpressionAttributeNames: {
             "#name": "name",
             "#role": "role",

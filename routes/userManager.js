@@ -93,9 +93,9 @@ router.post('/user-manager/user/fetch-all', async function (req, res) {
 router.post('/user-manager/user/edit', multer.single('file'), async function (req, res) {
     // let response = await fetchAllWorkspaces(req.body)
     // console.log(req.file, req.body)
-    console.log(req.file);
+    // console.log(req.file);
     const response = await editUser(req.file, req.body)
-    console.log(response);
+    // console.log(response);
 
     res.status(200).send( { status: true, message: "successful"} )
 })

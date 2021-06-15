@@ -10,9 +10,10 @@ const upload = async (file) => {
     if(!file){
         return { Location: null }
     }
+    console.log(file);
     const params = {
         Bucket: 'custom-segment-data',
-        Key: file.originalname,
+        Key: Date.now() + file.originalname,
         Body: Buffer.from(file.buffer, 'binary')
     }
     return await s3.upload(params).promise();
