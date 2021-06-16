@@ -63,7 +63,14 @@ const fetch = async (params) => {
     }
 }
 
-
+const query = async (params) => {
+    try{
+        return await docClient.query(params).promise()
+    }
+    catch(err){
+        return err.message
+    }
+}
 // var params = {
 //     TableName: "User",
 //     Item:{
@@ -91,4 +98,5 @@ module.exports = {
     fetch,
     fetchAll,
     update,
+    query,
 }

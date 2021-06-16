@@ -6,7 +6,7 @@ const authManager = require("./authManger")
 const authShopifyManager = require("./authShopifyManager")
 const analyticsManager = require("./analyticsManager")
 const customerManager = require("./customerManager")
-const whereClause = require('./whereClause');
+const segment = require('./segment');
 
 routes.get('/', (req, res) => {
   res.status(200).json({ message: 'it works!' });
@@ -32,5 +32,5 @@ module.exports = {
   analyticsManager,
   authShopifyManager,
   customerManager,
-  whereClause,
+  segment,
 };
