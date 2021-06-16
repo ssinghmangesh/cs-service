@@ -5,13 +5,13 @@ const customer = io("https://custom-segment-socket.herokuapp.com/customer");
 
 
 socket.on("connect", () => {
-    console.log('workspace connected');
+    // console.log('workspace connected');
     // socket.emit("workspaceId", "1")
     // console.log("connected");
 })
 
 customer.on('connect', () => {
-    console.log('connected');
+    // console.log('connected');
 })
 
 customer.on('add', addVisitor)

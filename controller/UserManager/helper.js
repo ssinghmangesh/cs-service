@@ -21,9 +21,11 @@ const editUser = async (file, data) => {
             ":status": data.status,
             ":company": data.company,
             ":username": data.username,
-            ":src": Location,
             ":updated_at": Date.now()
         }
+    }
+    if (Location) {
+        value.ExpressionAttributeValues[':src'] = Location
     }
     return await updateUser(value)
 }
