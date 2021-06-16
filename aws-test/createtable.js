@@ -29,6 +29,3 @@ dynamodb.createTable(params, function(err, data) {
         console.log("Created table. Table description JSON:", JSON.stringify(data, null, 2));
     }
 });
-
-//ACCOUNT ID(AWS): 832340934261
-//PASSWORD : iiT44R%Y}J8sN(M

@@ -19,13 +19,17 @@ const Dashboard = require('./index.js')
 // .then(console.log)
 // .catch(console.log)
 
-// Dashboard.lineGraph({TABLE_NAME: ORDER_TABLE_NAME, columnname: 'total_price', groupBykey: 'YEAR', workspaceId: 333, 
-//     startdate: '2000-01-01 11:49:40.765997+05:30', enddate: '2021-05-13 11:49:40.765997+05:30'})
+// Dashboard.lineGraph({TABLE_NAME: 'order333', columnname: 'total_price',
+//     dates: [{startdate: '2000-01-01 11:49:40.765997+05:30', enddate: '2021-05-13 11:49:40.765997+05:30'},
+//     {startdate: '2019-01-01 11:49:40.765997+05:30', enddate: '2021-01-01 11:49:40.765997+05:30'}],
+//     statsDefinition: {"aggregate": "count", "columnname": "id"}})
 // .then(console.log)
 // .catch(console.log)
 
-// Dashboard.barGraph({TABLE_NAME: ORDER_TABLE_NAME, columnname: 'total_price', groupBykey: 'YEAR', groupBykey2: 'fulfillment_status', workspaceId: 333, 
-//     startdate: '2000-01-01 11:49:40.765997+05:30', enddate: '2021-05-13 11:49:40.765997+05:30'})
+// Dashboard.barGraph({TABLE_NAME: 'order333', columnname: 'total_price', groupBykey2: 'fulfillment_status',
+//     startdate: '2000-01-01 11:49:40.765997+05:30', enddate: '2021-05-13 11:49:40.765997+05:30',
+//     prevstartdate: '2019-01-01 11:49:40.765997+05:30', prevenddate: '2021-01-01 11:49:40.765997+05:30',
+//     statsDefinition: {"aggregate": "count", "columnname": "id"}})
 // .then(console.log)
 // .catch(console.log)
 

@@ -190,6 +190,22 @@ class Shopify {
             }
         })
     }
+
+    static fetchTrackingScript(shopName, accessToken, workspaceId) {
+        return axios({
+            method: 'POST',
+            url: `https://${shopName}/admin/api/2021-04/script_tags.json`,
+            headers: {
+                'X-Shopify-Access-Token': accessToken,
+            },
+            data: {
+                "script_tag": {
+                    "event": "onload",
+                    "src": `http://cdn.customsegment.com/tracking.js?workspaceid=${workspaceId}`
+                }
+            }
+        })
+    }
 }
 
 
@@ -197,11 +213,8 @@ class Shopify {
 //test token == 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
 // shopName = grofers-orders.myshopify.com
 
-// Shopify.fetchCustomerCount('grofers-orders.myshopify.com', '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', {since_id: 0, limit: 2})
-// .then(res => {
-//     const {data:{count}} = res;
-//     console.log(count)
-// })
+// Shopify.fetchTrackingScript('indian-dress-cart.myshopify.com', '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', 1)
+// .then(console.log)
 // .catch(console.log)
 
 
