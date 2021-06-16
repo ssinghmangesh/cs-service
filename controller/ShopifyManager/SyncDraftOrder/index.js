@@ -27,6 +27,7 @@ const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0, workspaceId
 
     let draft_orders = []
     response.data.draft_orders.map(order => {
+        const { customer } = order
         draft_orders.push({
             ...order, 
             shipping_country: order.shipping_address && order.shipping_address.country,
@@ -53,6 +54,9 @@ const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0, workspaceId
         progress += response.data.draft_orders.length
         socket.emit("sync", `${progress} of ${count} done`)
         console.log(`${progress} of ${count} done`);
+        if(response.data.draft_orders.length) {
+            return response.data.draft_orders[response.data.draft_orders.length - 1].id
+        }
     } else {
         //call next since id
         progress += response.data.draft_orders.length
@@ -60,9 +64,13 @@ const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0, workspaceId
         console.log(`${progress} of ${count} done`);
         let nextSinceId = response.data.draft_orders[response.data.draft_orders.length - 1].id;
         // console.log("nextSinceId", nextSinceId)
-        await SYNC({ shopName, accessToken, sinceId: nextSinceId, limit, workspaceId, count, progress })
+        const lastObjectId = await SYNC({ shopName, accessToken, sinceId: nextSinceId, limit, workspaceId, count, progress })
+        if(typeof lastObjectId === 'undefined') {
+            return response.data.draft_orders[response.data.draft_orders.length - 1].id
+        } else {
+            return lastObjectId
+        }
     }
-    return;
 }
 
 
