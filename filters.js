@@ -144,7 +144,7 @@ let filters1 = {
 // AND id IN (SELECT order_id FROM order333 WHERE  (DATE(created_at)  = CURRENT_DATE - 10)) 
 // AND id IN (SELECT order_id FROM product333 WHERE  (title like '%a%')) )
 
-const whereClause = (filters = filters1, workspaceId = 333, ptype = 'ORDER') => {
+const whereClause = (filters = filters1, workspaceId = 333, ptype) => {
     if(filters.conditions) {
         return `(${filters.conditions.map(filter => {
             return whereClause(filter, workspaceId, ptype)
@@ -292,7 +292,7 @@ const typeBuild = (ptype, workspaceId, { columnName, filterType, dataType, value
     return query
 }
 
-console.log(whereClause())
+// console.log(whereClause())
 module.exports = {
     whereClause
 }
