@@ -25,10 +25,24 @@ const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0, workspaceId
         })
     })
 
+    let draft_orders = []
+    response.data.draft_orders.map(order => {
+        draft_orders.push({
+            ...order, 
+            shipping_country: order.shipping_address && order.shipping_address.country,
+            shipping_state: order.shipping_address && order.shipping_address.state,
+            shipping_city: order.shipping_address && order.shipping_address.city,
+            shipping_province: order.shipping_address && order.shipping_address.province,
+            shipping_zip: order.shipping_address && order.shipping_address.zip,
+            shipping_latitude: order.shipping_address && order.shipping_address.latitude,
+            shipping_longitude: order.shipping_address && order.shipping_address.longitude,
+            customer_id: customer ? customer.id : null 
+        })
+    })
     //insert
     if(response.data.draft_orders.length){
-        await del(DRAFTORDER_TABLE_NAME, response.data.draft_orders, workspaceId)
-        await insert(DRAFTORDER_TABLE_NAME, draftOrderColumns, response.data.draft_orders, workspaceId)  
+        await del(DRAFTORDER_TABLE_NAME, draft_orders, workspaceId)
+        await insert(DRAFTORDER_TABLE_NAME, draftOrderColumns, draft_orders, workspaceId)  
 
         await del(DRAFTORDERLINEITEMS_TABLE_NAME, draft_order_line_items, workspaceId);
         await insert(DRAFTORDERLINEITEMS_TABLE_NAME, draftOrderLineItemsColumns, draft_order_line_items, workspaceId);

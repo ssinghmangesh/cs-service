@@ -10,10 +10,6 @@ const {SYNC: locationSync} = require("./SyncLocation/index")
 const Shopify = require("./Shopify");
 
 const syncAll = async ({ shopName, accessToken, limit, workspaceId }) => {
-    console.log("Customer");
-    const { data: { count: customerCount } } = await Shopify.fetchCustomerCount(shopName, accessToken);
-    await customerSync({ shopName, accessToken, limit, workspaceId, count: customerCount });
-
     console.log("Order")
     const { data: { count: orderCount } } = await Shopify.fetchOrderCount(shopName, accessToken);
     await orderSync({ shopName, accessToken, limit, workspaceId, count: orderCount });
@@ -47,6 +43,10 @@ const syncAll = async ({ shopName, accessToken, limit, workspaceId }) => {
     console.log("location")
     const { data: { count: locationCount } } = await Shopify.fetchLocationCount(shopName, accessToken);
     await locationSync({ shopName, accessToken, limit, workspaceId, count: locationCount });
+
+    console.log("Customer");
+    const { data: { count: customerCount } } = await Shopify.fetchCustomerCount(shopName, accessToken);
+    await customerSync({ shopName, accessToken, limit, workspaceId, count: customerCount });
     
     return {status: 200, message: "Successful"};
 }
@@ -54,6 +54,7 @@ const syncAll = async ({ shopName, accessToken, limit, workspaceId }) => {
 module.exports={
     syncAll
 }
-// syncAll({ shopName: 'grofers-orders.myshopify.com', accessToken: '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',  limit: 50, workspaceId: 333 })
+
+// syncAll({ shopName: 'indian-dress-cart.myshopify.com', accessToken: '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',  limit: 50, workspaceId: 333 })
 // .then(console.log)
 // .catch(console.log)

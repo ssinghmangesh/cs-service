@@ -56,7 +56,6 @@ router.post('/analytics-manager/pie-chart', async (req, res) => {
 
 router.post('/analytics-manager/table-groupby', async (req, res) => {
     const details = req.body
-    // console.log(details.filters);
     const { 'x-workspace-id': workspaceId } = req.headers
     let table = `${details.table}${workspaceId}`
     let response = await Dashboard.tableGroupBy({TABLE_NAME: table, groupBykey: details.groupBykey, statsDefinition: details.statsDefinition, limit: details.limit, skipRowby: details.skipRowby})
