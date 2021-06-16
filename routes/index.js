@@ -7,6 +7,7 @@ const authShopifyManager = require("./authShopifyManager")
 const analyticsManager = require("./analyticsManager")
 const customerManager = require("./customerManager")
 const whereClause = require('./whereClause');
+const mailManager = require('./mailManager');
 
 routes.get('/', (req, res) => {
   res.status(200).json({ message: 'Connected!' });
@@ -30,4 +31,5 @@ module.exports = {
   authShopifyManager,
   customerManager,
   whereClause,
+  mailManager,
 };

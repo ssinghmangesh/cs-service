@@ -292,7 +292,7 @@ const typeBuild = (ptype, workspaceId, { columnName, filterType, dataType, value
     return query
 }
 
-console.log(whereClause())
+// console.log(whereClause())
 module.exports = {
     whereClause
 }
