@@ -1,25 +1,22 @@
 const upload = require("../../aws/upload");
 const { updateUser } = require("./user");
+const { updateUserToWorkpace } = require("./userToWorkspace");
 
-const editUser = async (file, data) => {
+const editUser = async (file, data, workspaceId) => {
     const { Location } = await upload(file);
-    const value = {
+    let value = {
         Key:{
             "user_id": data.user_id
         },
-        UpdateExpression: `set #name = :name, #role = :role, #status = :status, #company = :company, #username = :username,${Location ? 'src = :src,' : ''} updated_at = :updated_at`,
+        UpdateExpression: `set #name = :name, #status = :status, #username = :username,${Location ? 'src = :src,' : ''} updated_at = :updated_at`,
         ExpressionAttributeNames: {
             "#name": "name",
-            "#role": "role",
             "#status": "status",
-            "#company": "company",
             "#username": "username"
         },
         ExpressionAttributeValues:{
             ":name": data.name,
-            ":role": data.role,
             ":status": data.status,
-            ":company": data.company,
             ":username": data.username,
             ":updated_at": Date.now()
         }
@@ -27,7 +24,23 @@ const editUser = async (file, data) => {
     if (Location) {
         value.ExpressionAttributeValues[':src'] = Location
     }
-    return await updateUser(value)
+    await updateUser(value)
+    value = {
+        Key:{
+            "user_id": data.user_id,
+            "workspace_id": Number(workspaceId)
+        },
+        UpdateExpression: `set #role = :role, #company = :company`,
+        ExpressionAttributeNames: {
+            "#role": "role",
+            "#company": "company"
+        },
+        ExpressionAttributeValues:{
+            ":role": data.role,
+            ":company": data.company,
+        }
+    }
+    return await updateUserToWorkpace(value);
 }
 
 module.exports = {
