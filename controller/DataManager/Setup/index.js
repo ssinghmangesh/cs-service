@@ -92,7 +92,8 @@ const setupWorkspace = async(workspaceId) => {
     await createTable(taxColumns, TAX_TABLE_NAME, workspaceId)
 
     await createTable(discountApplicationsColumns, DISCOUNTAPPLICATION_TABLE_NAME, workspaceId)
-    await createTable(visitorColumns, VISITOR_TABLE_NAME, 1);
+    
+    await createTable(visitorColumns, VISITOR_TABLE_NAME, workspaceId);
 
     return {
         status: true,
@@ -109,7 +110,7 @@ const deleteWorkspace = async (workspaceId) => {
     }
 }
 
-// deleteWorkspace(333)
+// deleteWorkspace(56788582584)
 // .then(console.log)
 // .catch(console.log)
 

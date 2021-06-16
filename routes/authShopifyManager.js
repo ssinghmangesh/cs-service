@@ -10,11 +10,15 @@ const nonce = require('nonce')();
 const querystring = require('querystring');
 const axios = require('axios');
 const { addWorkspace, fetchWorkspace, fetchUser, addUser, addUserToWorkspace } = require("../controller/UserManager");
+const { setupWorkspace } = require('../controller/DataManager/Setup')
+const { syncAll } = require("../controller/ShopifyManager/index");
+const { createWebhooks } = require("../controller/ShopifyManager/Webhooks/index");
+const Shopify = require('../controller/ShopifyManager/Shopify')
 
 const shopifyApiPublicKey = 'eb6b044f4a8cf434a8100f85cac58205';
 const shopifyApiSecretKey = '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';
 const scopes = 'read_products, read_product_listings, read_customers, read_orders, read_script_tags, write_script_tags, read_checkouts, read_draft_orders, read_price_rules, read_fulfillments, read_assigned_fulfillment_orders, read_content'
-const appUrl = 'http://localhost:3000';
+const appUrl = 'https://custom-segment-service.herokuapp.com';
 
 
 ///////////// Helper Functions /////////////
@@ -62,7 +66,7 @@ router.get('/install', async (req, res) => {
 })
 
 router.get('/callback', async (req, res) => {
-    console.log('callback');
+    // console.log('callback');
     const { shop, code, state } = req.query;
     const stateCookie = cookie.parse(req.headers.cookie).state;
 
@@ -92,6 +96,7 @@ router.get('/callback', async (req, res) => {
         // console.log("shopData: ", shopData.data.shop)
 
         const fetchedWorkspace = await fetchWorkspace({ workspace_id: shopData.data.shop.id })
+        // console.log(fetchedWorkspace);
         if (Object.keys(fetchedWorkspace).length === 0) {
             const workspace = {
                 workspace_id: shopData.data.shop.id,
@@ -103,6 +108,24 @@ router.get('/callback', async (req, res) => {
                 updated_at: Date.now()
             }
             await addWorkspace(workspace);
+            console.log('workspace added');
+            await Shopify.fetchTrackingScript(workspace.shop_name, workspace.access_token, workspace.workspace_id)
+            console.log('tracking script inserted')
+            await Shopify.addSocket(workspace.shop_name, workspace.access_token)
+            console.log('socket cdn added')
+            await Shopify.addJquery(workspace.shop_name, workspace.access_token)
+            console.log('jQuery added')
+            await setupWorkspace(workspace.workspace_id);
+            console.log('workspace setup done');
+            await createWebhooks(workspace.shop_name, workspace.access_token, workspace.workspace_id)
+            console.log('webhooks created');
+            await syncAll({ 
+                shopName: workspace.shop_name, 
+                accessToken: workspace.access_token,  
+                limit: 50, 
+                workspaceId: workspace.workspace_id 
+            });
+            console.log('synced')
         }
 
         let flag = false;

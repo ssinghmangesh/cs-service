@@ -201,7 +201,39 @@ class Shopify {
             data: {
                 "script_tag": {
                     "event": "onload",
-                    "src": `http://cdn.customsegment.com/tracking.js?workspaceid=${workspaceId}`
+                    "src": `https://cdn.jsdelivr.net/gh/ssinghmangesh/cs-service@latest/controller/tracking.js?workspaceid=${workspaceId}`
+                }
+            }
+        })
+    }
+
+    static addSocket(shopName, accessToken) {
+        return axios({
+            method: 'POST',
+            url: `https://${shopName}/admin/api/2021-04/script_tags.json`,
+            headers: {
+                'X-Shopify-Access-Token': accessToken,
+            },
+            data: {
+                "script_tag": {
+                    "event": "onload",
+                    "src": "https://cdn.socket.io/4.1.1/socket.io.min.js"
+                }
+            }
+        })
+    }
+
+    static addJquery(shopName, accessToken) {
+        return axios({
+            method: 'POST',
+            url: `https://${shopName}/admin/api/2021-04/script_tags.json`,
+            headers: {
+                'X-Shopify-Access-Token': accessToken,
+            },
+            data: {
+                "script_tag": {
+                    "event": "onload",
+                    "src": "https://code.jquery.com/jquery-3.6.0.min.js"
                 }
             }
         })

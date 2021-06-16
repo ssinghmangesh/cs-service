@@ -33,6 +33,14 @@ const GROUP_BY = (groupBykey) => {
     return query
 }
 
+const LIMIT = (limit) => {
+    if(limit){
+        return `LIMIT ${limit}`
+    } else {
+        return ''
+    }
+}
+
 const abstractData = (response, type) => {
     //extract only rows
     let res = null
@@ -135,15 +143,16 @@ class Dashboard {
         return
     }
 
-    static async table({TABLE_NAME = 'order333', orderBykey, orderByDirection, limit = 10, skipRowby = 0, filters = {}}) {
+    static async table({TABLE_NAME = 'order333', orderBykey, orderByDirection, limit, skipRowby = 0, filters = {}}) {
         let wc = whereClause(filters);
         let query = ``
         query = `
             SELECT * FROM ${TABLE_NAME}
             ${wc ? 'WHERE '+wc : ''}
             ${ORDER_BY(orderBykey, orderByDirection)}
-            LIMIT ${limit} OFFSET ${skipRowby};`
-        console.log(query)
+            ${LIMIT(limit)} 
+            OFFSET ${skipRowby};`
+        // console.log(query)
         return abstractData(await PostgresqlDb.query(query));
     }
 
