@@ -21,7 +21,8 @@ const {
     LOCATION_TABLE_NAME,
     DRAFTORDERLINEITEMS_TABLE_NAME,
     TAX_TABLE_NAME,
-    DISCOUNTAPPLICATION_TABLE_NAME
+    DISCOUNTAPPLICATION_TABLE_NAME,
+    VISITOR_TABLE_NAME
 } = require("../helper");
 
 // // customer section
@@ -61,7 +62,8 @@ const deleteTable = async (workspaceId) => {
             ${LOCATION_TABLE_NAME(workspaceId)},
             ${DRAFTORDERLINEITEMS_TABLE_NAME(workspaceId)},
             ${TAX_TABLE_NAME(workspaceId)},
-            ${DISCOUNTAPPLICATION_TABLE_NAME(workspaceId)}`
+            ${DISCOUNTAPPLICATION_TABLE_NAME(workspaceId)},
+            ${VISITOR_TABLE_NAME(workspaceId)}`
 
     const query = `DROP TABLE IF EXISTS ${tableQuery};`
 

@@ -24,8 +24,10 @@
 #    and best practices on handling the access key credentials.
 
 on:
-  release:
-    types: [created]
+  push:
+    branches:
+      - main
+  
 
 name: Deploy to Amazon ECS
 
@@ -54,7 +56,7 @@ jobs:
       id: build-image
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        ECR_REPOSITORY: cs-service
+        ECR_REPOSITORY: custom-docker-repository
         IMAGE_TAG: ${{ github.sha }}
       run: |
         # Build a docker container and
@@ -68,14 +70,14 @@ jobs:
       id: task-def
       uses: aws-actions/amazon-ecs-render-task-definition@v1
       with:
-        task-definition: task-definition.json
-        container-name: sample-app
+        task-definition: ecs-task-defination.json
+        container-name: custom-segment-container
         image: ${{ steps.build-image.outputs.image }}
 
     - name: Deploy Amazon ECS task definition
       uses: aws-actions/amazon-ecs-deploy-task-definition@v1
       with:
         task-definition: ${{ steps.task-def.outputs.task-definition }}
-        service: sample-app-service
-        cluster: default
+        service: custom-segment-service
+        cluster: custom-segment-cluster
         wait-for-service-stability: true

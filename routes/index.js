@@ -8,11 +8,15 @@ const analyticsManager = require("./analyticsManager")
 const customerManager = require("./customerManager")
 const whereClause = require('./whereClause');
 const mailManager = require('./mailManager');
+const segment = require('./segment');
 
 routes.get('/', (req, res) => {
-  res.status(200).json({ message: 'Connected!' });
+  res.status(200).json({ message: 'it works!' });
 });
 
+routes.get('/health3', (re, res) => {
+  res.status(200).send('working');
+})
 
 routes.get('/health', (req, res) => {
   res.status(200).json({ message: 'Connected!' });
@@ -32,4 +36,5 @@ module.exports = {
   customerManager,
   whereClause,
   mailManager,
+  segment,
 };

@@ -144,7 +144,7 @@ let filters1 = {
 // AND id IN (SELECT order_id FROM order333 WHERE  (DATE(created_at)  = CURRENT_DATE - 10)) 
 // AND id IN (SELECT order_id FROM product333 WHERE  (title like '%a%')) )
 
-const whereClause = (filters = filters1, workspaceId = 333, ptype = 'ORDER') => {
+const whereClause = (filters = filters1, workspaceId = 333, ptype) => {
     if(filters.conditions) {
         return `(${filters.conditions.map(filter => {
             return whereClause(filter, workspaceId, ptype)
@@ -236,6 +236,16 @@ const typeBuild = (ptype, workspaceId, { columnName, filterType, dataType, value
 
         } else if (filterType === 'is_unknown') {
 
+        } else if (filterType === 'in') {
+            let newvalues = values.map(str => {
+                return `'${str}'`
+            }).join(", ")
+            query = `${prefix} (${columnName} IN (${newvalues}))`
+        } else if (filterType === 'not_in') {
+            let newvalues = values.map(str => {
+                return `'${str}'`
+            }).join(", ")
+            query = `${prefix} (${columnName} NOT IN (${newvalues}))`
         }
     } else if (dataType === 'varchar[]') {
         if (filterType === 'in') {

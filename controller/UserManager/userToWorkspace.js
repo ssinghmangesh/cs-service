@@ -1,4 +1,4 @@
-const { insert, del } = require("../../aws/index");
+const { insert, del, fetchAll, fetch, update } = require("../../aws/index");
 
 const addUserToWorkspace = async (data) => {
     const params = {
@@ -28,18 +28,38 @@ const deleteUserToWorkspace = async (data) => {
     await del(params)
 }
 
-// const getUserToWorkspace = async (data) => {
-//     var params = {
-//             TableName: 'UserToWorkspace',
-//             Key:{
-//                 "id": data.id
-//             }
-//         }
-//     await fetch(params);
-// }
+const getUserToWorkspace = async (workspaceId, userId) => {
+    var params = {
+            TableName: 'UserToWorkspace',
+            Key:{
+                "workspace_id": workspaceId,
+                "user_id": userId
+            }
+        }
+    return await fetch(params);
+}
+
+const updateUserToWorkpace = async (val) => {
+    const params = {
+        TableName: 'UserToWorkspace',
+        ...val,
+    }
+    return await update(params);
+}
+
+const fetchAllUserToWorkspaces = async (workspaceId) => {
+    const params = {
+        TableName: "UserToWorkspace",
+        FilterExpression: "workspace_id = :workspaceId",
+        ExpressionAttributeValues: { ":workspaceId": Number(workspaceId) }
+    }
+    return await fetchAll(params)
+}
 
 module.exports = {
     addUserToWorkspace,
     deleteUserToWorkspace,
-    // getUserToWorkspace
+    getUserToWorkspace,
+    fetchAllUserToWorkspaces,
+    updateUserToWorkpace,
 }

@@ -2,14 +2,17 @@ trackCS = async function(workspaceId) {
     function sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
       }
-      
-    var x = document.createElement("SCRIPT");
-    x.src = 'https://cdn.socket.io/4.1.1/socket.io.min.js';
-    document.body.appendChild(x);
+    // const script = document.createElement('script');
+    // script.src = "https://code.jquery.com/jquery-3.6.0.min.js";
+    // document.getElementsByTagName('head')[0].appendChild(script);
+
+    // const x = document.createElement("SCRIPT");
+    // x.src = 'https://cdn.socket.io/4.1.1/socket.io.min.js';
+    // document.getElementsByTagName('head')[0].appendChild(x);
     
     await sleep(500);
 
-    const socket = window.io("http://localhost:4000/customer");
+    const socket = io("https://custom-segment-socket.herokuapp.com/customer");
 
     let csData = {}
 
@@ -85,18 +88,20 @@ trackCS = async function(workspaceId) {
     async function syncAPI(){
         console.log(csData)
         return await jQuery.ajax({
-                        url: "http://localhost:3000/data-manager/event/add",
+                        url: "https://custom-segment-service.herokuapp.com/data-manager/event/add",
                         type: "POST",
                         dataType: "json",
                         cache: 0,
+                        headers:{
+                            'x-workspace-id': workspaceId
+                        },
                         data: {
-                            workspaceId: 1,
                             event: csData
                         }
                     })
     }
     
-    jQuery(document).ajaxSuccess(async function(_e, _t, _r) {
+    $(document).ajaxSuccess(async function(_e, _t, _r) {
         if(_r.url.match(/cart\/(update|change|add).js/g)){
             // console.log(_t.responseJSON);
             csData = {...csData, cart: _t.responseJSON};
@@ -107,13 +112,13 @@ trackCS = async function(workspaceId) {
     })
         
     
-    // console.log("csData : ", csData)
-    // const res = await syncAPI()
-    // console.log(res)
+    console.log("csData : ", csData)
+    const res = await syncAPI()
+    console.log(res)
 }
 
 
-trackCS(1)
+trackCS(56788582584)
 
 
 

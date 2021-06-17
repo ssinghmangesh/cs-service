@@ -63,7 +63,14 @@ const fetch = async (params) => {
     }
 }
 
-
+const query = async (params) => {
+    try{
+        return await docClient.query(params).promise()
+    }
+    catch(err){
+        return err.message
+    }
+}
 // var params = {
 //     TableName: "User",
 //     Item:{
@@ -75,7 +82,6 @@ const fetch = async (params) => {
 // }
 
 const fetchAll = async (params) => {
-    console.log("Scanning Movies table.");
     return await docClient.scan(params).promise();
 }
 
@@ -92,4 +98,5 @@ module.exports = {
     fetch,
     fetchAll,
     update,
+    query,
 }

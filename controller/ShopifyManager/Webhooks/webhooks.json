@@ -1,0 +1,102 @@
+[
+  {
+    "event": "carts",
+    "type": "create"
+  },
+  {
+    "event": "carts",
+    "type": "update"
+  },
+  {
+    "event": "checkouts",
+    "type": "create"
+  },
+  {
+    "event": "checkouts",
+    "type": "update"
+  },
+  {
+    "event": "checkouts",
+    "type": "delete"
+  },
+  {
+    "event": "customers",
+    "type": "create"
+  },
+  {
+    "event": "customers",
+    "type": "update"
+  },
+  {
+    "event": "customers",
+    "type": "delete"
+  },
+  {
+    "event": "draft_orders",
+    "type": "create"
+  },
+  {
+    "event": "draft_orders",
+    "type": "update"
+  },
+  {
+    "event": "draft_orders",
+    "type": "delete"
+  },
+  {
+    "event": "fulfillments",
+    "type": "create"
+  },
+  {
+    "event": "fulfillments",
+    "type": "update"
+  },
+  {
+    "event": "products",
+    "type": "create"
+  },
+  {
+    "event": "products",
+    "type": "update"
+  },
+  {
+    "event": "products",
+    "type": "delete"
+  },
+  {
+    "event": "refunds",
+    "type": "create"
+  },
+  {
+    "event": "orders",
+    "type": "cancelled"
+  },
+  {
+    "event": "orders",
+    "type": "create"
+  },
+  {
+    "event": "orders",
+    "type": "fulfilled"
+  },
+  {
+    "event": "orders",
+    "type": "paid"
+  },
+  {
+    "event": "orders",
+    "type": "partially_fulfilled"
+  },
+  {
+    "event": "orders",
+    "type": "updated"
+  },
+  {
+    "event": "orders",
+    "type": "delete"
+  },
+  {
+    "event": "orders",
+    "type": "edited"
+  }
+]

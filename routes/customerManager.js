@@ -47,7 +47,6 @@ router.post('/customer-manager/customer-aggregate', async (req, res) => {
     const details = req.body
     const { 'x-workspace-id': workspaceId } = req.headers
     let response = await Customer.aggregate({customerId: details.customerId, workspaceId: workspaceId, aggregateDefinition: details.aggregateDefinition})
-    // console.log(response)
     res.status(200).send( { status: true, message: "successful", data: response } )
 })
 

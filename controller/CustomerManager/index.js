@@ -70,8 +70,6 @@ class Customer {
         }
         queryAggregate += ` FROM customeraggregate${workspaceId} ${WHERE_CLAUSE({customerId})};`
         queryNonAggregate += ` FROM customeraggregate${workspaceId} ${WHERE_CLAUSE({customerId})};`
-        // console.log('!!!!!', queryAggregate)
-        // console.log('@@@@@', queryNonAggregate)
         let dataAggregate = [], dataNonAggregate = []
         if(g) dataNonAggregate = abstractData(await PostgresqlDb.query(queryNonAggregate));
         if(f) dataAggregate = abstractData(await PostgresqlDb.query(queryAggregate));
