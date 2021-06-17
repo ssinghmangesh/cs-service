@@ -68,7 +68,6 @@ router.post('/analytics-manager/stats', async (req, res) => {
     const { 'x-workspace-id': workspaceId } = req.headers
     let table = `${details.table}${workspaceId}`
     let response = await Dashboard.stats({TABLE_NAME: table, limit: details.limit, skipRowby: details.skipRowby, statsDefinition: details.statsDefinition})
-    // console.log(response)
     res.status(200).send( { status: true, message: "successful", data: response } )
 })
 

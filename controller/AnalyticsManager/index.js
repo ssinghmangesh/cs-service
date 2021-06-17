@@ -79,7 +79,7 @@ class Dashboard {
         return abstractData(await PostgresqlDb.query(query));
     }
 
-    static async tableGroupBy({TABLE_NAME = 'order333', groupBykey, statsDefinition = [], limit = 10, skipRowby = 0}) {
+    static async tableGroupBy({TABLE_NAME, groupBykey, statsDefinition = [], limit = 10, skipRowby = 0}) {
         let query = `SELECT `
         if(statsDefinition) {
             for(let i = 0; i < statsDefinition.length; i++) {
@@ -93,7 +93,6 @@ class Dashboard {
                 if(i < statsDefinition.length - 1) query += ', '
             }
             query += ` FROM ${TABLE_NAME} ${GROUP_BY(groupBykey)} LIMIT ${limit} OFFSET ${skipRowby};`
-            // console.log(query)
             return abstractData(await PostgresqlDb.query(query));
         }
         return
@@ -104,7 +103,7 @@ class Dashboard {
         let query = ``
         query = `
             SELECT * FROM ${TABLE_NAME}
-            ${wc ? 'WHERE '+wc : ''}
+            ${wc ? 'WHERE ' + wc : ''}
             ${ORDER_BY(orderBykey, orderByDirection)}
             LIMIT ${limit} OFFSET ${skipRowby};`
         console.log(query)

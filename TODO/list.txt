@@ -122,13 +122,29 @@ socket.on('workspace', (message) => {
     15 feb
     1. 6,7,8,...
     2. 5,4,3,...
-<<<<<<< HEAD
-    3. 26 ,... , 4
-=======
->>>>>>> 3242c7c64854f33e75090601867e91767e453042
-=======
-    3. 26 ,... , 4
-<<<<<<< HEAD
-=======
->>>>>>> db77d32e5ec33f193dfeee235038093664a63320
->>>>>>> local
+
+
+Devashish
+1. Complete user management. 
+2. socket service deploy heroku.
+3. Ui visitor add. 
+4. add https for cs-service.
+
+
+
+
+Nimish
+1. Run Customer aggregate for all customer.
+2. add a route for group by query.
+3. https for s3 frontend.
+
+
+
+
+
+
+https for cs-service, shift aws
+socket service deploy aws
+
+
+https for s3 frontend 

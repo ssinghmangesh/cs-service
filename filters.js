@@ -172,6 +172,16 @@ const typeBuild = (ptype, workspaceId, { columnName, filterType, dataType, value
 
         } else if (filterType === 'is_unknown') {
 
+        } else if (filterType === 'in') {
+            let newvalues = values.map(str => {
+                return `'${str}'`
+            }).join(", ")
+            query = `${prefix} (${columnName} IN (${newvalues}))`
+        } else if (filterType === 'not_in') {
+            let newvalues = values.map(str => {
+                return `'${str}'`
+            }).join(", ")
+            query = `${prefix} (${columnName} NOT IN (${newvalues}))`
         }
     } else if (dataType === 'varchar[]') {
         if (filterType === 'in') {
