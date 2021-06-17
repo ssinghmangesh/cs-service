@@ -40,28 +40,21 @@ const fetchTemplate = async (data) => {
 
 const fetchAllTemplates = async (workspaceId) => {
     const params = {
-        TableName: "EmailTemplate",
-        FilterExpression: "contains (#workspaceList, :workspaceId)",
-        ExpressionAttributeNames: {
-            "#workspaceList": "workspace_list",
-        },
-        ExpressionAttributeValues: {
-            ":workspaceId": Number(workspaceId)
-        }
+        TableName: "EmailTemplate"
     }
     let response = await fetchAll(params)
-    return response.Items
-    // console.log('#', response)
-    // if(response.Items.length) {
-    //     let i = 0
-    //     for(; i < response.Items.length; i++) {
-    //         if(templateId === response.Items[i].template_id) {
-    //             break;
-    //         }
-    //     }
-    //     return response.Items[i]
-    // }
-    // return await fetchTemplate({templateId: templateId})
+
+    const templates = []
+    response.Items.forEach((template) => {
+        if(template.workspace_list) {
+            if(template.workspace_list.includes(Number(workspaceId))) {
+                templates.push(template)
+            }
+        } else {
+            templates.push(template)
+        }
+    })
+    return templates
 }
 
 module.exports = {
