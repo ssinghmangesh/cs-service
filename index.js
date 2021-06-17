@@ -3,6 +3,7 @@ const app = express()
 const allRoutes = require('./routes');
 const cors = require("cors");
 const port = 3000;
+const dotenv = require("dotenv").config();
 
 
 app.use(cors());
@@ -20,7 +21,7 @@ Object.keys(allRoutes).forEach(key => {
 
 
 
-app.listen(port, () => {
+app.listen(process.env.PORT || port, () => {
     console.log('App listening on port ', port);
 });
 

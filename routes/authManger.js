@@ -98,9 +98,10 @@ router.post('/auth-manager/login', async (req, res) => {
     const data = {
         "user_id": userId
     }
-    const user = await fetchUser(data);
-    if (user.Item.password === password){
-        res.status(200).send();
+    const { Item: user } = await fetchUser(data);
+    if (user.password === password){
+        delete user.password
+        res.status(200).send(user);
     } else {
         res.status(403).send();
     }

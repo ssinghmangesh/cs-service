@@ -73,28 +73,80 @@ const {
 
 // }
 
-// let filters1 = {
-//     "relation": "AND",  //AND  OR
-//     conditions: [{
-//         type: "CUSTOMER", //CUSTOMER. ORDER, Cart
-//         columnName: "first_name",
-//         filterType: "contains",  // >, <,=, not 
-//         dataType: "varchar",
-//         values: "a"
-//     },
-//     {
-//         type: "ORDER", //CUSTOMER. ORDER, Cart
-//         columnName: "created_at",
-//         filterType: "between",  // >, <,=, not 
-//         dataType: "timestamptz[]",
-//         values: [10, 20]
-//     }]
-// }
+let filters1 = {
+    "relation": "AND",
+    conditions: [{
+        type: "CUSTOMER",
+        columnName: "first_name",
+        filterType: "contains",
+        dataType: "varchar",
+        values: ["a"]
+    },
+    {
+        "relation": "OR",
+        conditions: [{
+            type: "ORDER",
+            columnName: "fulfillment_status",
+            filterType: "equal_to",
+            dataType: "varchar",
+            values: ["pending"]
+        },
+        {
+            "relation": "AND",
+            conditions: [{
+                type: "FULFILLMENT",
+                columnName: "status",
+                filterType: "contains",
+                dataType: "varchar",
+                values: ["a"]
+            },
+            {
+                type: "PRODUCT",
+                columnName: "product_type",
+                filterType: "contains",
+                dataType: "varchar",
+                values: ["a"]
+            }]
+        },
+        {
+            type: "CUSTOMER",
+            columnName: "email",
+            filterType: "contains",
+            dataType: "varchar",
+            values: ["a"]
+        }]
+    },
+    {
+        columnName: "created_at",
+        filterType: "equal_to",
+        dataType: "timestamptz",
+        values: [10]
+    },
+    {
+        type: "PRODUCT",
+        columnName: "title",
+        filterType: "contains",
+        dataType: "varchar",
+        values: ["a"]
+    }]
+}
+
+// RESULT
+// (id IN (SELECT order_id FROM customer333 WHERE  (first_name like '%a%')) 
+// AND 
+// ( (fulfillment_status = 'pending') 
+//     OR
+//     (id IN (SELECT order_id FROM fulfillment333 WHERE  (status like '%a%'))
+//         AND 
+//         id IN (SELECT order_id FROM product333 WHERE  (product_type like '%a%')) ) 
+//     OR 
+//     id IN (SELECT order_id FROM customer333 WHERE  (email like '%a%')) ) 
+// AND id IN (SELECT order_id FROM order333 WHERE  (DATE(created_at)  = CURRENT_DATE - 10)) 
+// AND id IN (SELECT order_id FROM product333 WHERE  (title like '%a%')) )
 
 const whereClause = (filters = filters1, workspaceId = 333, ptype) => {
     if(filters.conditions) {
-        return `(${filters.conditions.map((filter, index) => {
-            if(!index) ptype = filter.type
+        return `(${filters.conditions.map(filter => {
             return whereClause(filter, workspaceId, ptype)
         }).join(` ${ filters.relation } `)} )`
     } else {
@@ -106,6 +158,8 @@ const whereClause = (filters = filters1, workspaceId = 333, ptype) => {
 const typeBuild = (ptype, workspaceId, { columnName, filterType, dataType, values, type }) => {
     let prefix = ''
     let table = ''
+    let f = 0
+    // console.log(ptype, type)
     if(type === 'CUSTOMER') {
         table = `${CUSTOMER_TABLE_NAME(workspaceId)}`
     } else if(type === 'ORDER') {
@@ -114,20 +168,30 @@ const typeBuild = (ptype, workspaceId, { columnName, filterType, dataType, value
         table = `${PRODUCT_TABLE_NAME(workspaceId)}`
     } else if(type === 'FULFILLMENT') {
         table = `${FULFILLMENT_TABLE_NAME(workspaceId)}`
-    } else if(type === 'CUSTOMERAGGREGATE') {
-        table = `${CUSTOMERAGGREGATE_TABLE_NAME(workspaceId)}`
+    } else if(typeof type === 'undefined') {
+        f = 1
     }
 
     if(ptype === 'CUSTOMER' && ptype != type) {
+        if(f) {
+            table = `${CUSTOMER_TABLE_NAME(workspaceId)}`
+        }
         prefix = `id IN (SELECT customer_id FROM ${table} WHERE `
     } else if(ptype === 'ORDER' && ptype != type) {
+        if(f) {
+            table = `${ORDER_TABLE_NAME(workspaceId)}`
+        }
         prefix = `id IN (SELECT order_id FROM ${table} WHERE `
     } else if(ptype === 'PRODUCT' && ptype != type) {
+        if(f) {
+            table = `${PRODUCT_TABLE_NAME(workspaceId)}`
+        }
         prefix = `id IN (SELECT product_id FROM ${table} WHERE `
     } else if(ptype === 'FULFILLMENT' && ptype != type) {
+        if(f) {
+            table = `${FULFILLMENT_TABLE_NAME(workspaceId)}`
+        }
         prefix = `id IN (SELECT fulfillment_id FROM ${table} WHERE `
-    } else if(typeof ptype === 'undefined' || ptype === type) {
-        // prefix = `id IN (SELECT id FROM ${table} WHERE `
     }
 
     let query = ''
@@ -212,17 +276,17 @@ const typeBuild = (ptype, workspaceId, { columnName, filterType, dataType, value
             query += `BETWEEN CURRENT_DATE - ${Math.max(...values)} AND CURRENT_DATE - ${Math.min(...values)})`
         } else {
             if (filterType === 'equal_to') {
-                query = ` = CURRENT_DATE - ${values[0]})`
+                query += ` = CURRENT_DATE - ${values[0]})`
             } else if (filterType === 'not_equal_to') {
-                query = ` != CURRENT_DATE - ${values[0]})`
+                query += ` != CURRENT_DATE - ${values[0]})`
             } else if (filterType === 'less_than') {
-                query = `< CURRENT_DATE - ${values[0]})`
+                query += `< CURRENT_DATE - ${values[0]})`
             } else if (filterType === 'less_than_equal_to') {
-                query = `<= CURRENT_DATE - ${values[0]})`
+                query += `<= CURRENT_DATE - ${values[0]})`
             } else if (filterType === 'greater_than') {
-                query = `> CURRENT_DATE - ${values[0]})`
+                query += `> CURRENT_DATE - ${values[0]})`
             } else if (filterType === 'greater_than_equal_to') {
-                query = `>= CURRENT_DATE - ${values[0]})`
+                query += `>= CURRENT_DATE - ${values[0]})`
             }
         }
     } else if (dataType === 'timestamptz[]') {
@@ -232,14 +296,13 @@ const typeBuild = (ptype, workspaceId, { columnName, filterType, dataType, value
             query = `${prefix} (${prefix} DATE(${columnName}) NOT BETWEEN CURRENT_DATE - ${Math.max(...values)} AND CURRENT_DATE - ${Math.min(...values)})`
         }
     }
-    // console.log(prefix, ptype);
     if(prefix) {
         query += ')'
     }
     return query
 }
 
-// console.log(whereClause(filters1))
+// console.log(whereClause())
 module.exports = {
     whereClause
 }

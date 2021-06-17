@@ -1,6 +1,6 @@
 const Shopify = require('../Shopify')
-const {insert, del} = require("../../DataManager/index");
-const {CUSTOMER_TABLE_NAME} = require("../../DataManager/helper")
+const {insert, del, aggregate} = require("../../DataManager/index");
+const {CUSTOMER_TABLE_NAME, CUSTOMERAGGREGATE_TABLE_NAME} = require("../../DataManager/helper")
 const customerColumn = require('../../DataManager/Setup/customerColumns.json');
 const { socket } = require("../../../socket");
 
@@ -23,6 +23,12 @@ const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0, workspaceId
     if(response.data.customers.length){
         await del(CUSTOMER_TABLE_NAME, customers, workspaceId)
         await insert(CUSTOMER_TABLE_NAME, customerColumn, customers, workspaceId)
+
+        // console.log('!!', customers)
+        await del(CUSTOMERAGGREGATE_TABLE_NAME, customers, workspaceId, 'customer_id', 'id')
+        customers.map(async (customer) => {
+            await aggregate(workspaceId, customer.id)
+        })
     }
     //call next batch
     if(response.data.customers.length < limit) {
@@ -47,6 +53,6 @@ module.exports = {
     SYNC
 }
 
-// SYNC({ shopName: 'grofers-orders.myshopify.com', accessToken: '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',  limit: 50, workspaceId: 2 })
+// SYNC({ shopName: 'grofers-orders.myshopify.com', accessToken: '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',  limit: 50, workspaceId: 333 })
 // .then(console.log)
 // .catch(console.log)

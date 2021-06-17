@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const { setupWorkspace } = require('../controller/DataManager/Setup')
+const { updateEvent } = require("../controller/ShopifyManager/Webhooks/helper");
 const { update } = require("../controller/ShopifyManager/Webhooks/index");
 const {
     CUSTOMER_TABLE_NAME, 
@@ -9,8 +10,7 @@ const {
     CART_TABLE_NAME,
     CARTLINEITEMS_TABLE_NAME,
     CHECKOUT_TABLE_NAME,
-    CHECKOUTLINEITEMS_TABLE_NAME,
-    EVENT_TABLE_NAME
+    CHECKOUTLINEITEMS_TABLE_NAME
 } = require("../controller/DataManager/helper");
 const Dashboard  = require("../controller/AnalyticsManager/index"); 
 
@@ -20,8 +20,12 @@ const productColumns = require("../controller/DataManager/Setup/productColumns.j
 const cartColumns = require("../controller/DataManager/Setup/cartColumns.json");
 const cartLineItemsColumns = require("../controller/DataManager/Setup/cartLineItemColumns.json");
 const checkoutColumns = require("../controller/DataManager/Setup/checkoutColumns.json");
-const eventColumns = require("../controller/DataManager/Setup/eventColumns.json");
 const checkoutLineItemsColumns = require("../controller/DataManager/Setup/checkoutLineItemsColumns.json");
+const { default: axios } = require('axios');
+
+
+
+
 
 router.get('/data-manager/customer/count', async (req, res) => {
     const { 'x-workspace-id': workspaceId } = req.headers
@@ -94,10 +98,10 @@ router.post('/data-manager/checkout/add',async (req, res) => {
 router.post('/data-manager/event/add',async (req, res) => {
     const { event } = req.body;
     const { 'x-workspace-id': workspaceId } = req.headers
-    console.log(event);
-    // const response = await update(EVENT_TABLE_NAME, eventColumns, [event], workspaceId);
+    event.id = event.page_id;
+    const response = await updateEvent(event, workspaceId);
 
-    console.log("event done");
+    console.log("event added");
     res.status(200).send({ message: "working" })
 })
 
@@ -107,6 +111,11 @@ router.get('/data-manager/cart/delete',async (req, res) => {
 
 router.get('/data-manager/checkout/delete',async (req, res) => {
     res.status(200).send("")
+})
+
+router.post('/webhooks/:workspaceId/:event/:type',async (req, res) => {
+    await update(req.params, req.body);
+    res.status(200).send("done")
 })
 
 module.exports = router
