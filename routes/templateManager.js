@@ -1,6 +1,5 @@
 const express = require('express')
 const { addTemplate, fetchAllTemplates } = require('../controller/TemplateManager/index')
-const { getHtmlCode } = require('../controller/TemplateManager/helper')
 const router = express.Router()
 
 router.post('/template/insert', async function (req, res) {
@@ -20,7 +19,7 @@ router.post('/template/fetch-all', async function (req, res) {
     const details = req.body
     const { 'x-workspace-id': workspaceId } = req.headers
     let response = await fetchAllTemplates(workspaceId)
-    // console.log(response)
+    console.log(response)
     res.status(200).send( { status: true, message: "successful", data: response } )
 })
 
