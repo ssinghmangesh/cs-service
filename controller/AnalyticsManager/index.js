@@ -152,7 +152,6 @@ class Dashboard {
             ${ORDER_BY(orderBykey, orderByDirection)}
             ${LIMIT(limit)} 
             OFFSET ${skipRowby};`
-        // console.log(query)
         return abstractData(await PostgresqlDb.query(query));
     }
 
