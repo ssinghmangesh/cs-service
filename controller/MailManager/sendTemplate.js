@@ -3,6 +3,7 @@ const { sendMail } = require('./index')
 const { whereClause } = require('../../filters')
 const { fetchAllTemplates } = require('../TemplateManager/index')
 const axios = require("axios")
+const { gmail } = require('googleapis/build/src/apis/gmail')
 
 const WHERE_CLAUSE = (details) => {
     if(Object.entries(details.filters).length) {
@@ -22,14 +23,14 @@ const sendtemplate = async (details) => {
 
     response = await axios({
                         method: 'GET',
-                        url: details.src
+                        url: details.html_path
                     })
     // console.log('html: ', typeof html.data)
     const html = response.data
     mailOptions = {
-        from: details.from,
-        to: 'nimish007gupta@gmail.com',
-        subject: response.default_subject,
+        from: 'lionelthegoatmessi@gmail.com',
+        to: 'nimish007gupta@gmail.com',// to,
+        subject: details.subject ? details.subject : "Hello from Custom Segment!",
         html: html
     }
     // console.log('could have been sent!', mailOptions)

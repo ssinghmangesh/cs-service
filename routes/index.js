@@ -10,6 +10,7 @@ const whereClause = require('./whereClause');
 const mailManager = require('./mailManager');
 const segment = require('./segment');
 const templateManager = require('./templateManager');
+const notificationsManager = require('./notificationsManager');
 
 routes.get('/', (req, res) => {
   res.status(200).json({ message: 'it works!' });
@@ -39,4 +40,5 @@ module.exports = {
   mailManager,
   segment,
   templateManager,
+  notificationsManager,
 };
