@@ -140,6 +140,9 @@ const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0 , workspaceI
         progress += response.data.orders.length
         socket.emit("sync", `${progress} of ${count} done`)
         console.log(`${progress} of ${count} done`);
+        if(response.data.orders.length) {
+            return response.data.orders[response.data.orders.length - 1].id
+        }
     } else {
         //call next since id
         progress += response.data.orders.length
@@ -147,9 +150,13 @@ const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0 , workspaceI
         console.log(`${progress} of ${count} done`);
         let nextSinceId = response.data.orders[response.data.orders.length - 1].id;
         // console.log("nextSinceId", nextSinceId)
-        await SYNC({ shopName, accessToken, sinceId: nextSinceId, limit, workspaceId, count, progress })
+        const lastObjectId = await SYNC({ shopName, accessToken, sinceId: nextSinceId, limit, workspaceId, count, progress })
+        if(typeof lastObjectId === 'undefined') {
+            return response.data.orders[response.data.orders.length - 1].id
+        } else {
+            return lastObjectId
+        }
     }
-    return;
 }
 
 

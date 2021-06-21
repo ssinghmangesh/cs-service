@@ -19,6 +19,8 @@ const SYNC = async ({ shopName, accessToken, workspaceId, count, progress = 0 })
     progress += response.data.locations.length
     socket.emit("sync", `${progress} of ${count} done`)
     console.log(`${progress} of ${count} done`);
+    return response.data.locations[response.data.locations.length - 1].id
+    
     // if(response.data.locations.length < limit) {
         // progress += response.data.locations.length
         // socket.emit("sync", `${progress} of ${count} done`)
@@ -32,7 +34,6 @@ const SYNC = async ({ shopName, accessToken, workspaceId, count, progress = 0 })
     //     // console.log("nextSinceId", nextSinceId)
     //     await SYNC({ shopName, accessToken, sinceId: nextSinceId, limit, workspaceId, count, progress })
     // }
-    return;
 }
 
 
