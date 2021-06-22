@@ -183,6 +183,11 @@ const DISCOUNTAPPLICATION_TABLE_NAME = (workspaceId) => {
 const VISITOR_TABLE_NAME = (workspaceId) => {
     return `visitor${workspaceId}`
 }
+
+const SENTEMAIL_TABLE_NAME = (workspaceId) => {
+    return `sentemail${workspaceId}`
+}
+
 // const
 // getInsertQury(discount222, order)
 // .then(console.log)
@@ -214,4 +219,5 @@ module.exports={
     TAX_TABLE_NAME,
     DISCOUNTAPPLICATION_TABLE_NAME,
     VISITOR_TABLE_NAME,
+    SENTEMAIL_TABLE_NAME,
 }

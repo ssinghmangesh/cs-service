@@ -23,7 +23,7 @@ const insert = async(TABLE_NAME, column, data, workspaceId) => {
         VALUES ${getValues({ columnData: column, data })}
     `
     // console.log(query)
-    await PostgresqlDb.query(query)
+    return await PostgresqlDb.query(query)
 }
 
 const aggregate = async (workspaceId, customerId) => {
