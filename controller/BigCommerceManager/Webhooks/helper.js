@@ -46,7 +46,7 @@ const getCustomer = async (id) => {
                       headers:  {
                           'X-Auth-Token': fetchedWorkspace.Item.access_token,
                       }
-                  })
+                    })
         if(customers.length != 50) {
           break
         }

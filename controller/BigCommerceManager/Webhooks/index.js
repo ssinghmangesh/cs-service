@@ -80,7 +80,7 @@ const bgUpdate = async (options, details) => {
         //     }
         //     break
         case 'customer':
-            const data = getCustomer(details.id)
+            const data = await getCustomer(details.id)
             console.log('@@@@@@@@@@', data)
             await updateTable(CUSTOMER_TABLE_NAME, customerColumns, [data], options.workspaceId, options.type);
             break
