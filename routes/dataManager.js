@@ -120,13 +120,15 @@ router.post('/webhooks/:workspaceId/:event/:type',async (req, res) => {
 })
 
 router.post('/bg-webhooks/:workspaceId/:store/:event/:type',async (req, res) => {
-    // console.log(req.params, '!!!!!!!!!!', req.body)
-    bgUpdate(req.params, req.body)
+    // console.log('params: ', req.params)
+    // console.log('body: ', req.body)
+    await bgUpdate(req.params, req.body)
     res.status(200).send("done")
 })
 
 router.post('/bg1-webhooks/:workspaceId/:store/:event/:subevent/:type',async (req, res) => {
-    console.log(req.params, '!!!!!!!!!!', req.body)
+    console.log('params: ', req.params)
+    console.log('body: ', req.body)
     // bgUpdate(req.params, req.body)
     res.status(200).send("done")
 })

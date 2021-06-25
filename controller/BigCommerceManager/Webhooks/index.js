@@ -70,7 +70,7 @@ const createWebhooks = async (shopName, accessToken, storeHash, workspaceId) => 
 const bgUpdate = async (options, details) => {
     // console.log(options, options.event)
     // if(options["subevent"]) console.log('!!!!!!!!!!', options["subevent"])
-    console.log('######', options)
+    // console.log('######', options)
     switch(options.event) {
         // case 'cart':
         //     if(options["subevent"]) {
@@ -80,8 +80,8 @@ const bgUpdate = async (options, details) => {
         //     }
         //     break
         case 'customer':
-            const data = await getCustomer(details.id)
-            console.log('@@@@@@@@@@', data)
+            const data = await getCustomer(details.data.id)
+            // console.log('@@@@@@@@@@', data)
             await updateTable(CUSTOMER_TABLE_NAME, customerColumns, [data], options.workspaceId, options.type);
             break
         // case 'order':
