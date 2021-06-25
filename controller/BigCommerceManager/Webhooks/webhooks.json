@@ -15,6 +15,21 @@
         "type": "deleted"
     },
     {
+        "event": "cart_lineItem",
+        "scope": "store/cart/lineItem/created",
+        "type": "created"
+    },
+    {
+        "event": "cart_lineItem",
+        "scope": "store/cart/lineItem/updated",
+        "type": "updated"
+    },
+    {
+        "event": "cart_lineItem",
+        "scope": "store/cart/lineItem/deleted",
+        "type": "deleted"
+    },
+    {
         "event": "customer",
         "scope": "store/customer/created",
         "type": "created"

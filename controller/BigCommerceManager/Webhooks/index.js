@@ -36,9 +36,16 @@ const {
 
 const createWebhooks = async (shopName, accessToken, storeHash, workspaceId) => {
     console.log(webhooks.length);
-    for(let i=0;i<webhooks.length;i++) {
+    for(let i=0;i<1;i++) {
         const { scope } = webhooks[i];
         console.log(scope)
+        let array = scope.split('/')
+        let destination = ``;
+        if(array.length === 3) {
+          destination = `https://custom-segment-service.herokuapp.com/bg-webhooks/${workspaceId}/${scope}`
+        } else {
+          destination = `https://custom-segment-service.herokuapp.com/bg1-webhooks/${workspaceId}/${scope}`
+        }
         try{
             const res = await axios({
               method: 'POST',
@@ -48,7 +55,7 @@ const createWebhooks = async (shopName, accessToken, storeHash, workspaceId) => 
               },
               data: {
                 "scope": scope,
-                "destination": `https://custom-segment-service.herokuapp.com/bg-webhooks/${workspaceId}/${scope}`,
+                "destination": destination,
                 "is_active": true
               }
             })
@@ -58,39 +65,45 @@ const createWebhooks = async (shopName, accessToken, storeHash, workspaceId) => 
     }
 }
 
-// const update = async ({ workspaceId, event, type}, data) => {
-//     switch(event){
-//         case 'cart':
-//             await updateTable(CART_TABLE_NAME, cartColumns, [data], workspaceId, type);
-//             await updateTable(CARTLINEITEMS_TABLE_NAME, cartLineItemsColumns, data.line_items, workspaceId, type);
-//             break
-//         case 'customer':
-//             await updateTable(CUSTOMER_TABLE_NAME, customerColumns, [data], workspaceId, type);
-//             break
-//         case 'order':
-//             await updateTable(ORDER_TABLE_NAME, orderColumns, [data], workspaceId, type);
-//             await updateTable(FULFILLMENT_TABLE_NAME, fulfillmentsColumns, data.fulfillments, workspaceId, type);
-//             await updateTable(REFUNDED_TABLE_NAME, refundedColumns, data.refunds, workspaceId, type);
-//             await updateTable(DISCOUNTAPPLICATION_TABLE_NAME, discountApplicationsColumns, data.discount_applications, workspaceId, type);
-//             await updateTable(LINEITEMS_TABLE_NAME, lineItemsColumns, data.line_items, workspaceId, type);
-//             await updateTable(TAX_TABLE_NAME, taxColumns, data.tax_lines, workspaceId, type);
-//             break
-//         case 'product':
-//             await updateTable(PRODUCT_TABLE_NAME, productColumns, [data], workspaceId, type);
-//             await updateTable(VARIANT_TABLE_NAME, variantsColumns, data.variants, workspaceId, type);
-//             break
-//         case 'order/refund':
-//             await updateTable(REFUNDED_TABLE_NAME, refundedColumns, [data], workspaceId, type);
-//             break
-//         default:
-//             break
-//     }
-//     return {status: 200, message: "Update Successful"}
-// }
+const bgUpdate = async (options, data) => {
+    // console.log(options["event"])
+    // if(options["subevent"]) console.log('!!!!!!!!!!', options["subevent"])
+    // switch(options["event"]) {
+    //     case 'cart':
+    //         if(options["subevent"]) {
+    //           await updateTable(CARTLINEITEMS_TABLE_NAME, cartLineItemsColumns, data.line_items, workspaceId, options["type"]);
+    //         } else {
+    //           await updateTable(CART_TABLE_NAME, cartColumns, [data], workspaceId, options["type"]);
+    //         }
+    //         break
+    //     case 'customer':
+    //         await updateTable(CUSTOMER_TABLE_NAME, customerColumns, [data], workspaceId, options["type"]);
+    //         break
+    //     case 'order':
+    //         if(options["subevent"]) {
+    //           await updateTable(REFUNDED_TABLE_NAME, refundedColumns, data.refunds, workspaceId, options["type"]);
+    //         } else {
+    //           await updateTable(ORDER_TABLE_NAME, orderColumns, [data], workspaceId, options["type"]);
+    //         }
+    //         // await updateTable(FULFILLMENT_TABLE_NAME, fulfillmentsColumns, data.fulfillments, workspaceId, options["type"]);
+    //         // await updateTable(DISCOUNTAPPLICATION_TABLE_NAME, discountApplicationsColumns, data.discount_applications, workspaceId, options["type"]);
+    //         // await updateTable(LINEITEMS_TABLE_NAME, lineItemsColumns, data.line_items, workspaceId, options["type"]);
+    //         // await updateTable(TAX_TABLE_NAME, taxColumns, data.tax_lines, workspaceId, options["type"]);
+    //         // await updateTable(REFUNDED_TABLE_NAME, refundedColumns, [data], workspaceId, options["type"]);
+    //         break
+    //     case 'product':
+    //         await updateTable(PRODUCT_TABLE_NAME, productColumns, [data], workspaceId, options["type"]);
+    //         await updateTable(VARIANT_TABLE_NAME, variantsColumns, data.variants, workspaceId, options["type"]);
+    //         break
+    //     default:
+    //         break
+    // }
+    return {status: 200, message: "Update Successful"}
+}
 
-createWebhooks("api.bigcommerce.com", "774vc7resdvtz4zoqrnp3rmhrvqd2e6", "vodskxqu9", 56788582584)
+// createWebhooks("api.bigcommerce.com", "774vc7resdvtz4zoqrnp3rmhrvqd2e6", "vodskxqu9", 56788582584)
 
 module.exports = {
-    // update,
+    bgUpdate,
     createWebhooks
 }
