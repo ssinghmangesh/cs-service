@@ -147,7 +147,7 @@ const del = async (TABLE_NAME, data, workspaceId, id = 'id', id1) => {
     }
     // console.log(id1, data)
     const query = `DELETE FROM ${TABLE_NAME(workspaceId)} WHERE ${id} IN ${getIds(data, id1)}`
-    // console.log(query);
+    console.log(query);
     let response =  await PostgresqlDb.query(query);
     // console.log(response);
 }
