@@ -1,0 +1,39 @@
+[
+    {
+        "columnName":"email_type",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"sender",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"receiver",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"html_body",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"subject",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"attachments_url",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"sent_time",
+        "dataType": "timestamptz"
+    },
+    {
+        "columnName":"email_id",
+        "dataType": "varchar",
+        "primaryKey": true
+    },
+    {
+        "columnName":"status",
+        "dataType": "varchar"
+    }
+]
