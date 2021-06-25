@@ -61,9 +61,10 @@ class Dashboard {
         return abstractData(await PostgresqlDb.query(query), "single");
     }
 
-    static async sum({TABLE_NAME, columnname, startdate, enddate}) {
+    static async sum({TABLE_NAME, columnname, filters = {}}) {
         let query = ``
-        query = `SELECT SUM(${columnname}) FROM ${TABLE_NAME} ${WHERE_CLAUSE({startdate, enddate})};`
+        let wc = whereClause(filters);
+        query = `SELECT SUM(${columnname}) FROM ${TABLE_NAME} ${wc ? 'WHERE ' + wc : ''};`
         return abstractData(await PostgresqlDb.query(query), "single");
     }
 
@@ -78,18 +79,29 @@ class Dashboard {
     //     return response
     // }
 
-    static async lineGraph({TABLE_NAME, groupBykey = 'MONTH', startdate, enddate, x = 'x', y = 'y', statsDefinition = {}, prevstartdate, prevenddate}) {
+    static async lineGraph({TABLE_NAME, groupBykey = 'MONTH', startdate, enddate, x = 'x', y = 'y', statsDefinition = {}, prevstartdate, prevenddate, filters = {}}) {
         let query = ``
+        let wc = whereClause(filters);
         if(prevstartdate && prevenddate) {
-            query = `SELECT EXTRACT(${groupBykey} FROM created_at) ${groupBykey === 'dow' ? ' + 1' : ''} AS ${x}, ${statsDefinition["aggregate"]}(${statsDefinition["columnname"]}) AS ${y} FROM ${TABLE_NAME} ${WHERE_CLAUSE({startdate, enddate})} GROUP BY ${x} ORDER BY ${x};`
-            let query1 = `SELECT EXTRACT(${groupBykey} FROM created_at) ${groupBykey === 'dow' ? ' + 1' : ''} AS ${x}, ${statsDefinition["aggregate"]}(${statsDefinition["columnname"]}) AS ${y} FROM ${TABLE_NAME} ${WHERE_CLAUSE({startdate: prevstartdate, enddate: prevenddate})} GROUP BY ${x} ORDER BY ${x};`
+            let datequery = WHERE_CLAUSE({startdate, enddate})
+            if(datequery) wc = datequery + 'AND' + wc
+            else wc = 'WHERE ' + wc
+            query = `SELECT EXTRACT(${groupBykey} FROM created_at) ${groupBykey === 'dow' ? ' + 1' : ''} AS ${x}, ${statsDefinition["aggregate"]}(${statsDefinition["columnname"]}) AS ${y} FROM ${TABLE_NAME} ${wc} GROUP BY ${x} ORDER BY ${x};`
+            
+            datequery = WHERE_CLAUSE({startdate: prevstartdate, enddate: prevenddate})
+            if(datequery) wc = datequery + 'AND' + wc
+            else wc = 'WHERE ' + wc
+            let query1 = `SELECT EXTRACT(${groupBykey} FROM created_at) ${groupBykey === 'dow' ? ' + 1' : ''} AS ${x}, ${statsDefinition["aggregate"]}(${statsDefinition["columnname"]}) AS ${y} FROM ${TABLE_NAME} ${wc} GROUP BY ${x} ORDER BY ${x};`
             let response = {
                 current: abstractData(await PostgresqlDb.query(query)),
                 previous: abstractData(await PostgresqlDb.query(query1))
             }
             return response
         } else {
-            query = `SELECT EXTRACT(${groupBykey} FROM created_at) ${groupBykey === 'dow' ? ' + 1' : ''} AS ${x}, ${statsDefinition["aggregate"]}(${statsDefinition["columnname"]}) AS ${y} FROM ${TABLE_NAME} ${WHERE_CLAUSE({startdate, enddate})} GROUP BY ${x} ORDER BY ${x};`
+            let datequery = WHERE_CLAUSE({startdate, enddate})
+            if(datequery) wc = datequery + 'AND' + wc
+            else wc = 'WHERE ' + wc
+            query = `SELECT EXTRACT(${groupBykey} FROM created_at) ${groupBykey === 'dow' ? ' + 1' : ''} AS ${x}, ${statsDefinition["aggregate"]}(${statsDefinition["columnname"]}) AS ${y} FROM ${TABLE_NAME} ${wc} GROUP BY ${x} ORDER BY ${x};`
             let response = {
                 current: abstractData(await PostgresqlDb.query(query))
             }
@@ -97,18 +109,29 @@ class Dashboard {
         }
     }
 
-    static async barGraph({TABLE_NAME, groupBykey = 'MONTH', groupBykey2 = 'os', x = 'x', y = 'y', startdate, enddate, prevstartdate, prevenddate, statsDefinition = {}}) {
+    static async barGraph({TABLE_NAME, groupBykey = 'MONTH', groupBykey2 = 'os', x = 'x', y = 'y', startdate, enddate, prevstartdate, prevenddate, statsDefinition = {}, filters = {}}) {
         let query = ``
+        let wc = whereClause(filters);
         if(prevstartdate && prevenddate) {
-            query = `SELECT EXTRACT(${groupBykey} FROM created_at) AS ${x}, ${groupBykey2}, ${statsDefinition["aggregate"]}(${statsDefinition["columnname"]}) AS ${y} FROM ${TABLE_NAME} ${WHERE_CLAUSE({startdate, enddate})} GROUP BY ${x}, ${groupBykey2} ORDER BY ${x}, ${groupBykey2};`
-            let query1 = `SELECT EXTRACT(${groupBykey} FROM created_at) AS ${x}, ${groupBykey2}, ${statsDefinition["aggregate"]}(${statsDefinition["columnname"]}) AS ${y} FROM ${TABLE_NAME} ${WHERE_CLAUSE({startdate: prevstartdate, enddate: prevenddate})} GROUP BY ${x}, ${groupBykey2} ORDER BY ${x}, ${groupBykey2};`
+            let datequery = WHERE_CLAUSE({startdate, enddate})
+            if(datequery) wc = datequery + 'AND' + wc
+            else wc = 'WHERE ' + wc
+            query = `SELECT EXTRACT(${groupBykey} FROM created_at) AS ${x}, ${groupBykey2}, ${statsDefinition["aggregate"]}(${statsDefinition["columnname"]}) AS ${y} FROM ${TABLE_NAME} ${wc} GROUP BY ${x}, ${groupBykey2} ORDER BY ${x}, ${groupBykey2};`
+            
+            datequery = WHERE_CLAUSE({startdate: prevstartdate, enddate: prevenddate})
+            if(datequery) wc = datequery + 'AND' + wc
+            else wc = 'WHERE ' + wc
+            let query1 = `SELECT EXTRACT(${groupBykey} FROM created_at) AS ${x}, ${groupBykey2}, ${statsDefinition["aggregate"]}(${statsDefinition["columnname"]}) AS ${y} FROM ${TABLE_NAME} ${wc} GROUP BY ${x}, ${groupBykey2} ORDER BY ${x}, ${groupBykey2};`
             let response = {
                 current: abstractData(await PostgresqlDb.query(query)),
                 previous: abstractData(await PostgresqlDb.query(query1))
             }
             return response
         } else {
-            query = `SELECT EXTRACT(${groupBykey} FROM created_at) AS ${x}, ${groupBykey2}, ${statsDefinition["aggregate"]}(${statsDefinition["columnname"]}) AS ${y} FROM ${TABLE_NAME} ${WHERE_CLAUSE({startdate, enddate})} GROUP BY ${x}, ${groupBykey2} ORDER BY ${x}, ${groupBykey2};`
+            let datequery = WHERE_CLAUSE({startdate, enddate})
+            if(datequery) wc = datequery + 'AND' + wc
+            else wc = 'WHERE ' + wc
+            query = `SELECT EXTRACT(${groupBykey} FROM created_at) AS ${x}, ${groupBykey2}, ${statsDefinition["aggregate"]}(${statsDefinition["columnname"]}) AS ${y} FROM ${TABLE_NAME} ${wc} GROUP BY ${x}, ${groupBykey2} ORDER BY ${x}, ${groupBykey2};`
             let response = {
                 current: abstractData(await PostgresqlDb.query(query))
             }
@@ -116,9 +139,10 @@ class Dashboard {
         }
     }
 
-    static async pieChart({TABLE_NAME, columnname, startdate, enddate, statsDefinition = {}, orderByDirection = 'asc'}) {
+    static async pieChart({TABLE_NAME, columnname, statsDefinition = {}, orderByDirection = 'asc', filters = {}}) {
         let query = ``
-        query = `SELECT ${columnname}, ${statsDefinition["aggregate"]}(${statsDefinition["columnname"]}) AS ${statsDefinition["aggregate"]} FROM ${TABLE_NAME} ${WHERE_CLAUSE({startdate, enddate})} GROUP BY ${columnname} ORDER BY ${statsDefinition["aggregate"]} ${orderByDirection};`
+        let wc = whereClause(filters);
+        query = `SELECT ${columnname}, ${statsDefinition["aggregate"]}(${statsDefinition["columnname"]}) AS ${statsDefinition["aggregate"]} FROM ${TABLE_NAME} ${wc ? 'WHERE ' + wc : ''} GROUP BY ${columnname} ORDER BY ${statsDefinition["aggregate"]} ${orderByDirection};`
         // console.log(query)
         return abstractData(await PostgresqlDb.query(query));
     }
@@ -155,6 +179,7 @@ class Dashboard {
     }
 
     static async stats({TABLE_NAME = 'order333', limit = 10, skipRowby = 0, filters = {}, statsDefinition = []}) {
+        let wc = whereClause(filters);
         let query = `SELECT `
         for(let i = 0; i < statsDefinition.length; i++) {
             query += `${statsDefinition[i].aggregate}(${statsDefinition[i].columnname}) AS ${statsDefinition[i].alias}`
@@ -162,16 +187,17 @@ class Dashboard {
                 query += `, `
             }
         }
-        query += ` FROM ${TABLE_NAME} LIMIT ${limit} OFFSET ${skipRowby};`
+        query += ` FROM ${TABLE_NAME} ${wc ? 'WHERE ' + wc : ''} LIMIT ${limit} OFFSET ${skipRowby};`
         // console.log(query)
         return abstractData(await PostgresqlDb.query(query), "single");
     }
 
-    static async timeline({workspaceId, customerId}) {
+    static async timeline({workspaceId, filters = {}}) {
         let query1 = ``
-        query1 = `SELECT * FROM order${workspaceId} WHERE customer_id = ${customerId};`
+        let wc = whereClause(filters);
+        query1 = `SELECT * FROM order${workspaceId} ${wc ? 'WHERE ' + wc : ''};`
         let query2 = ``
-        query2 = `SELECT * FROM event${workspaceId} WHERE customer_id = ${customerId};`
+        query2 = `SELECT * FROM event${workspaceId} ${wc ? 'WHERE ' + wc : ''};`
         const data1 = abstractData(await PostgresqlDb.query(query1));
         const data2 = abstractData(await PostgresqlDb.query(query2));
         const data = [...data1, ...data2]

@@ -67,7 +67,7 @@ const getValues = ({ columnData, data }) => {
                     return `'{}'`
                 }
             } else if(col.dataType === 'jsonb[]') {
-                if(value[col.columnName].length) {
+                if(value[col.columnName] && value[col.columnName].length) {
                     let q = value[col.columnName].map(obj => {
                         let details = JSON.stringify(obj)
                         return `'${details}'`
@@ -89,7 +89,7 @@ const getValues = ({ columnData, data }) => {
 const getIds = (data, name) => {
     return `(${data.map((value) => {
         if(typeof value[name] === 'string'){
-            return `'${value.id}'`
+            return `'${value[name]}'`
         }
         // if(typeof value.id === '')
         return value[name]

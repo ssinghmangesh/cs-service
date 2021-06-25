@@ -118,4 +118,9 @@ router.post('/webhooks/:workspaceId/:event/:type',async (req, res) => {
     res.status(200).send("done")
 })
 
+router.post('/bg-webhooks/:workspaceId/:scope',async (req, res) => {
+    // console.log(req.body)
+    res.status(200).send("done")
+})
+
 module.exports = router

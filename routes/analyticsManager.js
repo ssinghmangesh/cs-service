@@ -22,7 +22,7 @@ router.post('/analytics-manager/sum', async (req, res) => {
     const details = req.body
     const { 'x-workspace-id': workspaceId } = req.headers
     let table = `${details.table}${workspaceId}`
-    let response = await Dashboard.sum({TABLE_NAME: table, columnname: details.columnname, startdate: details.startdate, enddate: details.enddate})
+    let response = await Dashboard.sum({TABLE_NAME: table, columnname: details.columnname, startdate: details.startdate, enddate: details.enddate, filters: details.filters })
     // console.log(response)
     res.status(200).send( { status: true, message: "successful", data: response } )
 })
@@ -31,7 +31,7 @@ router.post('/analytics-manager/line-graph', async (req, res) => {
     const details = req.body
     const { 'x-workspace-id': workspaceId } = req.headers
     let table = `${details.table}${workspaceId}`
-    let response = await Dashboard.lineGraph({TABLE_NAME: table, groupBykey: details.groupBykey, startdate: details.startdate, enddate: details.enddate, statsDefinition: details.statsDefinition, prevstartdate: details.prevstartdate, prevenddate: details.prevenddate})
+    let response = await Dashboard.lineGraph({TABLE_NAME: table, groupBykey: details.groupBykey, startdate: details.startdate, enddate: details.enddate, statsDefinition: details.statsDefinition, prevstartdate: details.prevstartdate, prevenddate: details.prevenddate, filters: details.filters })
     // console.log(response)
     res.status(200).send( { status: true, message: "successful", data: response } )
 })
@@ -40,7 +40,7 @@ router.post('/analytics-manager/bar-graph', async (req, res) => {
     const details = req.body
     const { 'x-workspace-id': workspaceId } = req.headers
     let table = `${details.table}${workspaceId}`
-    let response = await Dashboard.barGraph({TABLE_NAME: table, columnname: details.columnname, groupBykey: details.groupBykey, groupBykey2: details.groupBykey2, startdate: details.startdate, enddate: details.enddate, statsDefinition: details.statsDefinition, prevstartdate: details.prevstartdate, prevenddate: details.prevenddate})
+    let response = await Dashboard.barGraph({TABLE_NAME: table, columnname: details.columnname, groupBykey: details.groupBykey, groupBykey2: details.groupBykey2, startdate: details.startdate, enddate: details.enddate, statsDefinition: details.statsDefinition, prevstartdate: details.prevstartdate, prevenddate: details.prevenddate, filters: details.filters })
     // console.log(response)
     res.status(200).send( { status: true, message: "successful", data: response } )
 })
@@ -49,7 +49,7 @@ router.post('/analytics-manager/pie-chart', async (req, res) => {
     const details = req.body
     const { 'x-workspace-id': workspaceId } = req.headers
     let table = `${details.table}${workspaceId}`
-    let response = await Dashboard.pieChart({TABLE_NAME: table, columnname: details.columnname, startdate: details.startdate, enddate: details.enddate, statsDefinition: details.statsDefinition, orderByDirection: details.orderByDirection})
+    let response = await Dashboard.pieChart({TABLE_NAME: table, columnname: details.columnname, startdate: details.startdate, enddate: details.enddate, statsDefinition: details.statsDefinition, orderByDirection: details.orderByDirection, filters: details.filters })
     // console.log(response)
     res.status(200).send( { status: true, message: "successful", data: response } )
 })
@@ -77,14 +77,14 @@ router.post('/analytics-manager/stats', async (req, res) => {
     const details = req.body
     const { 'x-workspace-id': workspaceId } = req.headers
     let table = `${details.table}${workspaceId}`
-    let response = await Dashboard.stats({TABLE_NAME: table, limit: details.limit, skipRowby: details.skipRowby, statsDefinition: details.statsDefinition})
+    let response = await Dashboard.stats({TABLE_NAME: table, limit: details.limit, skipRowby: details.skipRowby, statsDefinition: details.statsDefinition, filters: details.filters })
     res.status(200).send( { status: true, message: "successful", data: response } )
 })
 
 router.post('/analytics-manager/timeline', async (req, res) => {
     const details = req.body
     const { 'x-workspace-id': workspaceId } = req.headers
-    let response = await Dashboard.timeline({workspaceId: workspaceId, customerId: details.customerId})
+    let response = await Dashboard.timeline({workspaceId: workspaceId, filters: details.filters })
     // console.log(response)
     res.status(200).send( { status: true, message: "successful", data: response } )
 })
