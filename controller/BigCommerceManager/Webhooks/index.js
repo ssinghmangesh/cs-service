@@ -35,8 +35,8 @@ const {
 } = require("../../DataManager/helper");
 
 const createWebhooks = async (shopName, accessToken, storeHash, workspaceId) => {
-    console.log(webhooks.length);
-    for(let i=0;i<1;i++) {
+    // console.log(webhooks.length);
+    for(let i=0;i<webhooks.length;i++) {
         const { scope } = webhooks[i];
         console.log(scope)
         let array = scope.split('/')
@@ -59,6 +59,7 @@ const createWebhooks = async (shopName, accessToken, storeHash, workspaceId) => 
                 "is_active": true
               }
             })
+            console.log(res)
         }catch(err){
           console.log(err.response.data)
         }
