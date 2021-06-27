@@ -80,8 +80,15 @@ const bgUpdate = async (options, details) => {
         //     }
         //     break
         case 'customer':
-            const data = await getCustomer(details.data.id)
-            // console.log('@@@@@@@@@@', data)
+            let data = {}
+            if(options.type === "deleted") {
+              data = {
+                id: details.data.id
+              }
+            }
+            else {
+              data = await getCustomer(details.data.id)
+            }
             await updateTable(CUSTOMER_TABLE_NAME, customerColumns, [data], options.workspaceId, options.type);
             break
         // case 'order':
