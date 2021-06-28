@@ -85,7 +85,9 @@ const bgUpdate = async (params, body) => {
             else {
               data = await getCustomer(params, body)
             }
-            await updateTable(CUSTOMER_TABLE_NAME, customerColumns, [data], params.workspaceId, params.type);
+            if(data) {
+              await updateTable(CUSTOMER_TABLE_NAME, customerColumns, [data], params.workspaceId, params.type);
+            }
             break
         // case 'order':
         //     if(params["subevent"]) {

@@ -10,6 +10,7 @@ const updateEvent = async (data, workspaceId) => {
 }
 
 const updateTable = async (TABLE_NAME, column, data, workspaceId, type) => {
+    console.log('data: ', data)
     switch(type) {
         case 'created':
             await del(TABLE_NAME, data, workspaceId)
