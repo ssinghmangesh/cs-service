@@ -30,8 +30,8 @@ const updateTable = async (TABLE_NAME, column, data, workspaceId, type) => {
     }
 }
 
-const getCustomer = async (params, body) => {
-    const fetchedWorkspace = await fetchWorkspace({ workspace_id: Number(body.data.store_id) })
+const getCustomer = async (body) => {
+    const fetchedWorkspace = await fetchWorkspace({ workspace_id: Number(body.store_id) })
     console.log(fetchedWorkspace)
     let customers = [], page = 1, limit = 50
     while(1) {

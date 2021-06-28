@@ -86,7 +86,7 @@ const bgUpdate = async (params, body) => {
               data = await getCustomer(params, body)
             }
             if(data) {
-              await updateTable(CUSTOMER_TABLE_NAME, customerColumns, [data], body.data.store_id, params.type);
+              await updateTable(CUSTOMER_TABLE_NAME, customerColumns, [data], Number(body.store_id), params.type);
             }
             break
         // case 'order':
