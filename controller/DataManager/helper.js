@@ -38,7 +38,7 @@ const getValues = ({ columnData, data }) => {
                     return `0`
                 }
             } else if(col.dataType === 'numeric[]') {
-                if(value[col.columnName].length) {
+                if(value[col.columnName] && value[col.columnName].length) {
                     let q = value[col.columnName].map(num => {
                         return `${num}`
                     }).join(", ")
@@ -67,7 +67,7 @@ const getValues = ({ columnData, data }) => {
                     return `'{}'`
                 }
             } else if(col.dataType === 'jsonb[]') {
-                if(value[col.columnName].length) {
+                if(value[col.columnName] && value[col.columnName].length) {
                     let q = value[col.columnName].map(obj => {
                         let details = JSON.stringify(obj)
                         return `'${details}'`
