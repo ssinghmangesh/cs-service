@@ -1,6 +1,7 @@
 const {del, insert} = require("../../DataManager/index");
 const { EVENT_TABLE_NAME } = require("../../DataManager/helper");
 const eventColumn = require("../../DataManager/Setup/eventColumns.json");
+const { fetchWorkspace } = require('../../UserManager/workspace')
 const axios = require('axios');
 
 const updateEvent = async (data, workspaceId) => {

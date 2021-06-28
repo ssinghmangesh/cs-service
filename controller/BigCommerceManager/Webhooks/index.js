@@ -1,7 +1,6 @@
 const axios = require("axios")
 const webhooks = require('./webhooks.json');
 const { updateTable, getCustomer } = require('./helper');
-const { fetchWorkspace } = require('../../UserManager/workspace')
 
 const orderColumns = require('../../DataManager/Setup/orderColumns.json')
 const customerColumns = require('../../DataManager/Setup/customerColumns')
