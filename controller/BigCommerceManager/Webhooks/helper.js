@@ -29,8 +29,8 @@ const updateTable = async (TABLE_NAME, column, data, workspaceId, type) => {
     }
 }
 
-const getCustomer = async (options, id) => {
-    const fetchedWorkspace = await fetchWorkspace({ workspace_id: Number(options.workspaceId) })
+const getCustomer = async (details) => {
+    const fetchedWorkspace = await fetchWorkspace({ workspace_id: Number(details.store_id) })
     // console.log('id: ', id)
     // const fetchedWorkspace = {
     //     Item: {
@@ -56,7 +56,7 @@ const getCustomer = async (options, id) => {
             break;
         }
         for(let i = 0; i < customers.length; i++) {
-            if(customers[i].id === id) {
+            if(customers[i].id === details.data.id) {
                 return customers[i]
             }
         }
