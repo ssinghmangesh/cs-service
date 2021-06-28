@@ -66,45 +66,42 @@ const createWebhooks = async (shopName, accessToken, storeHash, workspaceId) => 
     }
 }
 
-const bgUpdate = async (options, details) => {
-    // console.log(options, options.event)
-    // if(options["subevent"]) console.log('!!!!!!!!!!', options["subevent"])
-    // console.log('######', options)
-    switch(options.event) {
+const bgUpdate = async (params, body) => {
+    switch(params.event) {
         // case 'cart':
-        //     if(options["subevent"]) {
-        //       await updateTable(CARTLINEITEMS_TABLE_NAME, cartLineItemsColumns, data.line_items, workspaceId, options.type);
+        //     if(params["subevent"]) {
+        //       await updateTable(CARTLINEITEMS_TABLE_NAME, cartLineItemsColumns, data.line_items, workspaceId, params.type);
         //     } else {
-        //       await updateTable(CART_TABLE_NAME, cartColumns, [data], workspaceId, options.type);
+        //       await updateTable(CART_TABLE_NAME, cartColumns, [data], workspaceId, params.type);
         //     }
         //     break
         case 'customer':
             let data = {}
-            if(options.type === "deleted") {
+            if(params.type === "deleted") {
               data = {
-                id: details.data.id
+                id: body.data.id
               }
             }
             else {
-              data = await getCustomer(details)
+              data = await getCustomer(params, body)
             }
-            await updateTable(CUSTOMER_TABLE_NAME, customerColumns, [data], options.workspaceId, options.type);
+            await updateTable(CUSTOMER_TABLE_NAME, customerColumns, [data], params.workspaceId, params.type);
             break
         // case 'order':
-        //     if(options["subevent"]) {
-        //       await updateTable(REFUNDED_TABLE_NAME, refundedColumns, data.refunds, workspaceId, options.type);
+        //     if(params["subevent"]) {
+        //       await updateTable(REFUNDED_TABLE_NAME, refundedColumns, data.refunds, workspaceId, params.type);
         //     } else {
-        //       await updateTable(ORDER_TABLE_NAME, orderColumns, [data], workspaceId, options.type);
+        //       await updateTable(ORDER_TABLE_NAME, orderColumns, [data], workspaceId, params.type);
         //     }
-        //     // await updateTable(FULFILLMENT_TABLE_NAME, fulfillmentsColumns, data.fulfillments, workspaceId, options.type);
-        //     // await updateTable(DISCOUNTAPPLICATION_TABLE_NAME, discountApplicationsColumns, data.discount_applications, workspaceId, options.type);
-        //     // await updateTable(LINEITEMS_TABLE_NAME, lineItemsColumns, data.line_items, workspaceId, options.type);
-        //     // await updateTable(TAX_TABLE_NAME, taxColumns, data.tax_lines, workspaceId, options.type);
-        //     // await updateTable(REFUNDED_TABLE_NAME, refundedColumns, [data], workspaceId, options.type);
+        //     // await updateTable(FULFILLMENT_TABLE_NAME, fulfillmentsColumns, data.fulfillments, workspaceId, params.type);
+        //     // await updateTable(DISCOUNTAPPLICATION_TABLE_NAME, discountApplicationsColumns, data.discount_applications, workspaceId, params.type);
+        //     // await updateTable(LINEITEMS_TABLE_NAME, lineItemsColumns, data.line_items, workspaceId, params.type);
+        //     // await updateTable(TAX_TABLE_NAME, taxColumns, data.tax_lines, workspaceId, params.type);
+        //     // await updateTable(REFUNDED_TABLE_NAME, refundedColumns, [data], workspaceId, params.type);
         //     break
         // case 'product':
-        //     await updateTable(PRODUCT_TABLE_NAME, productColumns, [data], workspaceId, options.type);
-        //     await updateTable(VARIANT_TABLE_NAME, variantsColumns, data.variants, workspaceId, options.type);
+        //     await updateTable(PRODUCT_TABLE_NAME, productColumns, [data], workspaceId, params.type);
+        //     await updateTable(VARIANT_TABLE_NAME, variantsColumns, data.variants, workspaceId, params.type);
         //     break
         default:
             break
