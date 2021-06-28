@@ -1,0 +1,88 @@
+[
+    {
+        "event": "cart",
+        "scope": "store/cart/created",
+        "type": "created"
+    },
+    {
+        "event": "cart",
+        "scope": "store/cart/updated",
+        "type": "updated"
+    },
+    {
+        "event": "cart",
+        "scope": "store/cart/deleted",
+        "type": "deleted"
+    },
+    {
+        "event": "cart_lineItem",
+        "scope": "store/cart/lineItem/created",
+        "type": "created"
+    },
+    {
+        "event": "cart_lineItem",
+        "scope": "store/cart/lineItem/updated",
+        "type": "updated"
+    },
+    {
+        "event": "cart_lineItem",
+        "scope": "store/cart/lineItem/deleted",
+        "type": "deleted"
+    },
+    {
+        "event": "customer",
+        "scope": "store/customer/created",
+        "type": "created"
+    },
+    {
+        "event": "customer",
+        "scope": "store/customer/updated",
+        "type": "updated"
+    },
+    {
+        "event": "customer",
+        "scope": "store/customer/deleted",
+        "type": "deleted"
+    },
+    {
+        "event": "product",
+        "scope": "store/product/created",
+        "type": "created"
+    },
+    {
+        "event": "product",
+        "scope": "store/product/updated",
+        "type": "updated"
+    },
+    {
+        "event": "product",
+        "scope": "store/product/deleted",
+        "type": "deleted"
+    },
+    {
+        "event": "order_refund",
+        "scope": "store/order/refund/created",
+        "type": "created"
+    },
+    {
+        "event": "order",
+        "scope": "store/order/created",
+        "type": "created"
+    },
+    {
+        "event": "order",
+        "scope": "store/order/updated",
+        "type": "updated"
+    },
+    {
+        "event": "order",
+        "scope": "store/order/statusUpdated",
+        "type": "statusUpdated"
+    },
+    {
+        "event": "order",
+        "scope": "store/order/archived",
+        "type": "archived"
+    }
+]
+  
