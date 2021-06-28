@@ -59,6 +59,7 @@ const fetch = async (params) => {
         return await docClient.get(params).promise()
     }
     catch(err){
+        console.log(err);
         return err.message
     }
 }

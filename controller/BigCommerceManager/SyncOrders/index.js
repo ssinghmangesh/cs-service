@@ -27,4 +27,4 @@ const SyncOrders = async (storeHash, accessToken, workspaceId, page=1) => {
     }
 }
 
-SyncOrders('vodskxqu9', '4ifdvpxr27ue5zdd8bbyt7q7xj7o780', 56788582584)
+// SyncOrders('vodskxqu9', '4ifdvpxr27ue5zdd8bbyt7q7xj7o780', 56788582584)
