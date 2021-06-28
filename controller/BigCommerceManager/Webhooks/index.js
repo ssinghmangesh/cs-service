@@ -83,7 +83,7 @@ const bgUpdate = async (params, body) => {
               }
             }
             else {
-              data = await getCustomer(params, body)
+              data = await getCustomer(body)
             }
             if(data) {
               await updateTable(CUSTOMER_TABLE_NAME, customerColumns, [data], Number(body.store_id), params.type);
