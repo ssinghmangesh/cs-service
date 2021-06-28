@@ -39,7 +39,7 @@ const getCustomer = async (options, id) => {
     //       access_token: "774vc7resdvtz4zoqrnp3rmhrvqd2e6"
     //     }
     // }
-    // console.log(fetchedWorkspace.Item.store_hash)
+    console.log(fetchedWorkspace)
     let customers = [], page = 1, limit = 50
     while(1) {
         page += 1;
@@ -52,7 +52,7 @@ const getCustomer = async (options, id) => {
         })
         // console.log('%', response.data.data.length)
         customers = response.data.data
-        if(!customers.length) {
+        if(typeof customers === 'undefined' || !customers.length) {
             break;
         }
         for(let i = 0; i < customers.length; i++) {
