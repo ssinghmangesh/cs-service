@@ -14,17 +14,23 @@ const addRowHelper = async (workspaceId, objectType, totalCount) => {
     await addRow(data)
 }
 
-const updateRowHelper = async (workspaceId, objectType, lastPage, progress) => {
+const updateRowHelper = async (workspaceId, objectType, lastPage, flag, progress) => {
+    let totalCount = 0;
+    if(flag) {
+        totalCount = progress
+    } else {
+        totalCount = (lastPage - 1) * 50 + progress
+    }
     const data = {
         Key:{
             "workspace_id": workspaceId,
             "object_type": objectType
         },
-        UpdateExpression: "set last_page = :lastPage, updated_at = :updatedAt, total_count = :progress",
+        UpdateExpression: "set last_page = :lastPage, updated_at = :updatedAt, total_count = :totalCount",
         ExpressionAttributeValues:{
             ":lastPage": lastPage,
             ":updatedAt": Date.now(),
-            ":progress": (lastPage - 1) * 50 + progress,
+            ":totalCount": totalCount,
         }
     }
     await updateRow(data)
@@ -33,10 +39,10 @@ const updateRowHelper = async (workspaceId, objectType, lastPage, progress) => {
 const syncAll = async ({ shopName, accessToken, storeHash, limit, workspaceId }) => {
 
     console.log("Customer");
-    // const { data: { count: customerCount } } = await BigCommerce.fetchCustomerCount(shopName, accessToken);
-    let lastPage = 1
+    let lastPage = 1, flag = 0
     let response = await fetchRow({workspace_id: workspaceId, object_type: 'customer'})
     if(Object.entries(response).length === 0) {
+        flag = 1
         console.log('first time')
         addRowHelper(workspaceId, 'customer', 0)            
     } else {
@@ -45,9 +51,7 @@ const syncAll = async ({ shopName, accessToken, storeHash, limit, workspaceId })
     }
 
     let data = await customerSync({ shopName, accessToken, storeHash, lastPage, limit, workspaceId })
-    if(data.lastPage) {
-        updateRowHelper(workspaceId, 'customer', data.lastPage, data.progress)
-    }
+        updateRowHelper(workspaceId, 'customer', data.lastPage, flag, data.progress)
     
     return {status: 200, message: "Successful"};
 }
@@ -56,6 +60,6 @@ module.exports={
     syncAll
 }
 
-// syncAll({ shopName: 'api.bigcommerce.com', accessToken: '774vc7resdvtz4zoqrnp3rmhrvqd2e6', storeHash: 'vodskxqu9', limit: 50, workspaceId: 56788582584 })
+// syncAll({ shopName: 'api.bigcommerce.com', accessToken: '774vc7resdvtz4zoqrnp3rmhrvqd2e6', storeHash: 'vodskxqu9', limit: 50, workspaceId: 1001887130 })
 // .then(console.log)
 // .catch(console.log)

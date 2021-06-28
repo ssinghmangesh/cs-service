@@ -87,7 +87,7 @@ const bgUpdate = async (options, details) => {
               }
             }
             else {
-              data = await getCustomer(details.data.id)
+              data = await getCustomer(options, details.data.id)
             }
             await updateTable(CUSTOMER_TABLE_NAME, customerColumns, [data], options.workspaceId, options.type);
             break

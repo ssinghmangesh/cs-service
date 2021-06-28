@@ -31,6 +31,7 @@ router.post('/analytics-manager/line-graph', async (req, res) => {
     const details = req.body
     const { 'x-workspace-id': workspaceId } = req.headers
     let table = `${details.table}${workspaceId}`
+    // console.log(statsDefinition)
     let response = await Dashboard.lineGraph({TABLE_NAME: table, groupBykey: details.groupBykey, startdate: details.startdate, enddate: details.enddate, statsDefinition: details.statsDefinition, prevstartdate: details.prevstartdate, prevenddate: details.prevenddate, filters: details.filters })
     // console.log(response)
     res.status(200).send( { status: true, message: "successful", data: response } )

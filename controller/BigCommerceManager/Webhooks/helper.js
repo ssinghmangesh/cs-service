@@ -28,16 +28,16 @@ const updateTable = async (TABLE_NAME, column, data, workspaceId, type) => {
     }
 }
 
-const getCustomer = async (id) => {
-    // const fetchedWorkspace = await fetchWorkspace({ workspace_id: Number(options.workspaceId) })
+const getCustomer = async (options, id) => {
+    const fetchedWorkspace = await fetchWorkspace({ workspace_id: Number(options.workspaceId) })
     // console.log('id: ', id)
-    const fetchedWorkspace = {
-        Item: {
-          shop_name: "api.bigcommerce.com",
-          store_hash: "vodskxqu9",
-          access_token: "774vc7resdvtz4zoqrnp3rmhrvqd2e6"
-        }
-    }
+    // const fetchedWorkspace = {
+    //     Item: {
+    //       shop_name: "api.bigcommerce.com",
+    //       store_hash: "vodskxqu9",
+    //       access_token: "774vc7resdvtz4zoqrnp3rmhrvqd2e6"
+    //     }
+    // }
     // console.log(fetchedWorkspace.Item.store_hash)
     let customers = [], page = 1, limit = 50
     while(1) {

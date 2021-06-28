@@ -11,26 +11,26 @@ class BigCommerce {
         })
     }
 
-    static fetchTrackingScript(shopName, accessToken, storeHash, workspaceId) {
-        return axios({
-            method: 'POST',
-            url: `https://${shopName}/stores/${storeHash}/v3/content/scripts`,
-            headers: {
-                'X-Auth-Token': accessToken,
-            },
-            data: {
-                "name": "TrackingScript",
-                "description": "Build responsive websites",
-                "src": `https://cdn.jsdelivr.net/gh/ssinghmangesh/cs-service@latest/controller/tracking.js?workspaceid=${workspaceId}`,
-                "auto_uninstall": true,
-                "load_method": "default",
-                "location": "footer",
-                "visibility": "all_pages",
-                "kind": "src",
-                "consent_category": "essential"
-            }
-        })
-    }
+    // static fetchTrackingScript(shopName, accessToken, storeHash, workspaceId) {
+    //     return axios({
+    //         method: 'POST',
+    //         url: `https://${shopName}/stores/${storeHash}/v3/content/scripts`,
+    //         headers: {
+    //             'X-Auth-Token': accessToken,
+    //         },
+    //         data: {
+    //             "name": "TrackingScript",
+    //             "description": "Build responsive websites",
+    //             "src": `https://cdn.jsdelivr.net/gh/ssinghmangesh/cs-service@latest/controller/tracking.js?workspaceid=${workspaceId}`,
+    //             "auto_uninstall": true,
+    //             "load_method": "default",
+    //             "location": "footer",
+    //             "visibility": "all_pages",
+    //             "kind": "src",
+    //             "consent_category": "essential"
+    //         }
+    //     })
+    // }
 
     // static addSocket(shopName, accessToken, storeHash) {
     //     return axios({

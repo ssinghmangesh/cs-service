@@ -23,5 +23,13 @@
     {
         "columnName":"created_at",
         "dataType": "timestamptz"
+    },
+    {
+        "columnName":"product_id",
+        "dataType": "numeric[]"
+    },
+    {
+        "columnName":"variant_id",
+        "dataType": "numeric[]"
     }
 ]
