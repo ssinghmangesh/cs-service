@@ -16,15 +16,38 @@ const refundedColumns = require("../../DataManager/Setup/refundedColumns.json");
 const taxColumns = require("../../DataManager/Setup/taxColumns.json");
 const discountApplicationsColumns = require("../../DataManager/Setup/discountApplicationsColumns.json");
 
-const SyncOrders = async (storeHash, accessToken, workspaceId, page=1) => {
-    const res = await BigCommerce.fetchOrder(storeHash, accessToken, { page: page })
-    const orders = res.data.map(order => transformOrder(order))
-    // console.log(orders);
+const SYNC = async ({accessToken, storeHash, lastPage = 1, limit = 50, workspaceId, progress = 0 }) => {
+    //orders sync
+    const response = await BigCommerce.fetchOrder(storeHash, accessToken, { page: lastPage })
+    const orders = response.data.map(order => transformOrder(order))
+    
     await del(ORDER_TABLE_NAME, orders, workspaceId);
     await insert(ORDER_TABLE_NAME, orderColumns, orders, workspaceId);
-    if(orders.length === 50){
-        await SyncOrders(storeHash, accessToken, workspaceId, page + 1);
+
+    //line_items sync
+    let promises = []
+    orders.map(order => promises.push(BigCommerce.fetchLineItems(storeHash, accessToken, {order_id: order.id})))
+    const responses = await Promise.all(promises);
+    let line_items = []
+    responses.map(res => {
+        line_items = line_items.concat(res.data)
+    })
+    
+    await del(LINEITEMS_TABLE_NAME, line_items, workspaceId);
+    await insert(LINEITEMS_TABLE_NAME, lineitemsColumns, line_items, workspaceId);
+
+    if(response.data.length < limit) {
+        progress += response.data.length
+        // socket.emit("sync", `${progress} of ${count} done`)
+        console.log(`${progress} done`);
+        return { lastPage: lastPage, progress: progress }
+    } else {
+        //call next page
+        progress += response.data.length
+        // socket.emit("sync", `${progress} of ${count} done`)
+        console.log(`${progress} done`);
+        return await SYNC({accessToken, storeHash, lastPage: lastPage + 1, limit, workspaceId, progress })
     }
 }
 
-// SyncOrders('vodskxqu9', '4ifdvpxr27ue5zdd8bbyt7q7xj7o780', 56788582584)
+SYNC({storeHash: 'vodskxqu9',accessToken: '4ifdvpxr27ue5zdd8bbyt7q7xj7o780', workspaceId: 1001887130})
