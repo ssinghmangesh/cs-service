@@ -115,8 +115,8 @@ router.get('/data-manager/checkout/delete',async (req, res) => {
 })
 
 router.post('/webhooks/:workspaceId/:event/:type',async (req, res) => {
-    await update(req.params, req.body);
-    res.status(200).send("done")
+    const response = await update(req.params, req.body);
+    res.status(response.statusCode).send(response)
 })
 
 router.post('/bg-webhooks/:workspaceId/:store/:event/:type',async (req, res) => {

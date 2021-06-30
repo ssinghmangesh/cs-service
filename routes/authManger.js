@@ -99,11 +99,15 @@ router.post('/auth-manager/login', async (req, res) => {
         "user_id": userId
     }
     const { Item: user } = await fetchUser(data);
+    if(!user) {
+        res.status(404).send('Email not Found')
+        return;
+    }
     if (user.password === password){
         delete user.password
         res.status(200).send(user);
     } else {
-        res.status(403).send();
+        res.status(403).send('Incorrect Password');
     }
 })
 

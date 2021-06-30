@@ -37,11 +37,11 @@ const updateRowHelper = async (workspaceId, objectType, lastObjectId) => {
     await updateRow(data)
 }
 
-const syncAll = async ({ shopName, accessToken, limit, workspaceId }) => {
+const syncAll = async ({ shopName, accessToken, limit = 50, workspaceId, table = null }) => {
 
     console.log("Order")
     const { data: { count: orderCount } } = await Shopify.fetchOrderCount(shopName, accessToken);
-    if(orderCount) {
+    if(orderCount && (!table || table === 'order')) {
         let orderSinceId = 0
         let response = await fetchRow({workspace_id: workspaceId, object_type: 'order'})
         if(Object.entries(response).length === 0) {
@@ -59,7 +59,7 @@ const syncAll = async ({ shopName, accessToken, limit, workspaceId }) => {
 
     console.log("product")
     const { data: {count: productCount } } = await Shopify.fetchProductCount(shopName, accessToken);
-    if(productCount) {
+    if(productCount && (!table || table === 'product')) {
         let productSinceId = 0
         let response = await fetchRow({workspace_id: workspaceId, object_type: 'product'})
         if(Object.entries(response).length === 0) {
@@ -77,7 +77,7 @@ const syncAll = async ({ shopName, accessToken, limit, workspaceId }) => {
     
     console.log("discount")
     const { data: { count: discountCount } } = await Shopify.fetchDiscountCount(shopName, accessToken);
-    if(discountCount) {
+    if(discountCount && (!table || table === 'discount')) {
         let discountSinceId = 0
         let response = await fetchRow({workspace_id: workspaceId, object_type: 'discount'})
         if(Object.entries(response).length === 0) {
@@ -95,7 +95,7 @@ const syncAll = async ({ shopName, accessToken, limit, workspaceId }) => {
 
     console.log("cart")
     const { data: { count: cartCount } } = await Shopify.fetchCartCount(shopName, accessToken);
-    if(cartCount) {
+    if(cartCount && (!table || table === 'cart')) {
         let cartSinceId = 0
         let response = await fetchRow({workspace_id: workspaceId, object_type: 'cart'})
         if(Object.entries(response).length === 0) {
@@ -113,7 +113,7 @@ const syncAll = async ({ shopName, accessToken, limit, workspaceId }) => {
 
     console.log("draftOrder")
     const { data: { count: draftOrderCount } } = await Shopify.fetchDraftOrderCount(shopName, accessToken);
-    if(draftOrderCount) {
+    if(draftOrderCount && (!table || table === 'draftorder')) {
         let draftOrderSinceId = 0
         let response = await fetchRow({workspace_id: workspaceId, object_type: 'draftorder'})
         if(Object.entries(response).length === 0) {
@@ -142,7 +142,7 @@ const syncAll = async ({ shopName, accessToken, limit, workspaceId }) => {
     console.log("location")
     /****************** sinceId not used in location ****************/
     const { data: { count: locationCount } } = await Shopify.fetchLocationCount(shopName, accessToken);
-    if(locationCount) {
+    if(locationCount && (!table || table === 'location')) {
         let locationSinceId = 0
         let response = await fetchRow({workspace_id: workspaceId, object_type: 'location'})
         if(Object.entries(response).length === 0) {
@@ -160,7 +160,7 @@ const syncAll = async ({ shopName, accessToken, limit, workspaceId }) => {
 
     console.log("Customer");
     const { data: { count: customerCount } } = await Shopify.fetchCustomerCount(shopName, accessToken);
-    if(customerCount) {
+    if(customerCount && (!table || table === 'customer')) {
         let customerSinceId = 0
         let response = await fetchRow({workspace_id: workspaceId, object_type: 'customer'})
         if(Object.entries(response).length === 0) {
@@ -183,6 +183,6 @@ module.exports={
     syncAll
 }
 
-// syncAll({ shopName: 'indian-dress-cart.myshopify.com', accessToken: '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',  limit: 50, workspaceId: 56788582584 })
+// syncAll({ shopName: 'indian-dress-cart.myshopify.com', accessToken: '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',  limit: 50, workspaceId: 56788582584, table: 'order' })
 // .then(console.log)
 // .catch(console.log)
