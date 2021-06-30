@@ -80,6 +80,7 @@ const update = async ({ workspaceId, event, type}, data) => {
             await updateTable(FULFILLMENT_TABLE_NAME, fulfillmentsColumns, [data], workspaceId, type);
             break
         case 'orders':
+            console.log('orders data: ', data)
             await updateTable(ORDER_TABLE_NAME, orderColumns, [data], workspaceId, type);
             await updateTable(FULFILLMENT_TABLE_NAME, fulfillmentsColumns, data.fulfillments, workspaceId, type);
             await updateTable(REFUNDED_TABLE_NAME, refundedColumns, data.refunds, workspaceId, type);
