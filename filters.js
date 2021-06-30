@@ -77,7 +77,7 @@ let filters1 = {
     "relation": "AND",
     conditions: [{
         type: "CUSTOMER",
-        columnName: "first_name",
+        columnName: "name",
         filterType: "contains",
         dataType: "varchar",
         values: ["a"]
@@ -223,19 +223,47 @@ const typeBuild = (ptype, workspaceId, { columnName, filterType, dataType, value
         }
     } else if (dataType === 'varchar') {
         if (filterType === 'equal_to') {
-            query = `${prefix} (${columnName} = '${values[0]}')`
+            if(columnName === 'name') {
+                query = `${prefix} (CONCAT(first_name, ' ', last_name) = '${values[0]}')`
+            } else {
+                query = `${prefix} (${columnName} = '${values[0]}')`
+            }
         } else if (filterType === 'not_equal_to') {
-            query = `${prefix} (${columnName} != '${values[0]}')`
+            if(columnName === 'name') {
+                query = `${prefix} (CONCAT(first_name, ' ', last_name) != '${values[0]}')`
+            } else {
+                query = `${prefix} (${columnName} != '${values[0]}')`
+            }
         } else if (filterType === 'starts_with') {
-            query = `${prefix} (${columnName} like '${values[0]}%')`
+            if(columnName === 'name') {
+                query = `${prefix} (CONCAT(first_name, ' ', last_name) like '${values[0]}%')`
+            } else {
+                query = `${prefix} (${columnName} like '${values[0]}%')`
+            }
         } else if (filterType === 'ends_with') {
-            query = `${prefix} (${columnName} like '%${values[0]}')`
+            if(columnName === 'name') {
+                query = `${prefix} (CONCAT(first_name, ' ', last_name) like '%${values[0]}')`
+            } else {
+                query = `${prefix} (${columnName} like '%${values[0]}')`
+            }
         } else if (filterType === 'contains') {
-            query = `${prefix} (${columnName} like '%${values[0]}%')`
+            if(columnName === 'name') {
+                query = `${prefix} (CONCAT(first_name, ' ', last_name) like '%${values[0]}%')`
+            } else {
+                query = `${prefix} (${columnName} like '%${values[0]}%')`
+            }
         } else if (filterType === 'is_known' ) {
-            query = `${prefix} (${columnName} IS NOT NULL)`
+            if(columnName === 'name') {
+                query = `${prefix} (LENGTH(CONCAT(first_name, ' ', last_name)) > 1)`
+            } else {
+                query = `${prefix} (LENGTH(${columnName}) > 0)`
+            }
         } else if (filterType === 'is_unknown') {
-            query = `${prefix} (${columnName} IS NULL)`
+            if(columnName === 'name') {
+                query = `${prefix} (LENGTH(CONCAT(first_name, ' ', last_name)) = 1)`
+            } else {
+                query = `${prefix} (LENGTH(${columnName}) = 0)`
+            }
         } else if (filterType === 'in') {
             let newvalues = values.map(str => {
                 return `'${str}'`
