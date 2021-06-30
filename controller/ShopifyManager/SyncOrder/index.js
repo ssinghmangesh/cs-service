@@ -138,7 +138,7 @@ const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0 , workspaceI
     //call next batch
     if(response.data.orders.length < limit) {
         progress += response.data.orders.length
-        socket.emit("sync", `${progress} of ${count} done`)
+        socket.emit("sync", workspaceId, 'orders', `${progress} of ${count} done`)
         console.log(`${progress} of ${count} done`);
         if(response.data.orders.length) {
             return response.data.orders[response.data.orders.length - 1].id
@@ -146,7 +146,7 @@ const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0 , workspaceI
     } else {
         //call next since id
         progress += response.data.orders.length
-        socket.emit("sync", `${progress} of ${count} done`)
+        socket.emit("sync", workspaceId, 'orders', `${progress} of ${count} done`)
         console.log(`${progress} of ${count} done`);
         let nextSinceId = response.data.orders[response.data.orders.length - 1].id;
         // console.log("nextSinceId", nextSinceId)

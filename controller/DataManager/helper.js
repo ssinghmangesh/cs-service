@@ -38,7 +38,7 @@ const getValues = ({ columnData, data }) => {
                     return `0`
                 }
             } else if(col.dataType === 'numeric[]') {
-                if(value[col.columnName].length) {
+                if(value[col.columnName] && value[col.columnName].length) {
                     let q = value[col.columnName].map(num => {
                         return num
                     }).join(", ")

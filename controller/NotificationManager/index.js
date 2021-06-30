@@ -10,18 +10,21 @@ const addNotification = async (data) => {
     return await insert(params);
 }
 
-const updateNotification = async (data, workspaceId) => {
+const updateNotification = async (data, workspaceId, workspaceName) => {
     // console.log(workspaceId, data.notificationType);
     var params = {
         TableName:'Notification',
         Key:{
-            "workspaceId": workspaceId,
+            "workspaceName": workspaceName,
             "notificationType": data.notificationType
         },
-        UpdateExpression: "set",
+        UpdateExpression: "set workspaceId = :workspaceId",
+        ExpressionAttributeValues: {
+            ":workspaceId": workspaceId
+        }
     };
     if(data.value !== undefined){
-        params.UpdateExpression += ' #value = :value'
+        params.UpdateExpression += ', #value = :value'
         params.ExpressionAttributeNames = { ...params.ExpressionAttributeNames, "#value": 'value' }
         params.ExpressionAttributeValues = { ...params.ExpressionAttributeValues, ":value": data.value }
     }

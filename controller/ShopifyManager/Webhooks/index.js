@@ -48,7 +48,7 @@ const createWebhooks = async (shopName, accessToken, workspaceId) => {
               data: {
                   "webhook": {
                       "topic": `${event}/${type}`,
-                      "address": `arn:aws:events:ap-south-1::event-source/aws.partner/shopify.com/5261447/custom-segment`,
+                      "address": `https://custom-segment-service.herokuapp.com/webhooks/${workspaceId}/${event}/${type}`,
                       "format": "json"
                   }
               }
@@ -61,6 +61,7 @@ const createWebhooks = async (shopName, accessToken, workspaceId) => {
 }
 
 const update = async ({ workspaceId, event, type}, data) => {
+    console.log(workspaceId, event, type);
     switch(event){
         case 'carts':
             await updateTable(CART_TABLE_NAME, cartColumns, [data], workspaceId, type);
@@ -69,7 +70,7 @@ const update = async ({ workspaceId, event, type}, data) => {
         case 'checkouts':
             await updateTable(CHECKOUT_TABLE_NAME, checkoutColumns, [data], workspaceId, type);
             break
-        case 'customer':
+        case 'customers':
             await updateTable(CUSTOMER_TABLE_NAME, customerColumns, [data], workspaceId, type);
             break
         case 'draft_orders':
@@ -82,7 +83,9 @@ const update = async ({ workspaceId, event, type}, data) => {
         case 'orders':
             // console.log('orders data: ', data)
             await updateTable(ORDER_TABLE_NAME, orderColumns, [data], workspaceId, type);
+            console.log('order updated');
             await updateTable(FULFILLMENT_TABLE_NAME, fulfillmentsColumns, data.fulfillments, workspaceId, type);
+            console.log('fulfillment updated');
             await updateTable(REFUNDED_TABLE_NAME, refundedColumns, data.refunds, workspaceId, type);
             for(let i = 0; i < data.discount_applications.length; i++) {
                 if(typeof data.discount_applications[i].order_id === 'undefined') {
@@ -108,9 +111,11 @@ const update = async ({ workspaceId, event, type}, data) => {
         default:
             break
     }
-    return {status: 200, message: "Update Successful"}
+    return {statusCode: 200, message: "Update Successful"}
 }
 
+// createWebhooks('indian-dress-cart.myshopify.com', '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', 56788582584)
+// .then(console.log)
 
 module.exports = {
     update,

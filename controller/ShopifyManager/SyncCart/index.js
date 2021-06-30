@@ -77,15 +77,15 @@ const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0, workspaceId
     //call next batch
     if(response.data.checkouts.length < limit) {
         progress += response.data.checkouts.length
-        socket.emit("sync", `${progress} of ${count} done`)
-        console.log(`${progress} of ${count} done`);
+        socket.emit("sync", workspaceId, 'carts', `${progress} of ${count} done`)
+        console.log(`${progress} of ${count} done...`);
         if(response.data.checkouts.length) {
             return response.data.checkouts[response.data.checkouts.length - 1].id
         }
     } else {
         //call next since id
         progress += response.data.checkouts.length
-        socket.emit("sync", `${progress} of ${count} done`)
+        socket.emit("sync", workspaceId, 'carts', `${progress} of ${count} done...`)
         console.log(`${progress} of ${count} done`);
         let nextSinceId = response.data.checkouts[response.data.checkouts.length - 1].id;
         // console.log("nextSinceId", nextSinceId)

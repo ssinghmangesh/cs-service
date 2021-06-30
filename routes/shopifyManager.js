@@ -1,11 +1,18 @@
 const express = require('express')
 const router = express.Router()
-const {syncAll} = require("../controller/ShopifyManager/index");
+const { syncAll } = require("../controller/ShopifyManager/index");
+const { count } = require("../controller/ShopifyManager/helper");
 
 router.post('/shopify-manager/sync', async (req, res) => {
     const { 'x-workspace-id': workspaceId } = req.headers;
-    const response = await syncAll({ shopName: 'grofers-orders.myshopify.com', accessToken: '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',  limit: 50, workspaceId: workspaceId } );
+    const response = await syncAll({ shopName: 'indian-dress-cart.myshopify.com', accessToken: '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', workspaceId: Number(workspaceId), table: req.body.table });
     res.status(200).send({ status: 200, message: "Added" })
+})
+
+router.get('/shopify-manager/count', async (req, res) => {
+    const { 'x-workspace-name': shopName } = req.headers;
+    const response = await count(shopName, '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')
+    res.status(200).send({ status: 200, message: "Added", count: response })
 })
 
 module.exports = router

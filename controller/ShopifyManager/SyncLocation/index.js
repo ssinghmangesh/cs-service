@@ -17,7 +17,7 @@ const SYNC = async ({ shopName, accessToken, workspaceId, count, progress = 0 })
     
     //call next batch
     progress += response.data.locations.length
-    socket.emit("sync", `${progress} of ${count} done`)
+    socket.emit("sync", workspaceId, 'locations', `${progress} of ${count} done`)
     console.log(`${progress} of ${count} done`);
     return response.data.locations[response.data.locations.length - 1].id
     
