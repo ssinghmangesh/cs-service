@@ -233,9 +233,9 @@ const typeBuild = (ptype, workspaceId, { columnName, filterType, dataType, value
         } else if (filterType === 'contains') {
             query = `${prefix} (${columnName} like '%${values[0]}%')`
         } else if (filterType === 'is_known' ) {
-
+            query = `${prefix} (${columnName} IS NOT NULL)`
         } else if (filterType === 'is_unknown') {
-
+            query = `${prefix} (${columnName} IS NULL)`
         } else if (filterType === 'in') {
             let newvalues = values.map(str => {
                 return `'${str}'`
