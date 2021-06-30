@@ -5,7 +5,7 @@ const { count } = require("../controller/ShopifyManager/helper");
 
 router.post('/shopify-manager/sync', async (req, res) => {
     const { 'x-workspace-id': workspaceId } = req.headers;
-    const response = await syncAll({ shopName: 'indian-dress-cart.myshopify.com', accessToken: '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',  limit: 50, workspaceId: 56788582584 });
+    const response = await syncAll({ shopName: 'indian-dress-cart.myshopify.com', accessToken: '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', workspaceId: Number(workspaceId), table: req.body.table });
     res.status(200).send({ status: 200, message: "Added" })
 })
 
