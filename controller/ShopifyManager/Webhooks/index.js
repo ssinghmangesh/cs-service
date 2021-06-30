@@ -48,7 +48,7 @@ const createWebhooks = async (shopName, accessToken, workspaceId) => {
               data: {
                   "webhook": {
                       "topic": `${event}/${type}`,
-                      "address": `arn:aws:events:ap-south-1::event-source/aws.partner/shopify.com/5261447/custom-segment`,
+                      "address": `https://custom-segment-service.herokuapp.com/${workspaceId}/${event}/${type}`,
                       "format": "json"
                   }
               }
@@ -61,6 +61,7 @@ const createWebhooks = async (shopName, accessToken, workspaceId) => {
 }
 
 const update = async ({ workspaceId, event, type}, data) => {
+    console.log(workspaceId, event, type);
     switch(event){
         case 'carts':
             await updateTable(CART_TABLE_NAME, cartColumns, [data], workspaceId, type);
@@ -97,9 +98,11 @@ const update = async ({ workspaceId, event, type}, data) => {
         default:
             break
     }
-    return {status: 200, message: "Update Successful"}
+    return {statusCode: 200, message: "Update Successful"}
 }
 
+// createWebhooks('indian-dress-cart.myshopify.com', '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', 56788582584)
+// .then(console.log)
 
 module.exports = {
     update,
