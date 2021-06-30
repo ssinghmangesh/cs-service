@@ -70,7 +70,7 @@ const update = async ({ workspaceId, event, type}, data) => {
         case 'checkouts':
             await updateTable(CHECKOUT_TABLE_NAME, checkoutColumns, [data], workspaceId, type);
             break
-        case 'customer':
+        case 'customers':
             await updateTable(CUSTOMER_TABLE_NAME, customerColumns, [data], workspaceId, type);
             break
         case 'draft_orders':
