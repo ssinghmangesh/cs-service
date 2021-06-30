@@ -92,7 +92,7 @@ const update = async ({ workspaceId, event, type}, data) => {
             await updateTable(LINEITEMS_TABLE_NAME, lineItemsColumns, data.line_items, workspaceId, type);
             console.log('lineitems updated');
             await updateTable(TAX_TABLE_NAME, taxColumns, data.tax_lines, workspaceId, type);
-            console.log('tax updated');
+            console.log('tax updated', data.tax_lines);
             break
         case 'products':
             await updateTable(PRODUCT_TABLE_NAME, productColumns, [data], workspaceId, type);
