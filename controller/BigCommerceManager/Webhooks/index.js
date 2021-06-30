@@ -1,6 +1,6 @@
 const axios = require("axios")
 const webhooks = require('./webhooks.json');
-const { updateTable } = require('./helper');
+// const { updateTable } = require('./helper');
 
 const orderColumns = require('../../DataManager/Setup/orderColumns.json')
 const customerColumns = require('../../DataManager/Setup/customerColumns')

@@ -1,19 +1,18 @@
 const { addNotification, updateNotification } = require('./index')
 const { query } = require('../../aws/index');
 
-const addNotificationHelper = async (data, workspaceId) => {
-    console.log(data);
+const addNotificationHelper = async (data, workspaceId, workspaceName) => {
     for(let item of data){
-        await updateNotification(item, Number(workspaceId));
+        await updateNotification(item, Number(workspaceId), workspaceName);
     }
 }
 
-const fetchNotificationHelper = async (workspaceId) => {
+const fetchNotificationHelper = async (workspaceName) => {
     const params = {
         TableName:'Notification',
-        KeyConditionExpression: "workspaceId = :workspaceId",
+        KeyConditionExpression: "workspaceName = :workspaceName",
         ExpressionAttributeValues: {
-            ":workspaceId": workspaceId
+            ":workspaceName": workspaceName
         }
     };
     const res = await query(params);

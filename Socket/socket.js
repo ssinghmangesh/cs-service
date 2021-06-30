@@ -13,8 +13,8 @@ io.of("/workspace").on("connection", (socket) => {
     socket.on("workspaceId", (workspaceId) => {
         socket.join(workspaceId)
     })
-    socket.on("sync", (workspaceId, message) => {
-        io.to(workspaceId).emit(message);
+    socket.on("sync", (workspaceId, type, message) => {
+        io.to(workspaceId).emit(type, message);
     })
     socket.on('disconnect', () => {
         // console.log("got disconnect");

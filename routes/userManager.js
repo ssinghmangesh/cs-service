@@ -21,7 +21,7 @@ const {
     getUserToWorkspace,
 
 } = require('../controller/UserManager/index.js')
-const { editUser } = require('../controller/UserManager/helper')
+const { editUser, getAllWorkspaces } = require('../controller/UserManager/helper')
 const Multer = require('multer');
 const upload = require('../aws/upload');
 
@@ -78,6 +78,11 @@ router.post('/user-manager/user/fetch', async function (req, res) {
 
 router.post('/user-manager/workspace/fetch', async function (req, res) {
     let response = await fetchWorkspace(req.body)
+    res.status(200).send( { status: true, message: "successful", data: response } )
+})
+
+router.post('/user-manager/workspace/fetch-all', async function (req, res) {
+    let response = await getAllWorkspaces(req.body)
     res.status(200).send( { status: true, message: "successful", data: response } )
 })
 

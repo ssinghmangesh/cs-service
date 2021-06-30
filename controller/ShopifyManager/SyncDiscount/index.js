@@ -19,7 +19,7 @@ const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0, workspaceId
     //call next batch
     if(response.data.price_rules.length < limit) {
         progress += response.data.price_rules.length
-        socket.emit("sync", `${progress} of ${count} done`)
+        socket.emit("sync", workspaceId, 'discounts', `${progress} of ${count} done`)
         console.log(`${progress} of ${count} done`);
         if(response.data.price_rules.length) {
             return response.data.price_rules[response.data.price_rules.length - 1].id
@@ -27,7 +27,7 @@ const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0, workspaceId
     } else {
         //call next since id
         progress += response.data.price_rules.length
-        socket.emit("sync", `${progress} of ${count} done`)
+        socket.emit("sync", workspaceId, 'discounts', `${progress} of ${count} done`)
         console.log(`${progress} of ${count} done`);
         let nextSinceId = response.data.price_rules[response.data.price_rules.length - 1].id;
         // console.log("nextSinceId", nextSinceId)

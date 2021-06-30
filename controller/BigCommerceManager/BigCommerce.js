@@ -11,6 +11,28 @@ class BigCommerce {
         })
     }
 
+    static fetchOrder(storeHash, accessToken, option) {
+        const { page } = option
+        return axios({
+            method: 'GET',
+            url: `https://api.bigcommerce.com/stores/${storeHash}/v2/orders?page=${page}`,
+            headers:  {
+                'X-Auth-Token': accessToken,
+            }
+        })
+    }
+
+    static fetchLineItems(storeHash, accessToken, option) {
+        const { order_id } = option
+        return axios({
+            method: 'GET',
+            url: `https://api.bigcommerce.com/stores/${storeHash}/v2/orders/${order_id}/products`,
+            headers:  {
+                'X-Auth-Token': accessToken,
+            }
+        })
+    }
+
     static fetchTrackingScript(shopName, accessToken, storeHash, workspaceId) {
         return axios({
             method: 'POST',

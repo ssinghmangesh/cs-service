@@ -1,6 +1,30 @@
 const upload = require("../../aws/upload");
 const { updateUser } = require("./user");
 const { updateUserToWorkpace } = require("./userToWorkspace");
+const { insert, del, fetchAll, fetch, update } = require("../../aws/index");
+
+const getAllWorkspaces = async ({ userId }) => {
+    let params = {
+        TableName: "UserToWorkspace",
+        FilterExpression: "user_id = :userId",
+        ExpressionAttributeValues: { ":userId": userId }
+    }
+    const res = await fetchAll(params)
+    const workspaces = []
+    for(let i=0; i<res.Items.length;i++){
+        params = {
+            TableName: "Workspace",
+            Key: {
+                workspace_id: res.Items[i].workspace_id
+            },
+            ProjectionExpression: "workspace_id, shop_name"
+        }
+        const {Item: workspace} = await fetch(params)
+        workspaces.push(workspace);
+    }
+    return workspaces
+}
+
 
 const editUser = async (file, data, workspaceId) => {
     const { Location } = await upload(file);
@@ -44,5 +68,6 @@ const editUser = async (file, data, workspaceId) => {
 }
 
 module.exports = {
-    editUser
+    editUser,
+    getAllWorkspaces
 }

@@ -9,14 +9,14 @@ const {v4 : uuidv4} = require('uuid')
 const Dashboard = require('../controller/AnalyticsManager/index')
 
 router.post('/notifications/email/insert', async function (req, res) {
-    const { 'x-workspace-id': workspaceId } = req.headers
-    let response = await addNotificationHelper(req.body.selected, workspaceId)
+    const { 'x-workspace-id': workspaceId, 'x-workspace-name': workspaceName } = req.headers
+    let response = await addNotificationHelper(req.body.selected, workspaceId, workspaceName)
     res.status(200).send( { status: true, message: "successful", data: response } )
 })
 
 router.post('/notifications/email/fetch', async function (req, res) {
-    const { 'x-workspace-id': workspaceId } = req.headers
-    const selected = await fetchNotificationHelper(Number(workspaceId))
+    const { 'x-workspace-name': workspaceName } = req.headers
+    const selected = await fetchNotificationHelper(workspaceName)
     res.status(200).send( { status: true, message: "successful", data: selected } )
 })
 
