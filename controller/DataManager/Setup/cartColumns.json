@@ -23,5 +23,29 @@
     {
         "columnName":"created_at",
         "dataType": "timestamptz"
+    },
+    {
+        "columnName":"product_id",
+        "dataType": "numeric[]"
+    },
+    {
+        "columnName":"variant_id",
+        "dataType": "numeric[]"
+    },
+    {
+        "columnName":"customer_name",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"email_status",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"recovery_status",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"total",
+        "dataType": "numeric"
     }
 ]

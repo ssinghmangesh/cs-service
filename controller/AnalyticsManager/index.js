@@ -41,6 +41,18 @@ const LIMIT = (limit) => {
     }
 }
 
+const getwc = (datequery, wc1) => {
+    if(datequery) {
+        if(wc1) {
+            return datequery + 'AND' + wc1 + ' '
+        } else {
+            return datequery
+        }
+    } else {
+        return 'WHERE ' + wc1
+    }
+}
+
 const abstractData = (response, type) => {
     //extract only rows
     let res = null
@@ -81,27 +93,29 @@ class Dashboard {
 
     static async lineGraph({TABLE_NAME, groupBykey = 'MONTH', startdate, enddate, x = 'x', y = 'y', statsDefinition = {}, prevstartdate, prevenddate, filters = {}}) {
         let query = ``
-        let wc = whereClause(filters);
+        let wc1 = whereClause(filters);
+        let wc = ``
         if(prevstartdate && prevenddate) {
             let datequery = WHERE_CLAUSE({startdate, enddate})
-            if(datequery) wc = datequery + 'AND' + wc
-            else wc = 'WHERE ' + wc
+            wc = getwc(datequery, wc1)
             query = `SELECT EXTRACT(${groupBykey} FROM created_at) ${groupBykey === 'dow' ? ' + 1' : ''} AS ${x}, ${statsDefinition["aggregate"]}(${statsDefinition["columnname"]}) AS ${y} FROM ${TABLE_NAME} ${wc} GROUP BY ${x} ORDER BY ${x};`
             
             datequery = WHERE_CLAUSE({startdate: prevstartdate, enddate: prevenddate})
-            if(datequery) wc = datequery + 'AND' + wc
-            else wc = 'WHERE ' + wc
+            wc = getwc(datequery, wc1)
             let query1 = `SELECT EXTRACT(${groupBykey} FROM created_at) ${groupBykey === 'dow' ? ' + 1' : ''} AS ${x}, ${statsDefinition["aggregate"]}(${statsDefinition["columnname"]}) AS ${y} FROM ${TABLE_NAME} ${wc} GROUP BY ${x} ORDER BY ${x};`
+            // console.log(query)
+            // console.log(query1)
             let response = {
                 current: abstractData(await PostgresqlDb.query(query)),
                 previous: abstractData(await PostgresqlDb.query(query1))
             }
+            // console.log(response)
             return response
         } else {
             let datequery = WHERE_CLAUSE({startdate, enddate})
-            if(datequery) wc = datequery + 'AND' + wc
-            else wc = 'WHERE ' + wc
+            wc = getwc(datequery, wc1)
             query = `SELECT EXTRACT(${groupBykey} FROM created_at) ${groupBykey === 'dow' ? ' + 1' : ''} AS ${x}, ${statsDefinition["aggregate"]}(${statsDefinition["columnname"]}) AS ${y} FROM ${TABLE_NAME} ${wc} GROUP BY ${x} ORDER BY ${x};`
+            // console.log(query)
             let response = {
                 current: abstractData(await PostgresqlDb.query(query))
             }
@@ -109,18 +123,17 @@ class Dashboard {
         }
     }
 
-    static async barGraph({TABLE_NAME, groupBykey = 'MONTH', groupBykey2 = 'os', x = 'x', y = 'y', startdate, enddate, prevstartdate, prevenddate, statsDefinition = {}, filters = {}}) {
+    static async barGraph({TABLE_NAME, groupBykey = 'MONTH', groupBykey2 = 'fulfillment_status', x = 'x', y = 'y', startdate, enddate, prevstartdate, prevenddate, statsDefinition = {}, filters = {}}) {
         let query = ``
-        let wc = whereClause(filters);
+        let wc1 = whereClause(filters);
+        let wc = ``
         if(prevstartdate && prevenddate) {
             let datequery = WHERE_CLAUSE({startdate, enddate})
-            if(datequery) wc = datequery + 'AND' + wc
-            else wc = 'WHERE ' + wc
+            wc = getwc(datequery, wc1)
             query = `SELECT EXTRACT(${groupBykey} FROM created_at) AS ${x}, ${groupBykey2}, ${statsDefinition["aggregate"]}(${statsDefinition["columnname"]}) AS ${y} FROM ${TABLE_NAME} ${wc} GROUP BY ${x}, ${groupBykey2} ORDER BY ${x}, ${groupBykey2};`
             
             datequery = WHERE_CLAUSE({startdate: prevstartdate, enddate: prevenddate})
-            if(datequery) wc = datequery + 'AND' + wc
-            else wc = 'WHERE ' + wc
+            wc = getwc(datequery, wc1)
             let query1 = `SELECT EXTRACT(${groupBykey} FROM created_at) AS ${x}, ${groupBykey2}, ${statsDefinition["aggregate"]}(${statsDefinition["columnname"]}) AS ${y} FROM ${TABLE_NAME} ${wc} GROUP BY ${x}, ${groupBykey2} ORDER BY ${x}, ${groupBykey2};`
             let response = {
                 current: abstractData(await PostgresqlDb.query(query)),
@@ -129,8 +142,7 @@ class Dashboard {
             return response
         } else {
             let datequery = WHERE_CLAUSE({startdate, enddate})
-            if(datequery) wc = datequery + 'AND' + wc
-            else wc = 'WHERE ' + wc
+            wc = getwc(datequery, wc1)
             query = `SELECT EXTRACT(${groupBykey} FROM created_at) AS ${x}, ${groupBykey2}, ${statsDefinition["aggregate"]}(${statsDefinition["columnname"]}) AS ${y} FROM ${TABLE_NAME} ${wc} GROUP BY ${x}, ${groupBykey2} ORDER BY ${x}, ${groupBykey2};`
             let response = {
                 current: abstractData(await PostgresqlDb.query(query))

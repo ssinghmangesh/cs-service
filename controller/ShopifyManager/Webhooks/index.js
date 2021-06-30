@@ -81,18 +81,25 @@ const update = async ({ workspaceId, event, type}, data) => {
             await updateTable(FULFILLMENT_TABLE_NAME, fulfillmentsColumns, [data], workspaceId, type);
             break
         case 'orders':
+            // console.log('orders data: ', data)
             await updateTable(ORDER_TABLE_NAME, orderColumns, [data], workspaceId, type);
             console.log('order updated');
             await updateTable(FULFILLMENT_TABLE_NAME, fulfillmentsColumns, data.fulfillments, workspaceId, type);
             console.log('fulfillment updated');
             await updateTable(REFUNDED_TABLE_NAME, refundedColumns, data.refunds, workspaceId, type);
-            console.log('refunds updated');
-            await updateTable(DISCOUNTAPPLICATION_TABLE_NAME, discountApplicationsColumns, data.discount_applications, workspaceId, type);
-            console.log('discount applications updated');
+            for(let i = 0; i < data.discount_applications.length; i++) {
+                if(typeof data.discount_applications[i].order_id === 'undefined') {
+                    data.discount_applications[i].order_id = data.id
+                }
+            }
+            await updateTable(DISCOUNTAPPLICATION_TABLE_NAME, discountApplicationsColumns, data.discount_applications, workspaceId, type, 'order_id');
             await updateTable(LINEITEMS_TABLE_NAME, lineItemsColumns, data.line_items, workspaceId, type);
-            console.log('lineitems updated', data.tax_lines);
-            await updateTable(TAX_TABLE_NAME, taxColumns, data.tax_lines, workspaceId, type);
-            console.log('tax updated');
+            for(let i = 0; i < data.tax_lines.length; i++) {
+                if(typeof data.tax_lines[i].order_id === 'undefined') {
+                    data.tax_lines[i].order_id = data.id
+                }
+            }
+            await updateTable(TAX_TABLE_NAME, taxColumns, data.tax_lines, workspaceId, type, 'order_id');
             break
         case 'products':
             await updateTable(PRODUCT_TABLE_NAME, productColumns, [data], workspaceId, type);

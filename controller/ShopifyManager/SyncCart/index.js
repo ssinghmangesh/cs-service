@@ -5,7 +5,13 @@ const cartColumns = require('../../DataManager/Setup/cartColumns.json');
 const cartLineItemColumns = require('../../DataManager/Setup/cartLineItemColumns.json');
 const { socket } = require("../../../socket");
 
-// console.log(socket);
+const getId = (array, column) => {
+    let ids = []
+    array.map(item => {
+        ids.push(item[column])
+    })
+    return ids
+}
 
 const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0, workspaceId, count, progress = 0 }) => {
     //call to shopify fetch one batch
@@ -15,6 +21,7 @@ const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0, workspaceId
     // console.log('!!!!!!!', response.data.checkouts[0].line_items[1].discount_allocations)
 
     let carts = []
+    // console.log(response.data.checkouts[0].line_items)
     response.data.checkouts.map(checkout => {
         const { customer } = checkout
         carts.push({
@@ -23,7 +30,9 @@ const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0, workspaceId
             token: checkout.cart_token,
             note: checkout.note,
             updated_at: checkout.updated_at,
-            created_at: checkout.created_at
+            created_at: checkout.created_at,
+            product_id: getId(checkout.line_items, "product_id"),
+            variant_id: getId(checkout.line_items, "variant_id"),
         }) 
     })
 
@@ -95,6 +104,6 @@ module.exports = {
     SYNC
 }
 
-// SYNC({ shopName: 'grofers-orders.myshopify.com', accessToken: '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',  limit: 50, workspaceId: 2 })
+// SYNC({ shopName: 'indian-dress-cart.myshopify.com', accessToken: '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',  limit: 50, workspaceId: 56788582584 })
 // .then(console.log)
 // .catch(console.log)

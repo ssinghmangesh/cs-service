@@ -21,6 +21,10 @@
         "dataType": "jsonb[]"
     },
     {
+        "columnName":"inventory",
+        "dataType": "numeric"
+    },
+    {
         "columnName":"options",
         "dataType": "jsonb[]"
     },
