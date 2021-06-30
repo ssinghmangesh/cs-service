@@ -21,7 +21,7 @@ const {
     getUserToWorkspace,
 
 } = require('../controller/UserManager/index.js')
-const { editUser, getAllWorkspaces } = require('../controller/UserManager/helper')
+const { editUser, getAllWorkspaces, getAllUserToWorkspaces } = require('../controller/UserManager/helper')
 const Multer = require('multer');
 const upload = require('../aws/upload');
 
@@ -106,9 +106,8 @@ router.post('/user-manager/user/edit', multer.single('file'), async function (re
 })
 
 router.post('/user-manager/user-to-workspace/fetch-all', async function (req, res) {
-    const { 'x-workspace-id': workspaceId } = req.headers;
-    let { Items } = await fetchAllUserToWorkspaces(workspaceId)
-    res.status(200).send( { status: true, message: "successful", data: Items } )
+    const response = await getAllUserToWorkspaces(req.body.userId)
+    res.status(200).send( { status: true, message: "successful", data: response } )
 })
 
 module.exports = router
