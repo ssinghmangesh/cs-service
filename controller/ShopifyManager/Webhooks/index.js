@@ -48,7 +48,7 @@ const createWebhooks = async (shopName, accessToken, workspaceId) => {
               data: {
                   "webhook": {
                       "topic": `${event}/${type}`,
-                      "address": `https://custom-segment-service.herokuapp.com/${workspaceId}/${event}/${type}`,
+                      "address": `https://custom-segment-service.herokuapp.com/webhooks/${workspaceId}/${event}/${type}`,
                       "format": "json"
                   }
               }
@@ -82,11 +82,17 @@ const update = async ({ workspaceId, event, type}, data) => {
             break
         case 'orders':
             await updateTable(ORDER_TABLE_NAME, orderColumns, [data], workspaceId, type);
+            console.log('order updated');
             await updateTable(FULFILLMENT_TABLE_NAME, fulfillmentsColumns, data.fulfillments, workspaceId, type);
+            console.log('fulfillment updated');
             await updateTable(REFUNDED_TABLE_NAME, refundedColumns, data.refunds, workspaceId, type);
+            console.log('refunds updated');
             await updateTable(DISCOUNTAPPLICATION_TABLE_NAME, discountApplicationsColumns, data.discount_applications, workspaceId, type);
+            console.log('discount applications updated');
             await updateTable(LINEITEMS_TABLE_NAME, lineItemsColumns, data.line_items, workspaceId, type);
+            console.log('lineitems updated');
             await updateTable(TAX_TABLE_NAME, taxColumns, data.tax_lines, workspaceId, type);
+            console.log('tax updated');
             break
         case 'products':
             await updateTable(PRODUCT_TABLE_NAME, productColumns, [data], workspaceId, type);
