@@ -88,11 +88,12 @@ const update = async ({ workspaceId, event, type}, data) => {
         case 'customers':
             console.log('customers data: ', data)
             await updateTable(CUSTOMER_TABLE_NAME, customerColumns, [data], workspaceId, type);
-            let customers = data.map((customer) => {
-                return {
+            let customers = []
+            data.map((customer) => {
+                customers.push({
                     ...customer['default_address'],
                     ...customer,
-                }
+                })
             })
             await del(CUSTOMERAGGREGATE_TABLE_NAME, customers, workspaceId, 'customer_id', 'id')
             customers.map(async (customer) => {
