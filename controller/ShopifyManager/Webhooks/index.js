@@ -194,7 +194,7 @@ const update = async ({ workspaceId, event, type}, data) => {
             } else {
                 discount_applications.push(data)
             }
-            await updateTable(DISCOUNTAPPLICATION_TABLE_NAME, discountApplicationsColumns, discount_applications, workspaceId, type, 'order_id');
+            await updateTable(DISCOUNTAPPLICATION_TABLE_NAME, discountApplicationsColumns, discount_applications, workspaceId, type, 'order_id', 'id');
 
             let line_items = []
             if(type != 'delete') {
@@ -226,26 +226,25 @@ const update = async ({ workspaceId, event, type}, data) => {
                         created_at: data.created_at
                     })
                 })
-                
             } else {
                 taxes.push(data)
             }
-            await updateTable(TAX_TABLE_NAME, taxColumns, taxes, workspaceId, type, 'order_id');
+            await updateTable(TAX_TABLE_NAME, taxColumns, taxes, workspaceId, type, 'order_id', 'id');
             break
         case 'products':
             // console.log('products data: ', data)
-            await updateTable(PRODUCT_TABLE_NAME, productColumns, [data], workspaceId, type);
+            // await updateTable(PRODUCT_TABLE_NAME, productColumns, [data], workspaceId, type);
 
-            let variants = [];
-            if(type != 'delete') {
-                variants.push({
-                    ...data.variants,
-                    image_url: getImageUrl(variant.image_id, product.images)
-                })
-            } else {
-                variants.push(data)
-            }
-            await updateTable(VARIANT_TABLE_NAME, variantsColumns, variants, workspaceId, type);
+            // let variants = [];
+            // if(type != 'delete') {
+            //     variants.push({
+            //         ...data.variants,
+            //         image_url: getImageUrl(variant.image_id, product.images)
+            //     })
+            // } else {
+            //     variants.push(data)
+            // }
+            // await updateTable(VARIANT_TABLE_NAME, variantsColumns, variants, workspaceId, type);
             break
         case 'refunds':
             await updateTable(REFUNDED_TABLE_NAME, refundedColumns, [data], workspaceId, type);
