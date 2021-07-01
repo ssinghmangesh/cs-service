@@ -115,7 +115,7 @@ const update = async ({ workspaceId, event, type}, data) => {
             })
             break
         case 'draft_orders':
-            console.log('draft orders: ', data)
+            // console.log('draft orders: ', data)
             let draft_orders = []
             if(type != 'delete') {
                 const { customer } = data
@@ -228,7 +228,7 @@ const update = async ({ workspaceId, event, type}, data) => {
                 discount_applications.push(data)
             }
             console.log('discount data: ', discount_applications)
-            await updateTable(DISCOUNTAPPLICATION_TABLE_NAME, discountApplicationsColumns, discount_applications, workspaceId, type, 'order_id', 'id');
+            await updateTable(DISCOUNTAPPLICATION_TABLE_NAME, discountApplicationsColumns, discount_applications, workspaceId, type, 'order_id');
 
             let line_items = []
             if(type != 'delete') {
@@ -264,7 +264,7 @@ const update = async ({ workspaceId, event, type}, data) => {
                 taxes.push(data)
             }
             console.log('taxes data: ', taxes)
-            await updateTable(TAX_TABLE_NAME, taxColumns, taxes, workspaceId, type, 'order_id', 'id');
+            await updateTable(TAX_TABLE_NAME, taxColumns, taxes, workspaceId, type, 'order_id');
             break
         case 'products':
             // console.log('products data: ', data)
