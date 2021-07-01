@@ -33,9 +33,7 @@ const updateRow = async (data) => {
 const deleteRow = async (data) => {
     var params = {
         TableName: 'SyncStatus',
-        Key:{
-            "workspace_id": data.workspaceId
-        }
+        ...data,
     }
     return await del(params)
 }
