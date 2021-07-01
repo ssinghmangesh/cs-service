@@ -127,16 +127,16 @@ const update = async ({ workspaceId, event, type}, data) => {
             if(type != 'delete') {
                 const { customer } = data
                 orders.push({
-                    shipping_country: order.shipping_address && order.shipping_address.country,
-                    shipping_state: order.shipping_address && order.shipping_address.state,
-                    shipping_city: order.shipping_address && order.shipping_address.city,
-                    shipping_province: order.shipping_address && order.shipping_address.province,
-                    shipping_zip: order.shipping_address && order.shipping_address.zip,
-                    shipping_latitude: order.shipping_address && order.shipping_address.latitude,
-                    shipping_longitude: order.shipping_address && order.shipping_address.longitude,
+                    shipping_country: data.shipping_address && data.shipping_address.country,
+                    shipping_state: data.shipping_address && data.shipping_address.state,
+                    shipping_city: data.shipping_address && data.shipping_address.city,
+                    shipping_province: data.shipping_address && data.shipping_address.province,
+                    shipping_zip: data.shipping_address && data.shipping_address.zip,
+                    shipping_latitude: data.shipping_address && data.shipping_address.latitude,
+                    shipping_longitude: data.shipping_address && data.shipping_address.longitude,
                     ...order,
-                    order_id: order.id,
-                    order_name: order.name,
+                    order_id: data.id,
+                    order_name: data.name,
                     customer_id: customer ? customer.id : null 
                 })
             } else {
@@ -147,11 +147,13 @@ const update = async ({ workspaceId, event, type}, data) => {
             let fulfillments = []
             if(type != 'delete') {
                 const { customer } = data
-                fulfillments.push({
-                    ...fulfillment,
-                    order_id: order.id,
-                    order_name: order.name,
-                    customer_id: customer ? customer.id : null 
+                data.fulfillments.map((fulfillment) => {
+                    fulfillments.push({
+                        ...fulfillment,
+                        order_id: data.id,
+                        order_name: data.name,
+                        customer_id: customer ? customer.id : null 
+                    })
                 })
             } else {
                 fulfillments.push(data)
@@ -161,12 +163,15 @@ const update = async ({ workspaceId, event, type}, data) => {
             let refunds = []
             if(type != 'delete') {
                 const { customer } = data
-                refunds.push({
-                    ...refund,
-                    order_id: order.id,
-                    order_name: order.name,
-                    customer_id: customer ? customer.id : null 
+                data.refunds.map((refund) => {
+                    refunds.push({
+                        ...refund,
+                        order_id: data.id,
+                        order_name: data.name,
+                        customer_id: customer ? customer.id : null 
+                    })
                 })
+                
             } else {
                 refunds.push(data)
             }
@@ -175,14 +180,16 @@ const update = async ({ workspaceId, event, type}, data) => {
             let discount_applications = []
             if(type != 'delete') {
                 const { customer } = data
-                discount_applications.push({
-                    ...discount_application,
-                    current_total_discounts: order.current_total_discounts,
-                    order_id: order.id,
-                    order_name: order.name,
-                    customer_id: customer ? customer.id : null,
-                    financial_status: order.financial_status,
-                    created_at: order.created_at
+                data.discount_applications.map((discount_application) => {
+                    discount_applications.push({
+                        ...discount_application,
+                        current_total_discounts: data.current_total_discounts,
+                        order_id: data.id,
+                        order_name: data.name,
+                        customer_id: customer ? customer.id : null,
+                        financial_status: data.financial_status,
+                        created_at: data.created_at
+                    })
                 })
             } else {
                 discount_applications.push(data)
@@ -192,11 +199,13 @@ const update = async ({ workspaceId, event, type}, data) => {
             let line_items = []
             if(type != 'delete') {
                 const { customer } = data
-                line_items.push({
-                    ...line_item,
-                    order_id: order.id,
-                    order_name: order.name,
-                    customer_id: customer ? customer.id : null 
+                data.line_items.map((line_item) => {
+                    line_items.push({
+                        ...line_item,
+                        order_id: data.id,
+                        order_name: data.name,
+                        customer_id: customer ? customer.id : null 
+                    })
                 })
             } else {
                 line_items.push(data)
@@ -206,15 +215,18 @@ const update = async ({ workspaceId, event, type}, data) => {
             let taxes = []
             if(type != 'delete') {
                 const { customer } = data
-                taxes.push({
-                    ...tax_line,
-                    current_total_tax: order.current_total_tax,
-                    order_id: order.id,
-                    order_name: order.name,
-                    customer_id: customer ? customer.id : null,
-                    financial_status: order.financial_status,
-                    created_at: order.created_at
+                data.tax_lines.map((tax_line) => {
+                    taxes.push({
+                        ...tax_line,
+                        current_total_tax: data.current_total_tax,
+                        order_id: data.id,
+                        order_name: data.name,
+                        customer_id: customer ? customer.id : null,
+                        financial_status: data.financial_status,
+                        created_at: data.created_at
+                    })
                 })
+                
             } else {
                 taxes.push(data)
             }
@@ -223,7 +235,7 @@ const update = async ({ workspaceId, event, type}, data) => {
         case 'products':
             // console.log('products data: ', data)
             await updateTable(PRODUCT_TABLE_NAME, productColumns, [data], workspaceId, type);
-            
+
             let variants = [];
             if(type != 'delete') {
                 variants.push({
