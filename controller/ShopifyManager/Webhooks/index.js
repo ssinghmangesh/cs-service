@@ -1,7 +1,7 @@
 const axios = require("axios")
 const webhooks = require('./webhooks.json');
 const { updateTable } = require('./helper');
-const { aggregate } = require('../../DataManager/index')
+const { del, aggregate } = require('../../DataManager/index')
 
 const orderColumns = require('../../DataManager/Setup/orderColumns.json')
 const customerColumns = require('../../DataManager/Setup/customerColumns')
