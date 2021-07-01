@@ -115,33 +115,41 @@ const update = async ({ workspaceId, event, type}, data) => {
             })
             break
         case 'draft_orders':
-            console.log('draft orders: ', data, type)
-            // let draft_orders = []
-            // const { customer } = data
-            // draft_orders.push({
-            //     ...data, 
-            //     shipping_country: data.shipping_address && data.shipping_address.country,
-            //     shipping_state: data.shipping_address && data.shipping_address.state,
-            //     shipping_city: data.shipping_address && data.shipping_address.city,
-            //     shipping_province: data.shipping_address && data.shipping_address.province,
-            //     shipping_zip: data.shipping_address && data.shipping_address.zip,
-            //     shipping_latitude: data.shipping_address && data.shipping_address.latitude,
-            //     shipping_longitude: data.shipping_address && data.shipping_address.longitude,
-            //     customer_id: customer ? customer.id : null 
-            // })
-            // await updateTable(DRAFTORDER_TABLE_NAME, draftOrderColumns, draft_orders, workspaceId, type);
+            console.log('draft orders: ', data)
+            let draft_orders = []
+            if(type != 'delete') {
+                const { customer } = data
+                draft_orders.push({
+                    ...data, 
+                    shipping_country: data.shipping_address && data.shipping_address.country,
+                    shipping_state: data.shipping_address && data.shipping_address.state,
+                    shipping_city: data.shipping_address && data.shipping_address.city,
+                    shipping_province: data.shipping_address && data.shipping_address.province,
+                    shipping_zip: data.shipping_address && data.shipping_address.zip,
+                    shipping_latitude: data.shipping_address && data.shipping_address.latitude,
+                    shipping_longitude: data.shipping_address && data.shipping_address.longitude,
+                    customer_id: customer ? customer.id : null 
+                })
+            } else {
+                draft_orders.push(data)
+            }       
+            await updateTable(DRAFTORDER_TABLE_NAME, draftOrderColumns, draft_orders, workspaceId, type);
 
-            // let draft_order_line_items = []
-            // const { customer } = draft_order
-            // data.line_items.map(line_item => {
-            //     draft_order_line_items.push({
-            //         ...line_item,
-            //         order_id: data.order_id,
-            //         customer_id: customer ? customer.id : null,
-            //         created_at: data.created_at,
-            //     })
-            // })
-            // await updateTable(DRAFTORDERLINEITEMS_TABLE_NAME, draftOrderLineItemsColumns, draft_order_line_items, workspaceId, type);
+            let draft_order_line_items = []
+            if(type != 'delete') {
+                const { customer } = data
+                data.line_items.map(line_item => {
+                    draft_order_line_items.push({
+                        ...line_item,
+                        order_id: data.id,
+                        customer_id: customer ? customer.id : null,
+                        created_at: data.created_at,
+                    })
+                })
+            } else {
+                draft_order_line_items.push(data)
+            }
+            await updateTable(DRAFTORDERLINEITEMS_TABLE_NAME, draftOrderLineItemsColumns, draft_order_line_items, workspaceId, type);
             break
         case 'fulfillments':
             await updateTable(FULFILLMENT_TABLE_NAME, fulfillmentsColumns, [data], workspaceId, type);
