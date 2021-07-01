@@ -86,19 +86,28 @@ const update = async ({ workspaceId, event, type}, data) => {
             await updateTable(CHECKOUT_TABLE_NAME, checkoutColumns, [data], workspaceId, type);
             break
         case 'customers':
-            console.log('customers data: ', data)
-            await updateTable(CUSTOMER_TABLE_NAME, customerColumns, [data], workspaceId, type);
-            let customers = []
+            // console.log('customers data: ', data)
+            customers = []
             if(type != 'deleted') {
                 customers.push({
+                    ...data,
+                    state: data.default_address.province,
+                    country: data.default_address.country,
+                })
+            }
+            await updateTable(CUSTOMER_TABLE_NAME, customerColumns, [data], workspaceId, type);
+            let customeragg = []
+            if(type != 'deleted') {
+                customeragg.push({
                     ...data['default_address'],
                     ...data,
                 })
             } else {
-                customers.push(data)
+                customeragg.push(data)
             }
-            await del(CUSTOMERAGGREGATE_TABLE_NAME, customers, workspaceId, 'customer_id', 'id')
-            customers.map(async (customer) => {
+            console.log('customer aggregate data: ', customeragg)
+            await del(CUSTOMERAGGREGATE_TABLE_NAME, customeragg, workspaceId, 'customer_id', 'id')
+            customeragg.map(async (customer) => {
                 await aggregate(workspaceId, customer.id)
             })
             break
