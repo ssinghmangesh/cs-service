@@ -37,18 +37,6 @@ const {
     CUSTOMERAGGREGATE_TABLE_NAME
 } = require("../../DataManager/helper");
 
-const getImageUrl = (image_id, images) => {
-    if(!images){
-        return ''
-    }
-    let image = images.find(image => image.id === image_id);
-    if(image){
-        return image.src;
-    }else{
-        return null;
-    }
-}
-
 const createWebhooks = async (shopName, accessToken, workspaceId) => {
     // console.log(webhooks.length);
     for(let i=0;i<webhooks.length;i++) {
@@ -268,18 +256,29 @@ const update = async ({ workspaceId, event, type}, data) => {
             break
         case 'products':
             console.log('products data: ', data)
-            // await updateTable(PRODUCT_TABLE_NAME, productColumns, [data], workspaceId, type);
+            let products = []
+            if(type != 'delete') {
+                products.push({
+                    ...data,
+                    inventory_item_id: data.variants[0].inventory_item_id,
+                    inventory_quantity: data.variants[0].inventory_quantity,
+                })
+            } else {
+                products.push(data)
+            }
+            await updateTable(PRODUCT_TABLE_NAME, productColumns, products, workspaceId, type);
 
-            // let variants = [];
-            // if(type != 'delete') {
-            //     variants.push({
-            //         ...data.variants,
-            //         image_url: getImageUrl(variant.image_id, product.images)
-            //     })
-            // } else {
-            //     variants.push(data)
-            // }
-            // await updateTable(VARIANT_TABLE_NAME, variantsColumns, variants, workspaceId, type);
+            let variants = [];
+            if(type != 'delete') {
+                data.variants.map((variant) => {
+                    variants.push({
+                        ...variant,
+                    })
+                })
+            } else {
+                variants.push(data)
+            }
+            await updateTable(VARIANT_TABLE_NAME, variantsColumns, variants, workspaceId, type);
             break
         case 'refunds':
             await updateTable(REFUNDED_TABLE_NAME, refundedColumns, [data], workspaceId, type);
