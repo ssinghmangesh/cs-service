@@ -86,9 +86,9 @@ const update = async ({ workspaceId, event, type}, data) => {
             await updateTable(CHECKOUT_TABLE_NAME, checkoutColumns, [data], workspaceId, type);
             break
         case 'customers':
-            // console.log('customers data: ', data)
+            console.log('customers data: ', data)
             customers = []
-            if(type != 'deleted') {
+            if(type != 'delete') {
                 customers.push({
                     ...data,
                     state: data.default_address.province,
@@ -97,7 +97,7 @@ const update = async ({ workspaceId, event, type}, data) => {
             }
             await updateTable(CUSTOMER_TABLE_NAME, customerColumns, [data], workspaceId, type);
             let customeragg = []
-            if(type != 'deleted') {
+            if(type != 'delete') {
                 customeragg.push({
                     ...data['default_address'],
                     ...data,
@@ -121,7 +121,7 @@ const update = async ({ workspaceId, event, type}, data) => {
         case 'orders':
             console.log('orders data: ', data)
             let orders = []
-            if(type != 'deleted') {
+            if(type != 'delete') {
                 const { customer } = order
                 orders.push({
                     shipping_country: order.shipping_address && order.shipping_address.country,
