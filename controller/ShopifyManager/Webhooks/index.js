@@ -94,6 +94,8 @@ const update = async ({ workspaceId, event, type}, data) => {
                     state: data.default_address.province,
                     country: data.default_address.country,
                 })
+            } else {
+                customers.push(data)
             }
             console.log('customers data: ', customers)
             await updateTable(CUSTOMER_TABLE_NAME, customerColumns, [data], workspaceId, type);
@@ -123,7 +125,7 @@ const update = async ({ workspaceId, event, type}, data) => {
             console.log('orders data: ', data)
             let orders = []
             if(type != 'delete') {
-                const { customer } = order
+                const { customer } = data
                 orders.push({
                     shipping_country: order.shipping_address && order.shipping_address.country,
                     shipping_state: order.shipping_address && order.shipping_address.state,
@@ -141,76 +143,81 @@ const update = async ({ workspaceId, event, type}, data) => {
                 orders.push(data)
             }
             await updateTable(ORDER_TABLE_NAME, orderColumns, orders, workspaceId, type);
+
             let fulfillments = []
-            data.map(order => {
-                const { customer } = order
-                order.line_items.map(fulfillment => {
-                    fulfillments.push({
-                        ...fulfillment,
-                        order_id: order.id,
-                        order_name: order.name,
-                        customer_id: customer ? customer.id : null 
-                    })
-                }) 
-            })
+            if(type != 'delete') {
+                const { customer } = data
+                fulfillments.push({
+                    ...fulfillment,
+                    order_id: order.id,
+                    order_name: order.name,
+                    customer_id: customer ? customer.id : null 
+                })
+            } else {
+                fulfillments.push(data)
+            }
             await updateTable(FULFILLMENT_TABLE_NAME, fulfillmentsColumns, fulfillments, workspaceId, type);
+
             let refunds = []
-            data.map(order => {
-                const { customer } = order
-                order.refunds.map(refund => {
-                    refunds.push({
-                        ...refund,
-                        order_id: order.id,
-                        order_name: order.name,
-                        customer_id: customer ? customer.id : null 
-                    })
-                }) 
-            })
+            if(type != 'delete') {
+                const { customer } = data
+                refunds.push({
+                    ...refund,
+                    order_id: order.id,
+                    order_name: order.name,
+                    customer_id: customer ? customer.id : null 
+                })
+            } else {
+                refunds.push(data)
+            }
             await updateTable(REFUNDED_TABLE_NAME, refundedColumns, refunds, workspaceId, type);
+
             let discount_applications = []
-            data.map(order => {
-                const { customer } = order
-                order.discount_applications.map(discount_application => {
-                    discount_applications.push({
-                        ...discount_application,
-                        current_total_discounts: order.current_total_discounts,
-                        order_id: order.id,
-                        order_name: order.name,
-                        customer_id: customer ? customer.id : null,
-                        financial_status: order.financial_status,
-                        created_at: order.created_at
-                    })
-                }) 
-            })
+            if(type != 'delete') {
+                const { customer } = data
+                discount_applications.push({
+                    ...discount_application,
+                    current_total_discounts: order.current_total_discounts,
+                    order_id: order.id,
+                    order_name: order.name,
+                    customer_id: customer ? customer.id : null,
+                    financial_status: order.financial_status,
+                    created_at: order.created_at
+                })
+            } else {
+                discount_applications.push(data)
+            }
             await updateTable(DISCOUNTAPPLICATION_TABLE_NAME, discountApplicationsColumns, discount_applications, workspaceId, type, 'order_id');
+
             let line_items = []
-            data.map(order => {
-                const { customer } = order
-                order.line_items.map(line_item => {
-                    line_items.push({
-                        ...line_item,
-                        order_id: order.id,
-                        order_name: order.name,
-                        customer_id: customer ? customer.id : null 
-                    })
-                }) 
-            })
+            if(type != 'delete') {
+                const { customer } = data
+                line_items.push({
+                    ...line_item,
+                    order_id: order.id,
+                    order_name: order.name,
+                    customer_id: customer ? customer.id : null 
+                })
+            } else {
+                line_items.push(data)
+            }
             await updateTable(LINEITEMS_TABLE_NAME, lineItemsColumns, line_items, workspaceId, type);
+
             let taxes = []
-            data.map(order => {
-                const { customer } = order
-                order.tax_lines.map(tax_line => {
-                    taxes.push({
-                        ...tax_line,
-                        current_total_tax: order.current_total_tax,
-                        order_id: order.id,
-                        order_name: order.name,
-                        customer_id: customer ? customer.id : null,
-                        financial_status: order.financial_status,
-                        created_at: order.created_at
-                    })
-                }) 
-            })
+            if(type != 'delete') {
+                const { customer } = data
+                taxes.push({
+                    ...tax_line,
+                    current_total_tax: order.current_total_tax,
+                    order_id: order.id,
+                    order_name: order.name,
+                    customer_id: customer ? customer.id : null,
+                    financial_status: order.financial_status,
+                    created_at: order.created_at
+                })
+            } else {
+                taxes.push(data)
+            }
             await updateTable(TAX_TABLE_NAME, taxColumns, taxes, workspaceId, type, 'order_id');
             break
         case 'products':
