@@ -97,7 +97,7 @@ const update = async ({ workspaceId, event, type}, data) => {
             } else {
                 customers.push(data)
             }
-            console.log('customers data: ', customers)
+            // console.log('customers data: ', customers)
             await updateTable(CUSTOMER_TABLE_NAME, customerColumns, [data], workspaceId, type);
             let customeragg = []
             if(type != 'delete') {
@@ -108,7 +108,7 @@ const update = async ({ workspaceId, event, type}, data) => {
             } else {
                 customeragg.push(data)
             }
-            console.log('customer aggregate data: ', customeragg)
+            // console.log('customer aggregate data: ', customeragg)
             await del(CUSTOMERAGGREGATE_TABLE_NAME, customeragg, workspaceId, 'customer_id', 'id')
             customeragg.map(async (customer) => {
                 await aggregate(workspaceId, customer.id)
@@ -221,17 +221,18 @@ const update = async ({ workspaceId, event, type}, data) => {
             await updateTable(TAX_TABLE_NAME, taxColumns, taxes, workspaceId, type, 'order_id');
             break
         case 'products':
-            console.log('products data: ', data)
+            // console.log('products data: ', data)
             await updateTable(PRODUCT_TABLE_NAME, productColumns, [data], workspaceId, type);
+            
             let variants = [];
-            data.map(product => {
-                product.variants.map(variant => {
-                    variants.push({
-                        ...variant,
-                        image_url: getImageUrl(variant.image_id, product.images)
-                    })
+            if(type != 'delete') {
+                variants.push({
+                    ...data.variants,
+                    image_url: getImageUrl(variant.image_id, product.images)
                 })
-            })
+            } else {
+                variants.push(data)
+            }
             await updateTable(VARIANT_TABLE_NAME, variantsColumns, variants, workspaceId, type);
             break
         case 'refunds':
