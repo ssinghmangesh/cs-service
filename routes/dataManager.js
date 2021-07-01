@@ -23,6 +23,7 @@ const cartLineItemsColumns = require("../controller/DataManager/Setup/cartLineIt
 const checkoutColumns = require("../controller/DataManager/Setup/checkoutColumns.json");
 const checkoutLineItemsColumns = require("../controller/DataManager/Setup/checkoutLineItemsColumns.json");
 const { default: axios } = require('axios');
+const clearData = require('../controller/DataManager/clearData');
 
 
 
@@ -117,6 +118,12 @@ router.get('/data-manager/checkout/delete',async (req, res) => {
 router.post('/webhooks/:workspaceId/:event/:type',async (req, res) => {
     const response = await update(req.params, req.body);
     res.status(response.statusCode).send(response)
+})
+
+router.post('/data-manager/clear-data',async (req, res) => {
+    const { 'x-workspace-id': workspaceId } = req.headers
+    await clearData(req.body.type, workspaceId)
+    res.status(200).send({ status: true, message: 'successful' })
 })
 
 router.post('/bg-webhooks/:workspaceId/:store/:event/:type',async (req, res) => {

@@ -11,10 +11,10 @@ class Shopify {
         })
     }
 
-    static fetchOrderCount(shopName, accessToken) {
+    static fetchOrderCount(shopName, accessToken, since_id = 0) {
         return axios({
             method: 'GET',
-            url: `https://${shopName}/admin/api/2021-04/orders/count.json?status=any`,
+            url: `https://${shopName}/admin/api/2021-04/orders/count.json?status=any&since_id=${since_id}`,
             headers:  {
                 'X-Shopify-Access-Token': accessToken,
             }
@@ -32,10 +32,10 @@ class Shopify {
         })
     }
 
-    static fetchCustomerCount(shopName, accessToken) {
+    static fetchCustomerCount(shopName, accessToken, since_id = 0) {
         return axios({
             method: 'GET',
-            url: `https://${shopName}/admin/api/2021-04/customers/count.json`,
+            url: `https://${shopName}/admin/api/2021-04/customers/count.json?since_id=${since_id}`,
             headers:  {
                 'X-Shopify-Access-Token': accessToken,
             }
@@ -53,10 +53,10 @@ class Shopify {
         })
     }
 
-    static fetchProductCount(shopName, accessToken) {
+    static fetchProductCount(shopName, accessToken, since_id = 0) {
         return axios({
             method: 'GET',
-            url: `https://${shopName}/admin/api/2021-04/products/count.json`,
+            url: `https://${shopName}/admin/api/2021-04/products/count.json?since_id=${since_id}`,
             headers:  {
                 'X-Shopify-Access-Token': accessToken,
             }
@@ -74,10 +74,10 @@ class Shopify {
         })
     }
 
-    static fetchDiscountCount(shopName, accessToken) {
+    static fetchDiscountCount(shopName, accessToken, since_id = 0) {
         return axios({
             method: 'GET',
-            url: `https://${shopName}/admin/api/2021-04/price_rules/count.json`,
+            url: `https://${shopName}/admin/api/2021-04/price_rules/count.json?since_id=${since_id}`,
             headers:  {
                 'X-Shopify-Access-Token': accessToken,
             }
@@ -95,10 +95,10 @@ class Shopify {
         })
     }
 
-    static fetchCartCount(shopName, accessToken) {
+    static fetchCartCount(shopName, accessToken, since_id = 0) {
         return axios({
             method: 'GET',
-            url: `https://${shopName}/admin/api/2021-04/checkouts/count.json`,
+            url: `https://${shopName}/admin/api/2021-04/checkouts/count.json?since_id=${since_id}`,
             headers:  {
                 'X-Shopify-Access-Token': accessToken,
             }
@@ -116,10 +116,10 @@ class Shopify {
         })
     }
 
-    static fetchDraftOrderCount(shopName, accessToken) {
+    static fetchDraftOrderCount(shopName, accessToken, since_id = 0) {
         return axios({
             method: 'GET',
-            url: `https://${shopName}/admin/api/2021-04/draft_orders/count.json`,
+            url: `https://${shopName}/admin/api/2021-04/draft_orders/count.json?since_id=${since_id}`,
             headers:  {
                 'X-Shopify-Access-Token': accessToken,
             }

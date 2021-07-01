@@ -67,7 +67,35 @@ const editUser = async (file, data, workspaceId) => {
     return await updateUserToWorkpace(value);
 }
 
+const getAllUserToWorkspaces = async (userId) => {
+    let params = {
+        TableName: "UserToWorkspace",
+        FilterExpression: "user_id = :userId and #role = :role",
+        ExpressionAttributeNames: {
+            "#role": "role"
+        },
+        ExpressionAttributeValues: { ":userId": userId, ":role": "admin" },
+        ProjectionExpression: "workspace_id"
+    }
+    const { Items } = await fetchAll(params)
+    // return Items;
+    const promises = []
+    Items.forEach(item => {
+        params = {
+            TableName: "Workspace",
+            Key: {
+                workspace_id: item.workspace_id
+            },
+            ProjectionExpression: "workspace_id, shop_name"
+        }
+        promises.push(fetch(params))
+    })
+    const res = await Promise.all(promises);
+    return res.map(item => item.Item)
+}
+
 module.exports = {
     editUser,
-    getAllWorkspaces
+    getAllWorkspaces,
+    getAllUserToWorkspaces
 }
