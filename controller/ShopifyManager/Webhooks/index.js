@@ -255,7 +255,7 @@ const update = async ({ workspaceId, event, type}, data) => {
             await updateTable(TAX_TABLE_NAME, taxColumns, taxes, workspaceId, type, 'order_id');
             break
         case 'products':
-            console.log('products data: ', data)
+            // console.log('products data: ', data)
             let products = []
             if(type != 'delete') {
                 products.push({
