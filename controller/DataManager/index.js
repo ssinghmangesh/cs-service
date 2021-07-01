@@ -22,7 +22,7 @@ const insert = async(TABLE_NAME, column, data, workspaceId) => {
         ${getColumnName({ columnData: column })}
         VALUES ${getValues({ columnData: column, data })}
     `
-    // console.log(query)
+    console.log(query)
     let res = await PostgresqlDb.query(query)
     // console.log('insert response: ', res)
     return res
