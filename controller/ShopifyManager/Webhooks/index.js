@@ -76,7 +76,7 @@ const createWebhooks = async (shopName, accessToken, workspaceId) => {
 }
 
 const update = async ({ workspaceId, event, type}, data) => {
-    console.log(workspaceId, event, type);
+    // console.log(workspaceId, event, type);
     switch(event){
         case 'carts':
             await updateTable(CART_TABLE_NAME, cartColumns, [data], workspaceId, type);
@@ -227,7 +227,7 @@ const update = async ({ workspaceId, event, type}, data) => {
             } else {
                 discount_applications.push(data)
             }
-            console.log('discount data: ', discount_applications)
+            // console.log('discount data: ', discount_applications)
             await updateTable(DISCOUNTAPPLICATION_TABLE_NAME, discountApplicationsColumns, discount_applications, workspaceId, type, 'order_id');
 
             let line_items = []
@@ -263,11 +263,11 @@ const update = async ({ workspaceId, event, type}, data) => {
             } else {
                 taxes.push(data)
             }
-            console.log('taxes data: ', taxes)
+            // console.log('taxes data: ', taxes)
             await updateTable(TAX_TABLE_NAME, taxColumns, taxes, workspaceId, type, 'order_id');
             break
         case 'products':
-            // console.log('products data: ', data)
+            console.log('products data: ', data)
             // await updateTable(PRODUCT_TABLE_NAME, productColumns, [data], workspaceId, type);
 
             // let variants = [];
