@@ -89,12 +89,14 @@ const update = async ({ workspaceId, event, type}, data) => {
             console.log('customers data: ', data)
             await updateTable(CUSTOMER_TABLE_NAME, customerColumns, [data], workspaceId, type);
             let customers = []
-            data.map((customer) => {
+            if(type != 'deleted') {
                 customers.push({
-                    ...customer['default_address'],
-                    ...customer,
+                    ...data['default_address'],
+                    ...data,
                 })
-            })
+            } else {
+                customers.push(data)
+            }
             await del(CUSTOMERAGGREGATE_TABLE_NAME, customers, workspaceId, 'customer_id', 'id')
             customers.map(async (customer) => {
                 await aggregate(workspaceId, customer.id)
@@ -110,7 +112,7 @@ const update = async ({ workspaceId, event, type}, data) => {
         case 'orders':
             console.log('orders data: ', data)
             let orders = []
-            data.map(order => {
+            if(type != 'deleted') {
                 const { customer } = order
                 orders.push({
                     shipping_country: order.shipping_address && order.shipping_address.country,
@@ -125,7 +127,9 @@ const update = async ({ workspaceId, event, type}, data) => {
                     order_name: order.name,
                     customer_id: customer ? customer.id : null 
                 })
-            })
+            } else {
+                orders.push(data)
+            }
             await updateTable(ORDER_TABLE_NAME, orderColumns, orders, workspaceId, type);
             let fulfillments = []
             data.map(order => {
