@@ -22,7 +22,7 @@ const insert = async(TABLE_NAME, column, data, workspaceId) => {
         ${getColumnName({ columnData: column })}
         VALUES ${getValues({ columnData: column, data })}
     `
-    // console.log(query)
+    console.log(query)
     let res = await PostgresqlDb.query(query)
     // console.log('insert response: ', res)
     return res
@@ -149,7 +149,7 @@ const del = async (TABLE_NAME, data, workspaceId, id = 'id', id1) => {
     }
     // if(id === 'order_id') console.log('data: ', data)
     const query = `DELETE FROM ${TABLE_NAME(workspaceId)} WHERE ${id} IN ${getIds(data, id1)}`
-    // console.log(query);
+    console.log(query);
     let response =  await PostgresqlDb.query(query);
     // console.log("delete response: ", response);
 }
