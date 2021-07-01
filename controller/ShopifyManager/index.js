@@ -37,20 +37,22 @@ const updateRowHelper = async (workspaceId, objectType, lastObjectId) => {
     await updateRow(data)
 }
 
+
 const syncAll = async ({ shopName, accessToken, limit = 50, workspaceId, table = null }) => {
 
     console.log("Order")
-    const { data: { count: orderCount } } = await Shopify.fetchOrderCount(shopName, accessToken);
-    if(orderCount && (!table || table === 'order')) {
+    const { data: { count: TotalOrderCount } } = await Shopify.fetchOrderCount(shopName, accessToken);
+    if(TotalOrderCount && (!table || table === 'order')) {
         let orderSinceId = 0
         let response = await fetchRow({workspace_id: workspaceId, object_type: 'order'})
         if(Object.entries(response).length === 0) {
             console.log('first time')
-            addRowHelper(workspaceId, 'order', orderCount)            
+            addRowHelper(workspaceId, 'order', TotalOrderCount)            
         } else {
             console.log('after first time')
             orderSinceId = response.Item.last_object_id;
         }
+        const { data: { count: orderCount } } = await Shopify.fetchOrderCount(shopName, accessToken, orderSinceId);
         let lastObjectId = await orderSync({ shopName, accessToken, sinceId: orderSinceId, limit, workspaceId, count: orderCount })
         if(lastObjectId) {
             updateRowHelper(workspaceId, 'order', lastObjectId)
@@ -58,17 +60,18 @@ const syncAll = async ({ shopName, accessToken, limit = 50, workspaceId, table =
     }
 
     console.log("product")
-    const { data: {count: productCount } } = await Shopify.fetchProductCount(shopName, accessToken);
-    if(productCount && (!table || table === 'product')) {
+    const { data: {count: TotalProductCount } } = await Shopify.fetchProductCount(shopName, accessToken);
+    if(TotalProductCount && (!table || table === 'product')) {
         let productSinceId = 0
         let response = await fetchRow({workspace_id: workspaceId, object_type: 'product'})
         if(Object.entries(response).length === 0) {
             console.log('first time')
-            addRowHelper(workspaceId, 'product', productCount)            
+            addRowHelper(workspaceId, 'product', TotalProductCount)            
         } else {
             console.log('after first time')
             productSinceId = response.Item.last_object_id;
         }
+        const { data: {count: productCount } } = await Shopify.fetchProductCount(shopName, accessToken, productSinceId);
         let lastObjectId = await productSync({ shopName, accessToken, sinceId: productSinceId, limit, workspaceId, count: productCount })
         if(lastObjectId) {
             updateRowHelper(workspaceId, 'product', lastObjectId)
@@ -76,17 +79,18 @@ const syncAll = async ({ shopName, accessToken, limit = 50, workspaceId, table =
     }
     
     console.log("discount")
-    const { data: { count: discountCount } } = await Shopify.fetchDiscountCount(shopName, accessToken);
-    if(discountCount && (!table || table === 'discount')) {
+    const { data: { count: totalDiscountCount } } = await Shopify.fetchDiscountCount(shopName, accessToken);
+    if(totalDiscountCount && (!table || table === 'discount')) {
         let discountSinceId = 0
         let response = await fetchRow({workspace_id: workspaceId, object_type: 'discount'})
         if(Object.entries(response).length === 0) {
             console.log('first time')
-            addRowHelper(workspaceId, 'discount', discountCount)            
+            addRowHelper(workspaceId, 'discount', totalDiscountCount)            
         } else {
             console.log('after first time')
             discountSinceId = response.Item.last_object_id;
         }
+        const { data: { count: discountCount } } = await Shopify.fetchDiscountCount(shopName, accessToken, discountSinceId);
         let lastObjectId = await discountSync({ shopName, accessToken, sinceId: discountSinceId, limit, workspaceId, count: discountCount })
         if(lastObjectId) {
             updateRowHelper(workspaceId, 'discount', lastObjectId)
@@ -94,17 +98,18 @@ const syncAll = async ({ shopName, accessToken, limit = 50, workspaceId, table =
     }
 
     console.log("cart")
-    const { data: { count: cartCount } } = await Shopify.fetchCartCount(shopName, accessToken);
-    if(cartCount && (!table || table === 'cart')) {
+    const { data: { count: totalCartCount } } = await Shopify.fetchCartCount(shopName, accessToken);
+    if(totalCartCount && (!table || table === 'cart')) {
         let cartSinceId = 0
         let response = await fetchRow({workspace_id: workspaceId, object_type: 'cart'})
         if(Object.entries(response).length === 0) {
             console.log('first time')
-            addRowHelper(workspaceId, 'cart', cartCount)            
+            addRowHelper(workspaceId, 'cart', totalCartCount)            
         } else {
             console.log('after first time')
             cartSinceId = response.Item.last_object_id;
         }
+        const { data: { count: cartCount } } = await Shopify.fetchCartCount(shopName, accessToken, cartSinceId);
         let lastObjectId = await cartSync({ shopName, accessToken, sinceId: cartSinceId, limit, workspaceId, count: cartCount })
         if(lastObjectId) {
             updateRowHelper(workspaceId, 'cart', lastObjectId)
@@ -112,17 +117,18 @@ const syncAll = async ({ shopName, accessToken, limit = 50, workspaceId, table =
     }
 
     console.log("draftOrder")
-    const { data: { count: draftOrderCount } } = await Shopify.fetchDraftOrderCount(shopName, accessToken);
-    if(draftOrderCount && (!table || table === 'draftorder')) {
+    const { data: { count: totalDraftOrderCount } } = await Shopify.fetchDraftOrderCount(shopName, accessToken);
+    if(totalDraftOrderCount && (!table || table === 'draftorder')) {
         let draftOrderSinceId = 0
         let response = await fetchRow({workspace_id: workspaceId, object_type: 'draftorder'})
         if(Object.entries(response).length === 0) {
             console.log('first time')
-            addRowHelper(workspaceId, 'draftorder', draftOrderCount)            
+            addRowHelper(workspaceId, 'draftorder', totalDraftOrderCount)            
         } else {
             console.log('after first time')
             draftOrderSinceId = response.Item.last_object_id;
         }
+        const { data: { count: draftOrderCount } } = await Shopify.fetchDraftOrderCount(shopName, accessToken, draftOrderSinceId);
         let lastObjectId = await draftOrderSync({ shopName, accessToken, sinceId: draftOrderSinceId, limit, workspaceId, count: draftOrderCount })
         if(lastObjectId) {
             updateRowHelper(workspaceId, 'draftorder', lastObjectId)
@@ -159,17 +165,18 @@ const syncAll = async ({ shopName, accessToken, limit = 50, workspaceId, table =
     }
 
     console.log("Customer");
-    const { data: { count: customerCount } } = await Shopify.fetchCustomerCount(shopName, accessToken);
-    if(customerCount && (!table || table === 'customer')) {
+    const { data: { count: totalCustomerCount } } = await Shopify.fetchCustomerCount(shopName, accessToken);
+    if(totalCustomerCount && (!table || table === 'customer')) {
         let customerSinceId = 0
         let response = await fetchRow({workspace_id: workspaceId, object_type: 'customer'})
         if(Object.entries(response).length === 0) {
             console.log('first time')
-            addRowHelper(workspaceId, 'customer', customerCount)            
+            addRowHelper(workspaceId, 'customer', totalCustomerCount)            
         } else {
             console.log('after first time')
             customerSinceId = response.Item.last_object_id;
         }
+        const { data: { count: customerCount } } = await Shopify.fetchCustomerCount(shopName, accessToken, customerSinceId);
         let lastObjectId = await customerSync({ shopName, accessToken, sinceId: customerSinceId, limit, workspaceId, count: customerCount })
         if(lastObjectId) {
             updateRowHelper(workspaceId, 'customer', lastObjectId)
@@ -183,6 +190,6 @@ module.exports={
     syncAll
 }
 
-// syncAll({ shopName: 'indian-dress-cart.myshopify.com', accessToken: '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',  limit: 50, workspaceId: 56788582584, table: 'order' })
+// syncAll({ shopName: 'indian-dress-cart.myshopify.com', accessToken: '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',  limit: 50, workspaceId: 56788582584 })
 // .then(console.log)
 // .catch(console.log)
