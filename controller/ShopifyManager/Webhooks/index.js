@@ -134,7 +134,7 @@ const update = async ({ workspaceId, event, type}, data) => {
                     shipping_zip: data.shipping_address && data.shipping_address.zip,
                     shipping_latitude: data.shipping_address && data.shipping_address.latitude,
                     shipping_longitude: data.shipping_address && data.shipping_address.longitude,
-                    ...order,
+                    ...data,
                     order_id: data.id,
                     order_name: data.name,
                     customer_id: customer ? customer.id : null 
