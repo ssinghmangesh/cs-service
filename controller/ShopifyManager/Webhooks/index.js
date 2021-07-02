@@ -1,6 +1,7 @@
 const axios = require("axios")
 const webhooks = require('./webhooks.json');
 const { updateTable } = require('./helper');
+const { del, aggregate } = require('../../DataManager/index')
 
 const orderColumns = require('../../DataManager/Setup/orderColumns.json')
 const customerColumns = require('../../DataManager/Setup/customerColumns')
@@ -16,6 +17,7 @@ const discountApplicationsColumns = require("../../DataManager/Setup/discountApp
 const lineItemsColumns = require("../../DataManager/Setup/lineItemsColumns.json");
 const taxColumns = require("../../DataManager/Setup/taxColumns.json");
 const variantsColumns = require("../../DataManager/Setup/variantColumns.json");
+const customerAggregateColumns = require("../../DataManager/Setup/customerAggregateColumns.json");
 
 const {
     CUSTOMER_TABLE_NAME, 
@@ -32,6 +34,7 @@ const {
     LINEITEMS_TABLE_NAME,
     TAX_TABLE_NAME,
     VARIANT_TABLE_NAME,
+    CUSTOMERAGGREGATE_TABLE_NAME
 } = require("../../DataManager/helper");
 
 const createWebhooks = async (shopName, accessToken, workspaceId) => {
@@ -61,7 +64,7 @@ const createWebhooks = async (shopName, accessToken, workspaceId) => {
 }
 
 const update = async ({ workspaceId, event, type}, data) => {
-    console.log(workspaceId, event, type);
+    // console.log(workspaceId, event, type);
     switch(event){
         case 'carts':
             await updateTable(CART_TABLE_NAME, cartColumns, [data], workspaceId, type);
@@ -71,39 +74,211 @@ const update = async ({ workspaceId, event, type}, data) => {
             await updateTable(CHECKOUT_TABLE_NAME, checkoutColumns, [data], workspaceId, type);
             break
         case 'customers':
+            // console.log('customers data: ', data)
+            customers = []
+            if(type != 'delete') {
+                customers.push({
+                    ...data,
+                    state: data.default_address.province,
+                    country: data.default_address.country,
+                })
+            } else {
+                customers.push(data)
+            }
+            // console.log('customers data: ', customers)
             await updateTable(CUSTOMER_TABLE_NAME, customerColumns, [data], workspaceId, type);
+            let customeragg = []
+            if(type != 'delete') {
+                customeragg.push({
+                    ...data['default_address'],
+                    ...data,
+                })
+            } else {
+                customeragg.push(data)
+            }
+            // console.log('customer aggregate data: ', customeragg)
+            await del(CUSTOMERAGGREGATE_TABLE_NAME, customeragg, workspaceId, 'customer_id', 'id')
+            customeragg.map(async (customer) => {
+                await aggregate(workspaceId, customer.id)
+            })
             break
         case 'draft_orders':
-            await updateTable(DRAFTORDER_TABLE_NAME, draftOrderColumns, [data], workspaceId, type);
-            await updateTable(DRAFTORDERLINEITEMS_TABLE_NAME, draftOrderLineItemsColumns, data.line_items, workspaceId, type);
+            // console.log('draft orders: ', data)
+            let draft_orders = []
+            if(type != 'delete') {
+                const { customer } = data
+                draft_orders.push({
+                    ...data, 
+                    shipping_country: data.shipping_address && data.shipping_address.country,
+                    shipping_state: data.shipping_address && data.shipping_address.state,
+                    shipping_city: data.shipping_address && data.shipping_address.city,
+                    shipping_province: data.shipping_address && data.shipping_address.province,
+                    shipping_zip: data.shipping_address && data.shipping_address.zip,
+                    shipping_latitude: data.shipping_address && data.shipping_address.latitude,
+                    shipping_longitude: data.shipping_address && data.shipping_address.longitude,
+                    customer_id: customer ? customer.id : null 
+                })
+            } else {
+                draft_orders.push(data)
+            }       
+            await updateTable(DRAFTORDER_TABLE_NAME, draftOrderColumns, draft_orders, workspaceId, type);
+
+            let draft_order_line_items = []
+            if(type != 'delete') {
+                const { customer } = data
+                data.line_items.map(line_item => {
+                    draft_order_line_items.push({
+                        ...line_item,
+                        order_id: data.id,
+                        customer_id: customer ? customer.id : null,
+                        created_at: data.created_at,
+                    })
+                })
+            } else {
+                draft_order_line_items.push(data)
+            }
+            await updateTable(DRAFTORDERLINEITEMS_TABLE_NAME, draftOrderLineItemsColumns, draft_order_line_items, workspaceId, type);
             break
         case 'fulfillments':
             await updateTable(FULFILLMENT_TABLE_NAME, fulfillmentsColumns, [data], workspaceId, type);
             break
         case 'orders':
             // console.log('orders data: ', data)
-            await updateTable(ORDER_TABLE_NAME, orderColumns, [data], workspaceId, type);
-            console.log('order updated');
-            await updateTable(FULFILLMENT_TABLE_NAME, fulfillmentsColumns, data.fulfillments, workspaceId, type);
-            console.log('fulfillment updated');
-            await updateTable(REFUNDED_TABLE_NAME, refundedColumns, data.refunds, workspaceId, type);
-            for(let i = 0; i < data.discount_applications.length; i++) {
-                if(typeof data.discount_applications[i].order_id === 'undefined') {
-                    data.discount_applications[i].order_id = data.id
-                }
+            let orders = []
+            if(type != 'delete') {
+                const { customer } = data
+                orders.push({
+                    shipping_country: data.shipping_address && data.shipping_address.country,
+                    shipping_state: data.shipping_address && data.shipping_address.state,
+                    shipping_city: data.shipping_address && data.shipping_address.city,
+                    shipping_province: data.shipping_address && data.shipping_address.province,
+                    shipping_zip: data.shipping_address && data.shipping_address.zip,
+                    shipping_latitude: data.shipping_address && data.shipping_address.latitude,
+                    shipping_longitude: data.shipping_address && data.shipping_address.longitude,
+                    ...data,
+                    order_id: data.id,
+                    order_name: data.name,
+                    customer_id: customer ? customer.id : null 
+                })
+            } else {
+                orders.push(data)
             }
-            await updateTable(DISCOUNTAPPLICATION_TABLE_NAME, discountApplicationsColumns, data.discount_applications, workspaceId, type, 'order_id');
-            await updateTable(LINEITEMS_TABLE_NAME, lineItemsColumns, data.line_items, workspaceId, type);
-            for(let i = 0; i < data.tax_lines.length; i++) {
-                if(typeof data.tax_lines[i].order_id === 'undefined') {
-                    data.tax_lines[i].order_id = data.id
-                }
+            await updateTable(ORDER_TABLE_NAME, orderColumns, orders, workspaceId, type);
+
+            let fulfillments = []
+            if(type != 'delete') {
+                const { customer } = data
+                data.fulfillments.map((fulfillment) => {
+                    fulfillments.push({
+                        ...fulfillment,
+                        order_id: data.id,
+                        order_name: data.name,
+                        customer_id: customer ? customer.id : null 
+                    })
+                })
+            } else {
+                fulfillments.push(data)
             }
-            await updateTable(TAX_TABLE_NAME, taxColumns, data.tax_lines, workspaceId, type, 'order_id');
+            await updateTable(FULFILLMENT_TABLE_NAME, fulfillmentsColumns, fulfillments, workspaceId, type);
+
+            let refunds = []
+            if(type != 'delete') {
+                const { customer } = data
+                data.refunds.map((refund) => {
+                    refunds.push({
+                        ...refund,
+                        order_id: data.id,
+                        order_name: data.name,
+                        customer_id: customer ? customer.id : null 
+                    })
+                })
+                
+            } else {
+                refunds.push(data)
+            }
+            await updateTable(REFUNDED_TABLE_NAME, refundedColumns, refunds, workspaceId, type);
+
+            let discount_applications = []
+            if(type != 'delete') {
+                const { customer } = data
+                data.discount_applications.map((discount_application) => {
+                    discount_applications.push({
+                        ...discount_application,
+                        current_total_discounts: data.current_total_discounts,
+                        order_id: data.id,
+                        order_name: data.name,
+                        customer_id: customer ? customer.id : null,
+                        financial_status: data.financial_status,
+                        created_at: data.created_at
+                    })
+                })
+            } else {
+                discount_applications.push(data)
+            }
+            // console.log('discount data: ', discount_applications)
+            await updateTable(DISCOUNTAPPLICATION_TABLE_NAME, discountApplicationsColumns, discount_applications, workspaceId, type, 'order_id');
+
+            let line_items = []
+            if(type != 'delete') {
+                const { customer } = data
+                data.line_items.map((line_item) => {
+                    line_items.push({
+                        ...line_item,
+                        order_id: data.id,
+                        order_name: data.name,
+                        customer_id: customer ? customer.id : null 
+                    })
+                })
+            } else {
+                line_items.push(data)
+            }
+            await updateTable(LINEITEMS_TABLE_NAME, lineItemsColumns, line_items, workspaceId, type);
+
+            let taxes = []
+            if(type != 'delete') {
+                const { customer } = data
+                data.tax_lines.map((tax_line) => {
+                    taxes.push({
+                        ...tax_line,
+                        current_total_tax: data.current_total_tax,
+                        order_id: data.id,
+                        order_name: data.name,
+                        customer_id: customer ? customer.id : null,
+                        financial_status: data.financial_status,
+                        created_at: data.created_at
+                    })
+                })
+            } else {
+                taxes.push(data)
+            }
+            // console.log('taxes data: ', taxes)
+            await updateTable(TAX_TABLE_NAME, taxColumns, taxes, workspaceId, type, 'order_id');
             break
         case 'products':
-            await updateTable(PRODUCT_TABLE_NAME, productColumns, [data], workspaceId, type);
-            await updateTable(VARIANT_TABLE_NAME, variantsColumns, data.variants, workspaceId, type);
+            // console.log('products data: ', data)
+            let products = []
+            if(type != 'delete') {
+                products.push({
+                    ...data,
+                    inventory_item_id: data.variants[0].inventory_item_id,
+                    inventory_quantity: data.variants[0].inventory_quantity,
+                })
+            } else {
+                products.push(data)
+            }
+            await updateTable(PRODUCT_TABLE_NAME, productColumns, products, workspaceId, type);
+
+            let variants = [];
+            if(type != 'delete') {
+                data.variants.map((variant) => {
+                    variants.push({
+                        ...variant,
+                    })
+                })
+            } else {
+                variants.push(data)
+            }
+            await updateTable(VARIANT_TABLE_NAME, variantsColumns, variants, workspaceId, type);
             break
         case 'refunds':
             await updateTable(REFUNDED_TABLE_NAME, refundedColumns, [data], workspaceId, type);
