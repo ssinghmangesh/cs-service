@@ -27,7 +27,8 @@ class Customer {
 
     static async productPurchased({TABLE_NAME, customerId, orderBykey, orderByDirection, limit, skipRowby = 0}) {
         let query = ``
-        query = `SELECT product_purchased FROM ${TABLE_NAME} WHERE customer_id = ${customerId} ${ORDER_BY(orderBykey, orderByDirection)} ${LIMIT(limit)} OFFSET ${skipRowby};`
+        console.log(customerId)
+        query = `SELECT * FROM ${TABLE_NAME} WHERE customer_id = ${customerId} ${ORDER_BY(orderBykey, orderByDirection)} ${LIMIT(limit)} OFFSET ${skipRowby};`
         // console.log(query);
         return abstractData(await PostgresqlDb.query(query));
     }
