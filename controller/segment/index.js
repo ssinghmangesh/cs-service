@@ -1,4 +1,4 @@
-const { insert, query } = require('../../aws/index')
+const { insert, query, del } = require('../../aws/index')
 
 const addSegment = async (workspaceId, data) => {
     const params = {
@@ -17,6 +17,17 @@ const addSegment = async (workspaceId, data) => {
     return await insert(params);
 }
 
+const deleteSegment = async (workspaceId, segmentId) => {
+    const params = {
+        TableName : "Segment",
+        Key: {
+            workspace_id: Number(workspaceId),
+            segment_id: segmentId
+        },
+    }
+    return await del(params);
+}
+
 const getSegments = async (workspaceId) => {
     const params = {
         TableName : "Segment",
@@ -30,5 +41,6 @@ const getSegments = async (workspaceId) => {
 
 module.exports = {
     addSegment,
-    getSegments
+    getSegments,
+    deleteSegment,
 }
