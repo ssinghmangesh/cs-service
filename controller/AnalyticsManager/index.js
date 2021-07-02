@@ -190,7 +190,7 @@ class Dashboard {
         return abstractData(await PostgresqlDb.query(query));
     }
 
-    static async stats({TABLE_NAME, limit, skipRowby = 0, filters = {}, statsDefinition = []}) {
+    static async stats({TABLE_NAME = 'order333', limit = null, skipRowby = 0, filters = {}, statsDefinition = []}) {
         let wc = whereClause(filters);
         let query = `SELECT `
         for(let i = 0; i < statsDefinition.length; i++) {
@@ -210,7 +210,7 @@ class Dashboard {
             }
         }
         query += ` FROM ${TABLE_NAME} ${wc ? 'WHERE ' + wc : ''} ${LIMIT(limit)} OFFSET ${skipRowby};`
-        console.log(query)
+        // console.log(query)
         return abstractData(await PostgresqlDb.query(query), "single");
     }
 

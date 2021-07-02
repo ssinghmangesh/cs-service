@@ -1,4 +1,4 @@
-trackCS = async function(workspaceId) {
+trackCS = async function() {
     function sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
       }
@@ -11,7 +11,7 @@ trackCS = async function(workspaceId) {
     // document.getElementsByTagName('head')[0].appendChild(x);
     
     await sleep(500);
-
+    const workspaceId = window.BOOMR.shopId
     const socket = io("https://custom-segment-socket.herokuapp.com/customer");
 
     let csData = {}
@@ -86,7 +86,6 @@ trackCS = async function(workspaceId) {
     }
 
     async function syncAPI(){
-        console.log(csData)
         return await jQuery.ajax({
                         url: "https://custom-segment-service.herokuapp.com/data-manager/event/add",
                         type: "POST",
@@ -110,50 +109,8 @@ trackCS = async function(workspaceId) {
             await syncAPI();
         }
     })
-        
-    
-    console.log("csData : ", csData)
     const res = await syncAPI()
-    console.log(res)
 }
 
 
-trackCS(56788582584)
-
-
-
-// module.exports = trackingScript
-
-// console.log(trackingScript())
-
-
-// cartChanges = function() {
-//     jq.ajax({
-//         url: "/cart.js",
-//         type: "GET",
-//         dataType: "json",
-//         cache: 0
-//     }).done(function(e) {
-        
-//         csData = { ...csData, cart: e }
-//         console.log(e)
-//     })
-// }
-
-
-
-/*
-step 1: on which page we are ? product_view, collection_view, article_view, blog_view, cart_view, checkout_view, home_screen
-*/
-
-// pageviewed(workspaceId)
-// page_id:
-// event_name: 
-// path:
-// href: 
-// cart_id:
-// customer_id: 
-// cart: 
-// product: 
-// os
-// previous_page
+trackCS()
