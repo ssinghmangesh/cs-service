@@ -75,9 +75,10 @@ const update = async ({ workspaceId, event, type}, data) => {
     // console.log(workspaceId, event, type);
     switch(event){
         case 'carts':
-            console.log(data)
+            console.log('cart data: ', data)
             let carts = []
             if(type != 'delete') {
+                const { customer } = data
                 carts.push({
                     id: data.id,
                     customer_id: customer ? customer.id : null,
@@ -96,6 +97,7 @@ const update = async ({ workspaceId, event, type}, data) => {
             let cartLineItems = []
             if(type != 'delete') {
                 data.line_items.map(line_item => {
+                    const { customer } = data
                     cartLineItems.push({
                         id: data.id,
                         customer_id: customer ? customer.id : null,
