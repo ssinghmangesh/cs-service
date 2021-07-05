@@ -82,7 +82,7 @@ const update = async ({ workspaceId, event, type}, data) => {
                 carts.push({
                     id: data.id,
                     customer_id: customer ? customer.id : null,
-                    token: data.cart_token,
+                    token: data.token,
                     note: data.note,
                     updated_at: data.updated_at,
                     created_at: data.created_at,
