@@ -19,6 +19,14 @@ const taxColumns = require("../../DataManager/Setup/taxColumns.json");
 const variantsColumns = require("../../DataManager/Setup/variantColumns.json");
 const customerAggregateColumns = require("../../DataManager/Setup/customerAggregateColumns.json");
 
+const getId = (array, column) => {
+    let ids = []
+    array.map(item => {
+        ids.push(item[column])
+    })
+    return ids
+}
+
 const {
     CUSTOMER_TABLE_NAME, 
     ORDER_TABLE_NAME,
@@ -67,8 +75,53 @@ const update = async ({ workspaceId, event, type}, data) => {
     // console.log(workspaceId, event, type);
     switch(event){
         case 'carts':
-            await updateTable(CART_TABLE_NAME, cartColumns, [data], workspaceId, type);
-            await updateTable(CARTLINEITEMS_TABLE_NAME, cartLineItemsColumns, data.line_items, workspaceId, type);
+            let carts = []
+            if(type != 'delete') {
+                carts.push({
+                    id: data.id,
+                    customer_id: customer ? customer.id : null,
+                    token: data.cart_token,
+                    note: data.note,
+                    updated_at: data.updated_at,
+                    created_at: data.created_at,
+                    product_id: getId(data.line_items, "product_id"),
+                    variant_id: getId(data.line_items, "variant_id"),
+                })
+            } else {
+                carts.push(data)
+            }
+            await updateTable(CART_TABLE_NAME, cartColumns, carts, workspaceId, type);
+
+            let cartLineItems = []
+            if(type != 'delete') {
+                data.line_items.map(line_item => {
+                    cartLineItems.push({
+                        id: data.id,
+                        customer_id: customer ? customer.id : null,
+                        quantity: line_item.quantity,
+                        variant_id: line_item.variant_id,
+                        key: line_item.key,
+                        discounted_price: data.total_price,
+                        properties: line_item.properties,
+                        discounts: line_item.applied_discounts,
+                        gift_card: line_item.gift_card,
+                        grams: line_item.grams,
+                        line_price: line_item.line_price,
+                        original_line_price: data.total_line_items_price,
+                        original_price: 0,
+                        price: line_item.price,
+                        product_id: line_item.product_id,
+                        sku: line_item.sku,
+                        taxable: line_item.taxable,
+                        title: line_item.title,
+                        total_discount: data.total_discounts,
+                        vendor: line_item.vendor
+                    }) 
+                })
+            } else {
+                cartLineItems.push(data)
+            }
+            await updateTable(CARTLINEITEMS_TABLE_NAME, cartLineItemsColumns, cartLineItems, workspaceId, type);
             break
         case 'checkouts':
             await updateTable(CHECKOUT_TABLE_NAME, checkoutColumns, [data], workspaceId, type);
