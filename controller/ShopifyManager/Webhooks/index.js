@@ -99,7 +99,7 @@ const update = async ({ workspaceId, event, type}, data) => {
                 data.line_items.map(line_item => {
                     const { customer } = data
                     cartLineItems.push({
-                        id: data.id,
+                        id: line_item.id,
                         customer_id: customer ? customer.id : null,
                         quantity: line_item.quantity,
                         variant_id: line_item.variant_id,
