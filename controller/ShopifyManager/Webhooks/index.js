@@ -75,6 +75,7 @@ const update = async ({ workspaceId, event, type}, data) => {
     // console.log(workspaceId, event, type);
     switch(event){
         case 'carts':
+            console.log(data)
             let carts = []
             if(type != 'delete') {
                 carts.push({
@@ -212,7 +213,7 @@ const update = async ({ workspaceId, event, type}, data) => {
                     order_id: data.id,
                     order_name: data.name,
                     customer_id: customer ? customer.id : null,
-                    fulfillment_status: order.fulfillment_status || 'unfulfilled'
+                    fulfillment_status: data.fulfillment_status || 'unfulfilled'
                 })
             } else {
                 orders.push(data)
@@ -227,7 +228,8 @@ const update = async ({ workspaceId, event, type}, data) => {
                         ...fulfillment,
                         order_id: data.id,
                         order_name: data.name,
-                        customer_id: customer ? customer.id : null 
+                        customer_id: customer ? customer.id : null,
+                        fulfillment_status: data.fulfillment_status || 'unfulfilled'
                     })
                 })
             } else {
@@ -280,7 +282,8 @@ const update = async ({ workspaceId, event, type}, data) => {
                         ...line_item,
                         order_id: data.id,
                         order_name: data.name,
-                        customer_id: customer ? customer.id : null 
+                        customer_id: customer ? customer.id : null,
+                        fulfillment_status: data.fulfillment_status || 'unfulfilled'
                     })
                 })
             } else {
