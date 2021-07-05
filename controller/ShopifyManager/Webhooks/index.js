@@ -158,7 +158,8 @@ const update = async ({ workspaceId, event, type}, data) => {
                     ...data,
                     order_id: data.id,
                     order_name: data.name,
-                    customer_id: customer ? customer.id : null 
+                    customer_id: customer ? customer.id : null,
+                    fulfillment_status: order.fulfillment_status || 'unfulfilled'
                 })
             } else {
                 orders.push(data)
