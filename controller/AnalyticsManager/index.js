@@ -194,7 +194,17 @@ class Dashboard {
         let wc = whereClause(filters);
         let query = `SELECT `
         for(let i = 0; i < statsDefinition.length; i++) {
-            query += `${statsDefinition[i].aggregate}(${statsDefinition[i].columnname}) AS ${statsDefinition[i].alias}`
+            if(statsDefinition[i].operator) {
+                query += `${statsDefinition[i].aggregate}(case when ${statsDefinition[i].columnname} ${statsDefinition[i].operator} `
+                if(typeof statsDefinition[i].value === 'number') {
+                    query += `${statsDefinition[i].value} then true end)`
+                } else {
+                    query += `'${statsDefinition[i].value}' then true end)`
+                }
+                query += ` AS ${statsDefinition[i].alias}`
+            } else {
+                query += `${statsDefinition[i].aggregate}(${statsDefinition[i].columnname}) AS ${statsDefinition[i].alias}`
+            }
             if(i < statsDefinition.length - 1) {
                 query += `, `
             }
