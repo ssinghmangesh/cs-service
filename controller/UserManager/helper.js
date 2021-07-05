@@ -17,9 +17,16 @@ const getAllWorkspaces = async ({ userId }) => {
             Key: {
                 workspace_id: res.Items[i].workspace_id
             },
-            ProjectionExpression: "workspace_id, shop_name"
+            ProjectionExpression: "workspace_id, shop_name, shop"
         }
-        const {Item: workspace} = await fetch(params)
+        let {Item: workspace} = await fetch(params)
+        workspace = { 
+            ...workspace, 
+            timezone: workspace.shop.timezone, 
+            currency: workspace.shop.money_format, 
+            currencies: workspace.shop.enabled_presentment_currencies 
+        }
+        delete workspace.shop;
         workspaces.push(workspace);
     }
     return workspaces
