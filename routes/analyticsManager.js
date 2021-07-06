@@ -71,6 +71,7 @@ router.post('/analytics-manager/table', async (req, res) => {
     let table = `${details.table}${workspaceId}`
     let response = await Dashboard.table({TABLE_NAME: table, orderBykey: details.orderBykey, orderByDirection: details.orderByDirection, limit: details.limit, skipRowby: details.skipRowby, filters: details.filters })
     // console.log(response)
+    res.setHeader('Access-Control-Allow-Origin', '*');
     res.status(200).send( { status: true, message: "successful", data: response } )
 })
 
