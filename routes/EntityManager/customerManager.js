@@ -56,21 +56,10 @@ router.post('/customer-manager/product-in-cart', async (req, res) => {
     res.status(200).send( { status: true, message: "successful", data: response } )
 })
 
-router.post('/customer-manager/product-viewed', async (req, res) => {
+router.post('/customer-manager/timeline', async (req, res) => {
     const details = req.body
     const { 'x-workspace-id': workspaceId } = req.headers
-    let table = `customeraggregate${workspaceId}`
-    let response = await Customer.productViewed({TABLE_NAME: table, customerId: details.customerId, orderBykey: details.orderBykey, 
-                                                orderByDirection: details.orderByDirection, limit: details.limit, 
-                                                skipRowby: details.skipRowby})
-    // console.log(response)
-    res.status(200).send( { status: true, message: "successful", data: response } )
-})
-
-router.post('/customer-manager/page-viewed', async (req, res) => {
-    const details = req.body
-    const { 'x-workspace-id': workspaceId } = req.headers
-    let table = `customeraggregate${workspaceId}`
+    let table = `event${workspaceId}`
     let response = await Customer.event({TABLE_NAME: table, customerId: details.customerId, orderBykey: details.orderBykey, 
                                         orderByDirection: details.orderByDirection, limit: details.limit, 
                                         skipRowby: details.skipRowby})

@@ -47,5 +47,13 @@
     {
         "columnName":"previous_page",
         "dataType": "varchar"
+    },
+    {
+        "columnName":"product_id",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"variant_id",
+        "dataType": "numeric"
     }
 ]
