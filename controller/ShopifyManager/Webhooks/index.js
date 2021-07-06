@@ -151,14 +151,15 @@ const update = async ({ workspaceId, event, type}, data) => {
                     ...data['default_address'],
                     ...data,
                 })
+                await del(CUSTOMERAGGREGATE_TABLE_NAME, customeragg, workspaceId, 'customer_id', 'id')
+                customeragg.map(async (customer) => {
+                    await aggregate(workspaceId, customer.id)
+                })
             } else {
                 customeragg.push(data)
+                await del(CUSTOMERAGGREGATE_TABLE_NAME, customeragg, workspaceId, 'customer_id', 'id')
             }
             // console.log('customer aggregate data: ', customeragg)
-            await del(CUSTOMERAGGREGATE_TABLE_NAME, customeragg, workspaceId, 'customer_id', 'id')
-            customeragg.map(async (customer) => {
-                await aggregate(workspaceId, customer.id)
-            })
             break
         case 'draft_orders':
             // console.log('draft orders: ', data)
