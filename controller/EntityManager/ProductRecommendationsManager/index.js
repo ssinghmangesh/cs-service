@@ -39,7 +39,21 @@ const compute = async ({workspaceId, customerId}) => {
     // return eventresponse
 }
 
+const addRecommendations = async (workspaceId, rawData) => {
+    const data = rawData.recommendations.map((recommendation) => ({
+        customer_id: rawData.customer_id,
+        recommendation_type: 'default',
+        product_id: recommendation.product_id,
+        variant_id: recommendation.variant_id,
+        score: 0,
+        created_at: Date.now(),
+        valid_till: Date.now() + 10
+    }))
+    return await insert(PRODUCTRECOMMENDATIONS_TABLE_NAME, productRecommendationsColumns, data, workspaceId)
+}
+
 module.exports = {
     productRecommendations,
     compute,
+    addRecommendations
 }

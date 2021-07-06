@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const { productRecommendations, compute } = require('../../controller/EntityManager/ProductRecommendationsManager/index')
+const { productRecommendations, compute, addRecommendations } = require('../../controller/EntityManager/ProductRecommendationsManager/index')
 
 router.post('/product-recommendations-manager/recommendations', async (req, res) => {
     const details = req.body
@@ -21,9 +21,13 @@ router.post('/product-recommendations-manager/compute-product-recommendations', 
 })
 
 router.post('/product-recommendations-manager/add', async (req, res) => {
-    // const details = req.body
-    // const { 'x-workspace-id': workspaceId } = req.headers
-    // res.status(200).send( { status: true, message: "successful", data: response } )
+    const { 'x-workspace-id': workspaceId } = req.headers
+    try {
+        await addRecommendations(workspaceId, req.body)
+        res.status(200).send( { status: true, message: "successful" } )
+    } catch {
+        res.status(400).send( { status: false, message: "unsuccessful" } )
+    }
 })
 
 module.exports = router
