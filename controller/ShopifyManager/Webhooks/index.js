@@ -135,28 +135,31 @@ const update = async ({ workspaceId, event, type}, data) => {
             if(type != 'delete') {
                 customers.push({
                     ...data,
-                    state: data.default_address.province,
-                    country: data.default_address.country,
+                    state: data.default_address && data.default_address.province,
+                    country: data.default_address && data.default_address.country,
+                    city: data.default_address && data.default_address.city,
                 })
+                // console.log('data to be inserted in customer table: ', customers)
             } else {
                 customers.push(data)
             }
             // console.log('customers data: ', customers)
-            await updateTable(CUSTOMER_TABLE_NAME, customerColumns, [data], workspaceId, type);
+            await updateTable(CUSTOMER_TABLE_NAME, customerColumns, customers, workspaceId, type);
             let customeragg = []
             if(type != 'delete') {
                 customeragg.push({
                     ...data['default_address'],
                     ...data,
                 })
+                await del(CUSTOMERAGGREGATE_TABLE_NAME, customeragg, workspaceId, 'customer_id', 'id')
+                customeragg.map(async (customer) => {
+                    await aggregate(workspaceId, customer.id)
+                })
             } else {
                 customeragg.push(data)
+                await del(CUSTOMERAGGREGATE_TABLE_NAME, customeragg, workspaceId, 'customer_id', 'id')
             }
             // console.log('customer aggregate data: ', customeragg)
-            await del(CUSTOMERAGGREGATE_TABLE_NAME, customeragg, workspaceId, 'customer_id', 'id')
-            customeragg.map(async (customer) => {
-                await aggregate(workspaceId, customer.id)
-            })
             break
         case 'draft_orders':
             // console.log('draft orders: ', data)
