@@ -107,7 +107,7 @@ router.post('/data-manager/event/add',async (req, res) => {
     if(event && event.product && event.product.id) {
         data = { 
             ...data,
-            product_id = event.product.id
+            product_id: event.product.id
         }
     }
     const response = await updateEvent(data, workspaceId);
