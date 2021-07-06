@@ -130,15 +130,16 @@ const update = async ({ workspaceId, event, type}, data) => {
             await updateTable(CHECKOUT_TABLE_NAME, checkoutColumns, [data], workspaceId, type);
             break
         case 'customers':
-            console.log('customers data: ', data)
+            // console.log('customers data: ', data)
             customers = []
             if(type != 'delete') {
                 customers.push({
                     ...data,
                     state: data.default_address.province,
                     country: data.default_address.country,
+                    city: data.default_address.city,
                 })
-                console.log('data to be inserted in customer table: ', customers)
+                // console.log('data to be inserted in customer table: ', customers)
             } else {
                 customers.push(data)
             }
