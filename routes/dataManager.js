@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+const uuid = require('uuid');
 const { setupWorkspace } = require('../controller/DataManager/Setup')
 const { updateEvent } = require("../controller/ShopifyManager/Webhooks/helper");
 const { update } = require("../controller/ShopifyManager/Webhooks/index");
@@ -100,7 +101,7 @@ router.post('/data-manager/checkout/add',async (req, res) => {
 router.post('/data-manager/event/add',async (req, res) => {
     const { event } = req.body;
     const { 'x-workspace-id': workspaceId } = req.headers
-    event.id = event.page_id;
+    event.id = uuid();
     let data = {
         ...event
     }
