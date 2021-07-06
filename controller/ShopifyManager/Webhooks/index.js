@@ -143,7 +143,7 @@ const update = async ({ workspaceId, event, type}, data) => {
                 customers.push(data)
             }
             // console.log('customers data: ', customers)
-            await updateTable(CUSTOMER_TABLE_NAME, customerColumns, [data], workspaceId, type);
+            await updateTable(CUSTOMER_TABLE_NAME, customerColumns, customers, workspaceId, type);
             let customeragg = []
             if(type != 'delete') {
                 customeragg.push({
