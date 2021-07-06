@@ -9,10 +9,11 @@ var docClient = new AWS.DynamoDB.DocumentClient();
 
 const insert = async (params) => {
     try{
-        return await docClient.put(params).promise()
+        await docClient.put(params).promise()
+        return params.Item
     }
     catch(err){
-        return err.message
+        throw err.message
     }
 }
 
@@ -21,7 +22,6 @@ const update = async (params) => {
         return await docClient.update(params).promise();
     }
     catch(err){
-        console.log(err.message);
         return err.message
     }
 }
@@ -41,7 +41,7 @@ const del = async (params) => {
         return await docClient.delete(params).promise()
     }
     catch(err){
-        return err.message
+        throw err.message
     }
 }
 
