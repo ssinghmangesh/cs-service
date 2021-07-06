@@ -46,12 +46,14 @@ const Dashboard = require('./index.js')
 //     {
 //         aggregate: 'sum',
 //         columnname: 'total_price',
-//         alias: 'Total'
+//         alias: 'Total',
 //     },
 //     {
 //         aggregate: 'count',
-//         columnname: 'total_price',
-//         alias: 'Total_Count'
+//         columnname: 'fulfillment_status',
+//         alias: 'Status',
+//         operator: '=',
+//         value: 'fulfilled'
 //     },
 //     {
 //         aggregate: '',
@@ -79,6 +81,10 @@ const Dashboard = require('./index.js')
 //         alias: 'ID'
 //     }
 // ]
+
+// Dashboard.stats({TABLE_NAME: 'order56788582584', statsDefinition: statsDefinition})
+// .then(console.log)
+// .catch(console.log)
 
 // Dashboard.tableGroupBy({groupBykey: ['fulfillment_status', 'buyer_accepts_marketing'], statsDefinition: statsDefinition})
 // .then(console.log)
