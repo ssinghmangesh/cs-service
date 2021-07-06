@@ -36,8 +36,9 @@ router.post('/customer-manager/cart', async (req, res) => {
 router.post('/customer-manager/product-purchased', async (req, res) => {
     const details = req.body
     const { 'x-workspace-id': workspaceId } = req.headers
-    let table = `customeraggregate${workspaceId}`
-    let response = await Customer.productPurchased({TABLE_NAME: table, customerId: details.customerId, orderBykey: details.orderBykey, 
+    let table = `lineitems${workspaceId}`
+    let response = await Customer.productPurchased({TABLE_NAME: table, customerId: details.customerId,
+                                                    orderBykey: details.orderBykey, 
                                                     orderByDirection: details.orderByDirection, limit: details.limit, 
                                                     skipRowby: details.skipRowby})
     // console.log(response)

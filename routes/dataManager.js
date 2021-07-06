@@ -101,7 +101,16 @@ router.post('/data-manager/event/add',async (req, res) => {
     const { event } = req.body;
     const { 'x-workspace-id': workspaceId } = req.headers
     event.id = event.page_id;
-    const response = await updateEvent(event, workspaceId);
+    let data = {
+        ...event
+    }
+    if(event && event.product && event.product.id) {
+        data = { 
+            ...data,
+            product_id = event.product.id
+        }
+    }
+    const response = await updateEvent(data, workspaceId);
 
     console.log("event added");
     res.status(200).send({ message: "working" })

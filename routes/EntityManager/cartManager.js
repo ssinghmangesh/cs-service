@@ -16,9 +16,9 @@ router.post('/cart-manager/cart', async (req, res) => {
 router.post('/cart-manager/product', async (req, res) => {
     const details = req.body
     const { 'x-workspace-id': workspaceId } = req.headers
-    let table = `cart${workspaceId}`
-    console.log('api')
-    let response = await Cart.product({TABLE_NAME: table, cartId: details.cartId, workspaceId: workspaceId, 
+    let table = `cartlineitems${workspaceId}`
+    // console.log('api')
+    let response = await Cart.product({TABLE_NAME: table, cartId: details.cartId, 
                                     orderBykey: details.orderBykey, orderByDirection: details.orderByDirection, 
                                     limit: details.limit, skipRowby: details.skipRowby})
     // console.log(response)

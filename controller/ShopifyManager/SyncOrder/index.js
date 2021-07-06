@@ -107,7 +107,8 @@ const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0 , workspaceI
             ...order,
             order_id: order.id,
             order_name: order.name,
-            customer_id: customer ? customer.id : null 
+            customer_id: customer ? customer.id : null,
+            fulfillment_status: order.fulfillment_status || 'unfulfilled'
         })
     })
 
