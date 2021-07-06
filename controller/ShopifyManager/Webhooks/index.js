@@ -138,6 +138,7 @@ const update = async ({ workspaceId, event, type}, data) => {
                     state: data.default_address.province,
                     country: data.default_address.country,
                 })
+                console.log('data to be inserted in customer table: ', customers)
             } else {
                 customers.push(data)
             }
