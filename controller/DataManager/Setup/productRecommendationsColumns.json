@@ -1,0 +1,31 @@
+[
+    {
+        "columnName":"customer_id",
+        "dataType": "numeric",
+        "primaryKey": true
+    },
+    {
+        "columnName":"recommendation_type",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"product_id",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"variant_id",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"score",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"created_at",
+        "dataType": "timestamptz"
+    },
+    {
+        "columnName":"valid_till",
+        "dataType": "timestamptz"
+    }
+]
