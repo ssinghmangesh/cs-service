@@ -135,9 +135,9 @@ const update = async ({ workspaceId, event, type}, data) => {
             if(type != 'delete') {
                 customers.push({
                     ...data,
-                    state: data.default_address.province,
-                    country: data.default_address.country,
-                    city: data.default_address.city,
+                    state: data.default_address && data.default_address.province,
+                    country: data.default_address && data.default_address.country,
+                    city: data.default_address && data.default_address.city,
                 })
                 // console.log('data to be inserted in customer table: ', customers)
             } else {
