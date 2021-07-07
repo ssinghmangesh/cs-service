@@ -38,7 +38,7 @@ const sendtemplate = async (details) => {
         html: html
     }
     // console.log('could have been sent!', mailOptions)
-    sendMail(mailOptions, 0, details.workspaceId, details.html_path)
+    sendMail({mailOptions: mailOptions, flag: 0, workspaceId: details.workspaceId, html_path: details.html_path})
 }
 
 module.exports = {
