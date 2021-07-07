@@ -4,6 +4,10 @@
         "dataType": "numeric"
     },
     {
+        "columnName":"created_at",
+        "dataType": "timestamptz"
+    },
+    {
         "columnName":"fulfillable_quantity",
         "dataType": "numeric"
     },
