@@ -37,8 +37,8 @@ const sendtemplate = async (details) => {
         subject: details.subject ? details.subject : "Hello from Custom Segment!",
         html: html
     }
-    console.log('could have been sent!', mailOptions)
-    sendMail(mailOptions, 0)
+    // console.log('could have been sent!', mailOptions)
+    sendMail(mailOptions, 0, details.workspaceId, details.html_path)
 }
 
 module.exports = {
