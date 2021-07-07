@@ -1,6 +1,12 @@
 const express = require('express')
 const router = express.Router()
-const { productRecommendations, compute } = require('../../controller/EntityManager/ProductRecommendationsManager/index')
+const { productRecommendations, historyBased, cartBased } = require('../../controller/EntityManager/ProductRecommendationsManager/index')
+
+router.post('/product-recommendations-manager/add', async (req, res) => {
+    const details = req.body
+    const { 'x-workspace-id': workspaceId } = req.headers
+    res.status(200).send( { status: true, message: "successful", data: response } )
+})
 
 router.post('/product-recommendations-manager/recommendations', async (req, res) => {
     const details = req.body
@@ -13,17 +19,18 @@ router.post('/product-recommendations-manager/recommendations', async (req, res)
     res.status(200).send( { status: true, message: "successful", data: response } )
 })
 
-router.post('/product-recommendations-manager/compute-product-recommendations', async (req, res) => {
+router.post('/product-recommendations-manager/history', async (req, res) => {
     const details = req.body
     const { 'x-workspace-id': workspaceId } = req.headers
-    let response = await compute({workspaceId: workspaceId, customerId: details.customerId})
+    let response = await historyBased({workspaceId: workspaceId, customerId: details.customerId})
     res.status(200).send( { status: true, message: "successful", data: response } )
 })
 
-router.post('/product-recommendations-manager/add', async (req, res) => {
-    // const details = req.body
-    // const { 'x-workspace-id': workspaceId } = req.headers
-    // res.status(200).send( { status: true, message: "successful", data: response } )
+router.post('/product-recommendations-manager/cart', async (req, res) => {
+    const details = req.body
+    const { 'x-workspace-id': workspaceId } = req.headers
+    let response = await cartBased({workspaceId: workspaceId, customerId: details.customerId})
+    res.status(200).send( { status: true, message: "successful", data: response } )
 })
 
 module.exports = router
