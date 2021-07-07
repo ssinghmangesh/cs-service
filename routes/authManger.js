@@ -4,32 +4,12 @@ const nonce = require('nonce')();
 const axios = require("axios");
 const { updateUser, fetchUser, addUser } = require("../controller/UserManager/index")
 
-const shopifyApiPublicKey = 'eb6b044f4a8cf434a8100f85cac58205';
-const shopifyApiSecretKey = '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';
-const scopes = 'read_products, read_product_listings, read_customers, read_orders, read_script_tags, write_script_tags, read_checkouts, read_draft_orders, read_price_rules, read_fulfillments, read_assigned_fulfillment_orders, read_content'
-
-const buildInstallUrl = (shop, state, redirectUri) => `https://${shop}/admin/oauth/authorize?client_id=${shopifyApiPublicKey}&scope=${scopes}&state=${state}&redirect_uri=${redirectUri}`;
-
-
 router.post('/auth-manager/check-for-register', async (req, res) => {
-    const { userId, password, shopName } = req.body 
+    const { userId, password } = req.body 
+    // return res.status(200).send(`http://localhost:3000/install?shop=${shopName}`);
     const fetchedUser = await fetchUser({ user_id: userId })
     if(Object.keys(fetchedUser).length !== 0){
-        if(!fetchedUser.Item.password) {
-            const data = {
-                Key:{
-                    "user_id": userId
-                },
-                UpdateExpression: "set password = :password",
-                ExpressionAttributeValues:{
-                    ":password": password,
-                }
-            }
-            await updateUser(data);
-            res.status(200).send('user created');
-        } else {
-            res.status(200).send('email already exists!');
-        }
+        res.status(400).send('email already exists!');
     } else {
         const user = {
             user_id: userId,
@@ -38,27 +18,13 @@ router.post('/auth-manager/check-for-register', async (req, res) => {
             updated_at: Date.now()
         }
         await addUser(user);
-        
-        const state = nonce();  
-        const installShopUrl = buildInstallUrl(shopName, state, 'http://localhost:3000/callback')
-        // console.log(await axios.get(installShopUrl))
-        res.status(200).send(installShopUrl);
-        // res.redirect('/install?shop='+shopName);
+        res.status(200).send('User Registered');
     }
     //step 1: check if the email of user already exists
     //login
     //step 2: check if the workspace already exists
     // 
     // res.redirect()
-
-    return {
-        alreadyExists: {
-            user: true,
-            workspace: true 
-        }
-    }
-    
-    res.status(200).send(response)
 })
 
 router.post('/auth-manager/user/add', async (req, res) => {
