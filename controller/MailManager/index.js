@@ -5,7 +5,7 @@ const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
         user: 'lionelthegoatmessi@gmail.com',
-        pass: 'lionelmessitg10'
+        pass: 'messithegoat10'
     }
 });
 
@@ -30,5 +30,5 @@ const sendMail = (mailOptions, flag) => {
 }
 
 module.exports = {
-    sendMail
+    sendMail,
 }

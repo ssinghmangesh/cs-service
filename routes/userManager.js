@@ -1,4 +1,5 @@
 const express = require('express')
+const { sendMail } = require('../controller/MailManager/index');
 const {
     // createUser, 
     // createWorkspace, 
@@ -36,8 +37,15 @@ const multer = Multer({
 
 /***** ADD *****/
 router.post('/user-manager/user/add', async function (req, res) {
-    let response = await addUser({user_id: req.body.user_id, status: 'pending', created_at: Date.now(), updated_at: Date.now()})
+    let response = await fetchUser({ user_id: req.body.user_id })
+    const flag = (response.Item && response.Item.password) ? true : false
+    if(!response.Item){
+        response = await addUser({user_id: req.body.user_id, status: 'pending', created_at: Date.now(), updated_at: Date.now()})
+    }
     response = await addUserToWorkspace({workspace_id: req.body.workspace_id, user_id: req.body.user_id, company: req.body.company, role: req.body.role})
+    if(!flag){
+        sendMail({ from: 'lionelthegoatmessi@gmail.com', to: req.body.user_id, subject: 'Set Password for Custom Segment' ,html: '<p>Click <a href="https://app.customsegment.com/pages/authentication/reset-password-v1?user_id=' + encodeURIComponent(req.body.user_id) + '">here</a> to set your password</p>'})
+    }
     return res.status(200).send( { status: true, message: "successful", data: response } )
 })
 
