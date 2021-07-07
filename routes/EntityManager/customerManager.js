@@ -67,6 +67,18 @@ router.post('/customer-manager/timeline', async (req, res) => {
     res.status(200).send( { status: true, message: "successful", data: response } )
 })
 
+router.post('/customer-manager/notifications', async (req, res) => {
+    const details = req.body
+    const { 'x-workspace-id': workspaceId } = req.headers
+    let table = `sentemail${workspaceId}`
+    let response = await Customer.notification({TABLE_NAME: table, customerEmail: details.customerEmail, orderBykey: details.orderBykey, 
+                                        orderByDirection: details.orderByDirection, limit: details.limit, 
+                                        skipRowby: details.skipRowby})
+    // console.log(response)
+    res.status(200).send( { status: true, message: "successful", data: response } )
+    return response
+})
+
 module.exports = router
 
 // let aggregateDefinition = [
