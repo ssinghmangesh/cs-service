@@ -76,7 +76,6 @@ router.post('/customer-manager/notifications', async (req, res) => {
                                         skipRowby: details.skipRowby})
     // console.log(response)
     res.status(200).send( { status: true, message: "successful", data: response } )
-    return response
 })
 
 module.exports = router
