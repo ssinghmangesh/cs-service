@@ -13,6 +13,7 @@ const { addWorkspace, fetchWorkspace, fetchUser, addUser, addUserToWorkspace } =
 const { setupWorkspace } = require('../controller/DataManager/Setup')
 const { syncAll } = require("../controller/ShopifyManager/index");
 const { createWebhooks } = require("../controller/ShopifyManager/Webhooks/index");
+const { insert, fetch, del, query } = require('../aws/index');
 const Shopify = require('../controller/ShopifyManager/Shopify')
 
 const shopifyApiPublicKey = 'eb6b044f4a8cf434a8100f85cac58205';
@@ -49,6 +50,39 @@ const fetchShopData = async (shop, accessToken) => await axios(buildShopDataRequ
     }
 });
 
+
+router.post('/connect', async (req, res) => {
+    try{
+        let params = {
+            TableName: 'ConnectStore',
+            Key: {
+                shop: req.body.shop
+            }
+        }
+        let resp = await fetch(params);
+        if(resp.Item){
+            const diff = Math.abs(new Date() - new Date(resp.Item.created_at));
+            const minutes = Math.floor((diff/1000)/60);
+            if(minutes < 5) {
+                return res.status(400).send(`${resp.Item.user_id} already trying to connect to store`)
+            }
+        }
+        params = {
+            TableName: 'ConnectStore',
+            Item: {
+                shop: req.body.shop,
+                user_id: req.body.userId,
+                created_at: new Date().toISOString(),
+            }
+        }
+        resp = await insert(params)
+        res.status(200).send(`https://custom-segment-service.herokuapp.com/install?shop=${req.body.shop}`);
+    } catch (err) {
+        console.log(err);
+        res.status(500).send("Something Went Wrong!")
+    }
+    
+})
 
 
 router.get('/install', async (req, res) => {
@@ -144,6 +178,18 @@ router.get('/callback', async (req, res) => {
             await addUser(user);
         }
 
+        
+        let params = {
+            TableName: 'ConnectStore',
+            Key: {
+                shop: shopData.data.shop.myshopify_domain
+            }
+        }
+        let resp = await fetch(params);
+        if(resp.Item){
+            await addUserToWorkspace({ user_id: resp.Item.user_id, workspace_id: shopData.data.shop.id, role: 'admin'})
+            await del(params);
+        }
         const userToWorkspace = {
             user_id: shopData.data.shop.email,
             workspace_id: shopData.data.shop.id,
