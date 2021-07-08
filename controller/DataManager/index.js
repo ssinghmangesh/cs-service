@@ -22,9 +22,8 @@ const insert = async(TABLE_NAME, column, data, workspaceId) => {
         ${getColumnName({ columnData: column })}
         VALUES ${getValues({ columnData: column, data })}
     `
-    console.log(query)
-    let res = await PostgresqlDb.query(query)
-    return res
+    // console.log(query)
+    return await PostgresqlDb.query(query)
 }
 
 const aggregate = async (workspaceId, customerId) => {
@@ -147,7 +146,7 @@ const del = async (TABLE_NAME, data, workspaceId, id = 'id', id1) => {
         id1 = id
     }
     const query = `DELETE FROM ${TABLE_NAME(workspaceId)} WHERE ${id} IN ${getIds(data, id1)}`
-    console.log(query);
+    // console.log(query);
     let response =  await PostgresqlDb.query(query);
 }
 

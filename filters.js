@@ -150,7 +150,6 @@ const whereClause = (filters = filters1, workspaceId = 333, ptype) => {
             return whereClause(filter, workspaceId, ptype)
         }).join(` ${ filters.relation } `)} )`
     } else {
-        // console.log(JSON.stringify(filters, null, 4));
         return typeBuild(ptype, workspaceId, filters)
     }
 }
@@ -159,7 +158,6 @@ const typeBuild = (ptype, workspaceId, { columnName, filterType, dataType, value
     let prefix = ''
     let table = ''
     let f = 0
-    // console.log(ptype, type)
     if(type === 'CUSTOMER') {
         table = `${CUSTOMER_TABLE_NAME(workspaceId)}`
     } else if(type === 'ORDER') {
@@ -330,7 +328,6 @@ const typeBuild = (ptype, workspaceId, { columnName, filterType, dataType, value
     return query
 }
 
-// console.log(whereClause())
 module.exports = {
     whereClause
 }

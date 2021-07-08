@@ -146,13 +146,14 @@ router.get('/callback', async (req, res) => {
 
         const userToWorkspace = {
             user_id: shopData.data.shop.email,
-            workspace_id: shopData.data.shop.id
+            workspace_id: shopData.data.shop.id,
+            role: 'admin'
         }
         await addUserToWorkspace(userToWorkspace);
         if (flag) {
-            res.redirect(`http://localhost:8080/pages/authentication/reset-password-v1?user_id=${shopData.data.shop.email}`)
+            res.redirect(`https://app.customsegment.com/pages/authentication/reset-password-v1?user_id=${uriEncodedComponent(shopData.data.shop.email)}`)
         } else {        
-            res.redirect('http://localhost:8080/apps/customers');
+            res.redirect('https://app.customsegment.com/apps/customers');
         }
     } catch (err) {
         console.log(err)

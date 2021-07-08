@@ -58,5 +58,5 @@ const sendMail = async ({mailOptions, flag, workspaceId, html_path}) => {
 }
 
 module.exports = {
-    sendMail
+    sendMail,
 }

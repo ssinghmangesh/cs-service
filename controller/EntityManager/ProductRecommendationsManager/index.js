@@ -99,8 +99,65 @@ const cartBased = async ({workspaceId, customerId}) => {
     }
 }
 
+const addRecommendations = async (workspaceId, rawData) => {
+    const data = rawData.recommendations.map((recommendation) => ({
+        customer_id: rawData.customerId,
+        recommendation_type: 'Added By Agent',
+        product_id: recommendation.product_id,
+        variant_id: recommendation.variant_id,
+        score: 1,
+        created_at: Date.now(),
+        valid_till: Date.now() + 10
+    }))
+    return await insert(PRODUCTRECOMMENDATIONS_TABLE_NAME, productRecommendationsColumns, data, workspaceId)
+}
+
+const popularProducts = async (data, workspaceId) => {
+    try{
+        const productDate = new Date();
+        productDate.setDate(productDate.getDate() - data.product_since_days);
+        let query = `SELECT product_id, COUNT(*) FROM lineitems${workspaceId} WHERE created_at >= '${productDate.toISOString().replace("T", " ")}' GROUP BY product_id ORDER BY COUNT(*) DESC LIMIT ${data.limit}`
+        let res = await PostgresqlDb.query(query);
+        let response = [...res.rows];
+        const ids = response.map((item) => item.product_id)
+        if(ids.length === 0) {
+            return;
+        }
+        query = `SELECT id FROM customer${workspaceId}`
+        res = await PostgresqlDb.query(query)
+        const customerDate = new Date();
+        customerDate.setDate(customerDate.getDate() - data.customer_since_days);
+        const promises = res.rows.map(({id: customerId}) => {
+            return new Promise(async (resolve, reject) => {
+                query = `SELECT product_id FROM lineitems${workspaceId} WHERE customer_id = ${customerId} AND created_at >= '${customerDate.toISOString().replace("T", " ")}' AND product_id IN (${ids}) GROUP BY product_id`
+                res = await PostgresqlDb.query(query);
+                const purchasedProducts = res.rows.map(item => item.product_id);
+                const productsToRecommend = ids.filter(obj => purchasedProducts.indexOf(obj) == -1);
+                const recommendations = productsToRecommend.map((productId) => ({
+                    customer_id: customerId,
+                    recommendation_type: 'Popular Products',
+                    product_id: productId,
+                    score: 1,
+                    created_at: Date.now(),
+                    valid_till: Date.now() + 10
+                }))
+                await insert(PRODUCTRECOMMENDATIONS_TABLE_NAME, productRecommendationsColumns, recommendations, workspaceId)
+                resolve();
+            })
+        })
+        await Promise.all(promises)
+        return true
+    } catch(err) {
+        console.log(err);
+        throw err;
+    }
+    
+}
+
 module.exports = {
     productRecommendations,
+    addRecommendations,
     historyBased,
     cartBased,
+    popularProducts,
 }

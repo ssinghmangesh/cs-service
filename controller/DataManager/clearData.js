@@ -130,7 +130,6 @@ const clearData = async (type, workspaceId) => {
         default:
             break;
     }
-    console.log('table deleted');
     await deleteRowHelper(workspaceId, type);
     return true
 }
