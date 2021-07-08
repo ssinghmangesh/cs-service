@@ -13,13 +13,17 @@ const WHERE_CLAUSE = (details) => {
 }
 
 const sendtemplate = async (details) => {
-    const query = `SELECT email FROM ${details.table} ${WHERE_CLAUSE(details)};`
-    let response = await PostgresqlDb.query(query)
     let to = []
-    for(let i = 0; i < response.rows.length; i++) {
-        to.push(response.rows[i].email)
+    if(details.filters) {
+        const query = `SELECT email FROM ${details.table} ${WHERE_CLAUSE(details)};`
+        let response = await PostgresqlDb.query(query)
+        for(let i = 0; i < response.rows.length; i++) {
+            to.push(response.rows[i].email)
+        }
     }
-    // console.log('to: ', to)
+    if(!to.length) {
+        to.push('nimish007gupta@gmail.com')
+    }
 
     response = await axios({
                         method: 'GET',
@@ -29,12 +33,12 @@ const sendtemplate = async (details) => {
     const html = response.data
     mailOptions = {
         from: 'lionelthegoatmessi@gmail.com',
-        to: 'nimish007gupta@gmail.com',// to,
+        to: to,
         subject: details.subject ? details.subject : "Hello from Custom Segment!",
         html: html
     }
     // console.log('could have been sent!', mailOptions)
-    sendMail(mailOptions, 0)
+    sendMail({mailOptions: mailOptions, flag: 0, workspaceId: details.workspaceId, html_path: details.html_path})
 }
 
 module.exports = {
