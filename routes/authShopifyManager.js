@@ -129,6 +129,22 @@ router.get('/callback', async (req, res) => {
         // console.log("tokenResponse : ", tokenResponseData)
         // console.log("shopData: ", shopData.data.shop)
 
+        let params = {
+            TableName: 'ConnectStore',
+            Key: {
+                shop: shopData.data.shop.myshopify_domain
+            }
+        }
+        let resp = await fetch(params);
+        if(resp.Item){
+            const diff = Math.abs(new Date() - new Date(resp.Item.created_at));
+            const minutes = Math.floor((diff/1000)/60);
+            if(minutes < 5) {
+                await addUserToWorkspace({ user_id: resp.Item.user_id, workspace_id: shopData.data.shop.id, role: 'admin'})
+                await del(params);
+            }
+        }
+
         const fetchedWorkspace = await fetchWorkspace({ workspace_id: shopData.data.shop.id })
         // console.log(fetchedWorkspace);
         if (Object.keys(fetchedWorkspace).length === 0) {
@@ -179,17 +195,7 @@ router.get('/callback', async (req, res) => {
         }
 
         
-        let params = {
-            TableName: 'ConnectStore',
-            Key: {
-                shop: shopData.data.shop.myshopify_domain
-            }
-        }
-        let resp = await fetch(params);
-        if(resp.Item){
-            await addUserToWorkspace({ user_id: resp.Item.user_id, workspace_id: shopData.data.shop.id, role: 'admin'})
-            await del(params);
-        }
+        
         const userToWorkspace = {
             user_id: shopData.data.shop.email,
             workspace_id: shopData.data.shop.id,
