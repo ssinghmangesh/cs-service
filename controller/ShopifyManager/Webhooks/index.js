@@ -353,10 +353,10 @@ const update = async ({ workspaceId, event, type}, data) => {
             break
         case 'inventory_items':
             console.log('inventory_items: ', data)
-            await updateTable(INVENTORYITEM_TABLE_NAME, inventoryItemColumns, [data], type)
+            await updateTable(INVENTORYITEM_TABLE_NAME, inventoryItemColumns, [data], workspaceId, type)
         case 'inventory_levels':
             console.log('inventory_levels: ', data)
-            await updateTable(INVENTORYLEVEL_TABLE_NAME, inventoryLevelColumns, [data], type, 'inventory_item_id')
+            await updateTable(INVENTORYLEVEL_TABLE_NAME, inventoryLevelColumns, [data], workspaceId, type, 'inventory_item_id')
         case 'refunds':
             await updateTable(REFUNDED_TABLE_NAME, refundedColumns, [data], workspaceId, type);
             break
