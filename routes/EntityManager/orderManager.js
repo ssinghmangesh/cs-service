@@ -35,4 +35,26 @@ router.post('/order-manager/fulfillments', async (req, res) => {
     res.status(200).send( { status: true, message: "successful", data: response } )
 })
 
+router.post('/order-manager/refunds', async (req, res) => {
+    const details = req.body
+    const { 'x-workspace-id': workspaceId } = req.headers
+    let table = `refunded${workspaceId}`
+    let response = await Order.refunds({TABLE_NAME: table, orderId: details.orderId, orderBykey: details.orderBykey, 
+                                            orderByDirection: details.orderByDirection, limit: details.limit, 
+                                            skipRowby: details.skipRowby})
+    // console.log(response)
+    res.status(200).send( { status: true, message: "successful", data: response } )
+})
+
+router.post('/order-manager/transactions', async (req, res) => {
+    const details = req.body
+    const { 'x-workspace-id': workspaceId } = req.headers
+    let table = `transaction${workspaceId}`
+    let response = await Order.transactions({TABLE_NAME: table, orderId: details.orderId, orderBykey: details.orderBykey, 
+                                            orderByDirection: details.orderByDirection, limit: details.limit, 
+                                            skipRowby: details.skipRowby})
+    // console.log(response)
+    res.status(200).send( { status: true, message: "successful", data: response } )
+})
+
 module.exports = router
