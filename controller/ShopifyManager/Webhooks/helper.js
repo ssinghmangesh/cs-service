@@ -20,6 +20,13 @@ const updateTable = async (TABLE_NAME, column, data, workspaceId, type, id = 'id
         case 'delete':
             await del(TABLE_NAME, data, workspaceId, id, id1)
             break
+        case 'connect':
+            await del(TABLE_NAME, data, workspaceId, id, id1)
+            await insert(TABLE_NAME, column, data, workspaceId)
+            break
+        case 'disconnect':
+            await del(TABLE_NAME, data, workspaceId, id, id1)
+            break
         default:
             await del(TABLE_NAME, data, workspaceId, id, id1)
             await insert(TABLE_NAME, column, data, workspaceId)
