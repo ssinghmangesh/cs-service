@@ -74,7 +74,7 @@ const getWorkspace = async ({shopName, notificationType}) => {
         let res = await query(params);
         const workspace = {
             workspaceId: res.Items[0].workspace_id,
-            domain: res.Items[0].shop.name,
+            domain: res.Items[0].shop.domain,
             moneyFormat: res.Items[0].shop.money_with_currency_in_emails_format,
             owner: res.Items[0].shop.customer_email,
             name: res.Items[0].shop.name
