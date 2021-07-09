@@ -65,7 +65,7 @@ const fetchAllNotifications = async (workspaceId) => {
 
 const getWorkspace = async ({shopName, notificationType}) => {
     try{
-
+        console.log(shopName);
         let params = { 
             TableName: 'Workspace',
             IndexName: 'shop-index',
