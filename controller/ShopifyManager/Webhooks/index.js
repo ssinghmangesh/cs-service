@@ -357,9 +357,10 @@ const update = async ({ workspaceId, event, type}, data) => {
         case 'inventory_levels':
             console.log('inventory_levels: ', data)
             await updateTable(INVENTORYLEVEL_TABLE_NAME, inventoryLevelColumns, [data], workspaceId, type, 'inventory_item_id')
-        case 'refunds':
-            await updateTable(REFUNDED_TABLE_NAME, refundedColumns, [data], workspaceId, type);
-            break
+        // case 'refunds':
+        //     console.log('refunded data: ', data)
+        //     await updateTable(REFUNDED_TABLE_NAME, refundedColumns, [data], workspaceId, type);
+        //     break
         default:
             break
     }
