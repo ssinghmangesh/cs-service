@@ -73,6 +73,7 @@ const getWorkspace = async ({shopName, notificationType}) => {
             ExpressionAttributeValues: { ':shop_name': shopName } 
         }
         let res = await query(params);
+        console.log(res);
         const workspace = {
             workspaceId: res.Items[0].workspace_id,
             domain: res.Items[0].shop.domain,
