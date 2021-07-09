@@ -1,4 +1,5 @@
 const { insert, del, fetch, fetchAll, update, query } = require("../../aws/index");
+const PostgresqlDb = require('../../db')
 
 const addNotification = async (data) => {
     const params = {
@@ -97,6 +98,47 @@ const getWorkspace = async ({shopName, notificationType}) => {
     }
 }
 
+const getProductImages = async(workspaceId, data) => {
+    try{
+        const promises = data.products.map(({product_id, variant_id}) => {
+            return new Promise(async (resolve, reject) => {
+                const query = `SELECT images FROM product${workspaceId} where id = ${product_id}`
+                const res = await PostgresqlDb.query(query);
+                const response = { variant_id }
+                res.rows[0].images.map((image, index) => {
+                    if(index == 0){
+                        response.image_url = image.src
+                    }
+                    if (image.variant_ids.includes(variant_id)) {
+                        response.image_url = image.src
+                    }
+                })
+                resolve(response);
+            })
+        })
+        const res = await Promise.all(promises);
+        return res;
+    } catch(err) {
+        console.log(err);
+        throw err;
+    }
+}
+
+// getProductImages(56788582584, [
+//     {
+//         product_id: 6718142251192,
+//         variant_id: 39859538821304
+//     },
+//     {
+//         product_id: 6718142251192,
+//         variant_id: 39859538755768
+//     },
+//     {
+//         product_id: 6718142251192,
+//         variant_id: 39859538788536
+//     },
+// ]);
+
 // getWorkspace('indian-dress-cart.myshopify.com', 'orderCreated')
 // .then(console.log)
 
@@ -107,4 +149,5 @@ module.exports = {
     fetchNotification,
     fetchAllNotifications,
     getWorkspace,
+    getProductImages,
 }

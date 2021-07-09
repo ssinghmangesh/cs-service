@@ -1,5 +1,5 @@
 const express = require('express')
-const { fetchNotification, getWorkspace } = require('../controller/NotificationManager/index')
+const { fetchNotification, getWorkspace, getProductImages } = require('../controller/NotificationManager/index')
 const { addNotificationHelper, fetchNotificationHelper } = require('../controller/NotificationManager/helper')
 const { del, insert } = require('../controller/DataManager/index')
 const { SENTEMAIL_TABLE_NAME } = require('../controller/DataManager/helper')
@@ -17,6 +17,16 @@ router.post('/notifications/email/insert', async function (req, res) {
 router.post('/notifications/workspace/fetch', async (req, res) => {
     try{
         const response = await getWorkspace(req.body);
+        res.status(200).send(response);
+    }catch(err){
+        res.sendStatus(500);
+    }
+})
+
+router.post('/notifications/product-images/fetch', async (req, res) => {
+    try{
+        const { 'x-workspace-id': workspaceId } = req.headers
+        const response = await getProductImages(workspaceId, req.body);
         res.status(200).send(response);
     }catch(err){
         res.sendStatus(500);
