@@ -346,7 +346,7 @@ const update = async ({ workspaceId, event, type}, data) => {
             } else {
                 variants.push(data)
             }
-            await updateTable(VARIANT_TABLE_NAME, variantsColumns, variants, workspaceId, type);
+            await updateTable(VARIANT_TABLE_NAME, variantsColumns, variants, workspaceId, type, 'product_id', 'id');
             break
         case 'inventory_items':
             console.log('inventory_items: ', data)
