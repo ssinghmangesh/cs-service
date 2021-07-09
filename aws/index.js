@@ -60,7 +60,7 @@ const fetch = async (params) => {
     }
     catch(err){
         console.log(err);
-        return err.message
+        throw err.message
     }
 }
 
