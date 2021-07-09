@@ -68,11 +68,14 @@ const createWebhooks = async (shopName, accessToken, workspaceId) => {
               }
           })
         //   console.log(i);
-        }catch(err){
-          console.log(err)
+        } catch(err){
+          console.log(err.response.data)
         }
     }
 }
+
+// createWebhooks('indian-dress-cart.myshopify.com', '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', 56788582584)
+// .then(console.log)
 
 const update = async ({ workspaceId, event, type}, data) => {
     // console.log(workspaceId, event, type);
@@ -353,7 +356,7 @@ const update = async ({ workspaceId, event, type}, data) => {
             await updateTable(INVENTORYITEM_TABLE_NAME, inventoryItemColumns, [data], type)
         case 'inventory_levels':
             console.log('inventory_levels: ', data)
-            await updateTable(INVENTORYLEVEL_TABLE_NAME, inventoryItemColumns, [data], type, 'inventory_item_id')
+            await updateTable(INVENTORYLEVEL_TABLE_NAME, inventoryLevelColumns, [data], type, 'inventory_item_id')
         case 'refunds':
             await updateTable(REFUNDED_TABLE_NAME, refundedColumns, [data], workspaceId, type);
             break
@@ -362,9 +365,6 @@ const update = async ({ workspaceId, event, type}, data) => {
     }
     return {statusCode: 200, message: "Update Successful"}
 }
-
-// createWebhooks('indian-dress-cart.myshopify.com', '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', 56788582584)
-// .then(console.log)
 
 module.exports = {
     update,
