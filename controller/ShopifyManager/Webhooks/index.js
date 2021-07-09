@@ -322,30 +322,22 @@ const update = async ({ workspaceId, event, type}, data) => {
         case 'products':
             // console.log('products data: ', data)
             let products = []
-            if(type != 'delete') {
-                let quantity = 0
-                data.variants.map((variant) => {
-                    quantity += variant.inventory_quantity
-                })
-                products.push({
-                    ...data,
-                    inventory_quantity: quantity
-                })
-            } else {
-                products.push(data)
-            }
+            let quantity = 0
+            data.variants.map((variant) => {
+                quantity += variant.inventory_quantity
+            })
+            products.push({
+                ...data,
+                inventory_quantity: quantity
+            })
             await updateTable(PRODUCT_TABLE_NAME, productColumns, products, workspaceId, type);
 
             let variants = [];
-            if(type != 'delete') {
-                data.variants.map((variant) => {
-                    variants.push({
-                        ...variant,
-                    })
+            data.variants.map((variant) => {
+                variants.push({
+                    ...variant,
                 })
-            } else {
-                variants.push(data)
-            }
+            })
             await updateTable(VARIANT_TABLE_NAME, variantsColumns, variants, workspaceId, type);
             break
         case 'inventory_items':
