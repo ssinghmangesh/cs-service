@@ -126,50 +126,25 @@ class Shopify {
         })
     }
 
-    static fetchInventoryItem(shopName, accessToken, option) {
-        const { since_id, limit } = option
+    static fetchInventoryItem(shopName, accessToken, inventoryItemIds) {
         return axios({
             method: 'GET',
-            url: `https://${shopName}/admin/api/2021-04/inventory_items.json?`,
+            url: `https://${shopName}/admin/api/2021-04/inventory_items.json?ids=${inventoryItemIds}`,
             headers:  {
                 'X-Shopify-Access-Token': accessToken,
             }
         })
     }
 
-    // static fetchInventoryItemCount(shopName, accessToken) {
-    //     return axios({
-    //         method: 'GET',
-    //         url: `https://${shopName}/admin/api/2021-04/draft_orders/count.json?status=any`,
-    //         headers:  {
-    //             'X-Shopify-Access-Token': accessToken,
-    //         }
-    //     })
-    // }
-
-    static fetchInventoryLevel(shopName, accessToken, option) {
-        const { location_ids } = option
-        console.log(option)
-        let Url = `https://${shopName}/admin/api/2021-04/inventory_levels.json?location_ids=${location_ids}&limit=50`
-        console.log('Url: ', Url)
+    static fetchInventoryLevel(shopName, accessToken, inventoryItemIds) {
         return axios({
             method: 'GET',
-            url: Url,
+            url: `https://${shopName}/admin/api/2021-04/inventory_levels.json?inventory_item_ids=${inventoryItemIds}`,
             headers:  {
                 'X-Shopify-Access-Token': accessToken,
             }
         })
     }
-
-    // static fetchInventoryLevelCount(shopName, accessToken) {
-    //     return axios({
-    //         method: 'GET',
-    //         url: `https://${shopName}/admin/api/2021-04/draft_orders/count.json?status=any`,
-    //         headers:  {
-    //             'X-Shopify-Access-Token': accessToken,
-    //         }
-    //     })
-    // }
 
     static fetchLocation(shopName, accessToken) {
         return axios({

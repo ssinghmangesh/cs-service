@@ -1,44 +1,32 @@
 const Shopify = require('../Shopify')
 const {insert, del} = require("../../DataManager/index");
-const {INVENTORYLEVEL_TABLE_NAME, INVENTORYITEM_TABLE_NAME, LOCATION_TABLE_NAME} = require("../../DataManager/helper")
-const inventoryLevelColumns = require("../../DataManager/Setup/inventoryLevelColumns.json");
-const { socket } = require("../../../socket");
+const {INVENTORYLEVEL_TABLE_NAME} = require("../../DataManager/helper")
+const inventoryLevelColumns = require('../../DataManager/Setup/inventoryLevelColumns.json');
+const { socket } = require("../../../socket")
 const PostgresqlDb = require('../../../db')
 
-const SYNC = async ({ shopName, accessToken, updatedAtMin = '2019-03-19T01:21:44-04:00', limit = 0, workspaceId, count, progress = 0 }) => {
-    //call to shopify fetch one batch
-    let data = await PostgresqlDb.query(`SELECT id FROM ${INVENTORYITEM_TABLE_NAME(workspaceId)};`)
-    let inventoryItemIds = data.rows
-    inventoryItemIds = [808950810,39072856,457924702]
+const SYNC = async ({ shopName, accessToken, workspaceId}) => {
 
-    data = await PostgresqlDb.query(`SELECT id FROM ${LOCATION_TABLE_NAME(workspaceId)};`)
-    const locationIds = []
-    for(i = 0; i < data.rows.length; i++) {
-        locationIds.push(Number(data.rows[i].id))
+    let query = `SELECT inventory_item_id FROM variant${workspaceId};`
+    let queryresponse = await PostgresqlDb.query(query)
+    // console.log(queryresponse.rows)
+
+    for(let i = 0; i < queryresponse.rows.length; i += 50) {
+        let string = ''
+        for(let j = i, c = 50; j < queryresponse.rows.length && c; j++, c--) {
+            if(string.length) {
+                string += ','
+            }
+            string += queryresponse.rows[i].inventory_item_id
+        }
+        let response = await Shopify.fetchInventoryLevel(shopName, accessToken, string)
+
+        // console.log('!', response.data)
+        if(response.data.inventory_levels.length) {
+            await del(INVENTORYLEVEL_TABLE_NAME, response.data.inventory_levels, workspaceId, 'inventory_item_id')
+            await insert(INVENTORYLEVEL_TABLE_NAME, inventoryLevelColumns, response.data.inventory_levels, workspaceId)  
+        }
     }
-
-    let response = await Shopify.fetchInventoryLevel(shopName, accessToken, { location_ids: locationIds })
-
-    //insert
-    // if(response.data.locations.length){
-    //     await del(LOCATION_TABLE_NAME, response.data.locations, workspaceId)
-    //     await insert(LOCATION_TABLE_NAME, locationColumns, response.data.locations, workspaceId)
-    // }
-    
-    // //call next batch
-    // if(response.data.locations.length < limit) {
-    //     progress += response.data.locations.length
-    //     socket.emit("sync", `${progress} of ${count} done`)
-    //     console.log(`${progress} of ${count} done`);
-    // } else {
-    //     //call next since id
-    //     progress += response.data.locations.length
-    //     socket.emit("sync", `${progress} of ${count} done`)
-    //     console.log(`${progress} of ${count} done`);
-    //     let nextSinceId = response.data.locations[response.data.locations.length - 1].id;
-    //     // console.log("nextSinceId", nextSinceId)
-    //     await SYNC({ shopName, accessToken, sinceId: nextSinceId, limit, workspaceId, count, progress })
-    // }
     return;
 }
 
@@ -48,6 +36,6 @@ module.exports = {
     SYNC
 }
 
-// SYNC({ shopName: 'grofers-orders.myshopify.com', accessToken: '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',  limit: 50, workspaceId: 333 })
+// SYNC({ shopName: 'indian-dress-cart.myshopify.com', accessToken: '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', workspaceId: 56788582584 })
 // .then(console.log)
 // .catch(console.log)

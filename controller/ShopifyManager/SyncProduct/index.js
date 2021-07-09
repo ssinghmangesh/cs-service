@@ -5,7 +5,6 @@ const productColumns = require("../../DataManager/Setup/productColumns.json");
 const variantColumns = require("../../DataManager/Setup/variantColumns.json");
 const { socket } = require("../../../socket");
 
-
 const getImageUrl = (image_id, images) => {
     if(!images){
         return ''
@@ -23,12 +22,10 @@ const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0, workspaceId
     let response = await Shopify.fetchProduct(shopName, accessToken, { since_id: sinceId, limit })
     // console.log(response.data.products.length)
 
-    //insert
-
-    const variants = [];
-
+    let variants = [], quantity = 0;
     response.data.products.map(product => {
         product.variants.map(variant => {
+            quantity += variant.inventory_quantity
             variants.push({
                 ...variant,
                 image_url: getImageUrl(variant.image_id, product.images)
@@ -36,15 +33,22 @@ const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0, workspaceId
         })
     })
 
+    let products = []
+    response.data.products.map((product) => {
+        products.push({
+            ...product,
+            inventory_quantity: quantity
+        })
+    })
+
+    //insert
     if(response.data.products.length){
-        
         await del(PRODUCT_TABLE_NAME, response.data.products, workspaceId)
         await insert(PRODUCT_TABLE_NAME, productColumns, response.data.products, workspaceId)
         
         await del(VARIANT_TABLE_NAME, variants, workspaceId)
         await insert(VARIANT_TABLE_NAME, variantColumns, variants, workspaceId)
     }
-    
     
     //call next batch
     if(response.data.products.length < limit) {
