@@ -105,6 +105,7 @@ const aggregate = async (workspaceId, customerId) => {
 
     // last_seen pending
     const customerData = [{
+        ...customer,
         customer_id: customerId,
         name: Name,
         first_name: firstName,
@@ -133,10 +134,6 @@ const aggregate = async (workspaceId, customerId) => {
 
     await insert(CUSTOMERAGGREGATE_TABLE_NAME, customerAggregateColumn, customerData, workspaceId)
 }
-
-// INSERT INTO customeraggregate${workspaceId}
-// ${getColumnName({ columnData: customerAggregateColumn })}
-// VALUES (3, '{ "address": "line" }', 10, 11, 12, array[1, 2, 3], array[4, 5, 6], 13, 14, 15, 16, 17, true, '2021-05-13 11:49:40.765997+05:30', '2021-05-13 11:49:40.765997+05:30', '2021-05-13 11:49:40.765997+05:30', 'ttaaggss', '{ "default_address": "real_address" }', 324005);
 
 const del = async (TABLE_NAME, data, workspaceId, id = 'id', id1) => {
     if(typeof data === 'undefined' || data.length == 0){

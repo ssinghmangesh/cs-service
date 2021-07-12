@@ -1,0 +1,71 @@
+[
+    {
+        "columnName":"id",
+        "dataType": "numeric",
+        "primaryKey": true
+    },
+    {
+        "columnName":"address1",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"city",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"country",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"created_at",
+        "dataType": "timestamptz"
+    },
+    {
+        "columnName":"estimated_delivery_at",
+        "dataType": "timestamptz"
+    },
+    {
+        "columnName":"fulfillment_id",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"happened_at",
+        "dataType": "timestamptz"
+    },
+    {
+        "columnName":"latitude",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"longitude",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"message",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"order_id",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"province",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"shop_id",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"status",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"updated_at",
+        "dataType": "timestamptz"
+    },
+    {
+        "columnName":"zip",
+        "dataType": "varchar"
+    }
+]
