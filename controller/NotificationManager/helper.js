@@ -25,5 +25,5 @@ const fetchNotificationHelper = async (workspaceName) => {
 
 module.exports = {
     addNotificationHelper,
-    fetchNotificationHelper
+    fetchNotificationHelper,
 }

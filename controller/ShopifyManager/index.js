@@ -135,16 +135,6 @@ const syncAll = async ({ shopName, accessToken, limit = 50, workspaceId, table =
         }
     }
 
-    // // console.log("inventoryItem")
-    // // // const { data: { count: inventoryItemCount } } = await Shopify.fetchinventoryItemCount(shopName, accessToken);
-    // // // console.log('!!!!!!!!!!!', inventoryItemCount)
-    // // await inventoryItemSync({ shopName, accessToken, limit, workspaceId, count: 0 });
-
-    // // console.log("inventoryLevel")
-    // // // const { data: { count: inventoryLevelCount } } = await Shopify.fetchinventoryLevelCount(shopName, accessToken);
-    // // // console.log('!!!!!!!!!!!', inventoryLevelCount)
-    // // await inventoryLevelSync({ shopName, accessToken, limit, workspaceId, count: 0 });
-
     console.log("location")
     /****************** sinceId not used in location ****************/
     const { data: { count: locationCount } } = await Shopify.fetchLocationCount(shopName, accessToken);
@@ -163,6 +153,12 @@ const syncAll = async ({ shopName, accessToken, limit = 50, workspaceId, table =
             updateRowHelper(workspaceId, 'location', lastObjectId)
         }
     }
+
+    console.log("inventoryItem")
+    await inventoryItemSync({ shopName, accessToken, workspaceId });
+
+    console.log("inventoryLevel")
+    await inventoryLevelSync({ shopName, accessToken, workspaceId });
 
     console.log("Customer");
     const { data: { count: totalCustomerCount } } = await Shopify.fetchCustomerCount(shopName, accessToken);

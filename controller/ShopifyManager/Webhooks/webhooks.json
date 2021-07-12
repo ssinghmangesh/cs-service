@@ -98,5 +98,29 @@
   {
     "event": "orders",
     "type": "edited"
+  },
+  {
+    "event": "inventory_items",
+    "type": "create"
+  },
+  {
+    "event": "inventory_items",
+    "type": "update"
+  },
+  {
+    "event": "inventory_items",
+    "type": "delete"
+  },
+  {
+    "event": "inventory_levels",
+    "type": "connect"
+  },
+  {
+    "event": "inventory_levels",
+    "type": "disconnect"
+  },
+  {
+    "event": "inventory_levels",
+    "type": "update"
   }
 ]

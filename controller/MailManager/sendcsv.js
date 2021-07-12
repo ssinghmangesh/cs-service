@@ -35,7 +35,7 @@ const sendcsv = async (details) => {
             text: details.text,
             attachments: attachments
         }
-        sendMail(mailOptions, 1)
+        sendMail({mailOptions: mailOptions, flag: 1, workspaceId: details.workspaceId})
     });
 }
 

@@ -17,7 +17,8 @@ const discountApplicationsColumns = require("../../DataManager/Setup/discountApp
 const lineItemsColumns = require("../../DataManager/Setup/lineItemsColumns.json");
 const taxColumns = require("../../DataManager/Setup/taxColumns.json");
 const variantsColumns = require("../../DataManager/Setup/variantColumns.json");
-const customerAggregateColumns = require("../../DataManager/Setup/customerAggregateColumns.json");
+const inventoryItemColumns = require("../../DataManager/Setup/inventoryItemColumns.json");
+const inventoryLevelColumns = require("../../DataManager/Setup/inventoryLevelColumns.json");
 
 const getId = (array, column) => {
     let ids = []
@@ -42,7 +43,9 @@ const {
     LINEITEMS_TABLE_NAME,
     TAX_TABLE_NAME,
     VARIANT_TABLE_NAME,
-    CUSTOMERAGGREGATE_TABLE_NAME
+    CUSTOMERAGGREGATE_TABLE_NAME,
+    INVENTORYLEVEL_TABLE_NAME,
+    INVENTORYITEM_TABLE_NAME
 } = require("../../DataManager/helper");
 
 const createWebhooks = async (shopName, accessToken, workspaceId) => {
@@ -65,11 +68,14 @@ const createWebhooks = async (shopName, accessToken, workspaceId) => {
               }
           })
         //   console.log(i);
-        }catch(err){
-          console.log(err)
+        } catch(err){
+          console.log(err.response.data)
         }
     }
 }
+
+// createWebhooks('indian-dress-cart.myshopify.com', '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', 56788582584)
+// .then(console.log)
 
 const update = async ({ workspaceId, event, type}, data) => {
     // console.log(workspaceId, event, type);
@@ -320,10 +326,13 @@ const update = async ({ workspaceId, event, type}, data) => {
             // console.log('products data: ', data)
             let products = []
             if(type != 'delete') {
+                let quantity = 0
+                data.variants.map((variant) => {
+                    quantity += variant.inventory_quantity
+                })
                 products.push({
                     ...data,
-                    inventory_item_id: data.variants[0].inventory_item_id,
-                    inventory_quantity: data.variants[0].inventory_quantity,
+                    inventory_quantity: quantity
                 })
             } else {
                 products.push(data)
@@ -340,19 +349,23 @@ const update = async ({ workspaceId, event, type}, data) => {
             } else {
                 variants.push(data)
             }
-            await updateTable(VARIANT_TABLE_NAME, variantsColumns, variants, workspaceId, type);
+            await updateTable(VARIANT_TABLE_NAME, variantsColumns, variants, workspaceId, type, 'product_id', 'id');
             break
-        case 'refunds':
-            await updateTable(REFUNDED_TABLE_NAME, refundedColumns, [data], workspaceId, type);
-            break
+        case 'inventory_items':
+            console.log('inventory_items: ', data)
+            await updateTable(INVENTORYITEM_TABLE_NAME, inventoryItemColumns, [data], workspaceId, type)
+        case 'inventory_levels':
+            console.log('inventory_levels: ', data)
+            await updateTable(INVENTORYLEVEL_TABLE_NAME, inventoryLevelColumns, [data], workspaceId, type, 'inventory_item_id')
+        // case 'refunds':
+        //     console.log('refunded data: ', data)
+        //     await updateTable(REFUNDED_TABLE_NAME, refundedColumns, [data], workspaceId, type);
+        //     break
         default:
             break
     }
     return {statusCode: 200, message: "Update Successful"}
 }
-
-// createWebhooks('indian-dress-cart.myshopify.com', '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', 56788582584)
-// .then(console.log)
 
 module.exports = {
     update,
