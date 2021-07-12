@@ -122,5 +122,13 @@
   {
     "event": "inventory_levels",
     "type": "update"
+  },
+  {
+    "event": "fulfillment_events",
+    "type": "create"
+  },
+  {
+    "event": "fulfillment_events",
+    "type": "delete"
   }
 ]

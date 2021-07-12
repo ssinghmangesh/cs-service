@@ -22,6 +22,7 @@ const discountApplicationsColumns = require("./discountApplicationsColumns.json"
 const visitorColumns = require("./visitorColumns.json");
 const sentEmailColumns = require("./sentEmailColumns.json");
 const productRecommendationsColumns = require("./productRecommendationsColumns.json");
+const fulfillmenteventsColumns = require("./fulfillmentEventsColumns.json");
 
 const {
     CUSTOMER_TABLE_NAME, 
@@ -47,7 +48,8 @@ const {
     DISCOUNTAPPLICATION_TABLE_NAME,
     VISITOR_TABLE_NAME,
     SENTEMAIL_TABLE_NAME,
-    PRODUCTRECOMMENDATIONS_TABLE_NAME
+    PRODUCTRECOMMENDATIONS_TABLE_NAME,
+    FULFILLMENTEVENTS_TABLE_NAME,
 } = require("../helper");
 
 
@@ -102,6 +104,8 @@ const setupWorkspace = async(workspaceId) => {
     await createTable(sentEmailColumns, SENTEMAIL_TABLE_NAME, workspaceId)
 
     await createTable(productRecommendationsColumns, PRODUCTRECOMMENDATIONS_TABLE_NAME, workspaceId)
+
+    await createTable(fulfillmenteventsColumns, FULFILLMENTEVENTS_TABLE_NAME, workspaceId)
 
     return {
         status: true,

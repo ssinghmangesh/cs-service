@@ -19,6 +19,7 @@ const taxColumns = require("../../DataManager/Setup/taxColumns.json");
 const variantsColumns = require("../../DataManager/Setup/variantColumns.json");
 const inventoryItemColumns = require("../../DataManager/Setup/inventoryItemColumns.json");
 const inventoryLevelColumns = require("../../DataManager/Setup/inventoryLevelColumns.json");
+const fulfillmentEventsColumns = require("../../DataManager/Setup/fulfillmentEventsColumns.json");
 
 const getId = (array, column) => {
     let ids = []
@@ -45,7 +46,8 @@ const {
     VARIANT_TABLE_NAME,
     CUSTOMERAGGREGATE_TABLE_NAME,
     INVENTORYLEVEL_TABLE_NAME,
-    INVENTORYITEM_TABLE_NAME
+    INVENTORYITEM_TABLE_NAME,
+    FULFILLMENTEVENTS_TABLE_NAME,
 } = require("../../DataManager/helper");
 
 const createWebhooks = async (shopName, accessToken, workspaceId) => {
@@ -54,21 +56,20 @@ const createWebhooks = async (shopName, accessToken, workspaceId) => {
         const { event, type } = webhooks[i];
         try{
             const res = await axios({
-              method: 'POST',
-              url: `https://${shopName}/admin/api/2021-04/webhooks.json`,
-              headers:  {
-                  'X-Shopify-Access-Token': accessToken,
-              },
-              data: {
-                  "webhook": {
-                      "topic": `${event}/${type}`,
-                      "address": `https://custom-segment-service.herokuapp.com/webhooks/${workspaceId}/${event}/${type}`,
-                      "format": "json"
-                  }
-              }
-          })
-        //   console.log(i);
-        } catch(err){
+                method: 'POST',
+                url: `https://${shopName}/admin/api/2021-04/webhooks.json`,
+                headers:  {
+                    'X-Shopify-Access-Token': accessToken,
+                },
+                data: {
+                    "webhook": {
+                        "topic": `${event}/${type}`,
+                        "address": `https://custom-segment-service.herokuapp.com/webhooks/${workspaceId}/${event}/${type}`,
+                        "format": "json"
+                    }
+                }
+            })
+        } catch(err) {
           console.log(err.response.data)
         }
     }
@@ -81,7 +82,7 @@ const update = async ({ workspaceId, event, type}, data) => {
     // console.log(workspaceId, event, type);
     switch(event){
         case 'carts':
-            console.log('cart data: ', data)
+            // console.log('cart data: ', data)
             let carts = []
             if(type != 'delete') {
                 const { customer } = data
@@ -352,15 +353,19 @@ const update = async ({ workspaceId, event, type}, data) => {
             await updateTable(VARIANT_TABLE_NAME, variantsColumns, variants, workspaceId, type, 'product_id', 'id');
             break
         case 'inventory_items':
-            console.log('inventory_items: ', data)
+            // console.log('inventory_items: ', data)
             await updateTable(INVENTORYITEM_TABLE_NAME, inventoryItemColumns, [data], workspaceId, type)
         case 'inventory_levels':
-            console.log('inventory_levels: ', data)
+            // console.log('inventory_levels: ', data)
             await updateTable(INVENTORYLEVEL_TABLE_NAME, inventoryLevelColumns, [data], workspaceId, type, 'inventory_item_id')
-        // case 'refunds':
-        //     console.log('refunded data: ', data)
-        //     await updateTable(REFUNDED_TABLE_NAME, refundedColumns, [data], workspaceId, type);
-        //     break
+        case 'refunds':
+            // console.log('refunded data: ', data)
+            await updateTable(REFUNDED_TABLE_NAME, refundedColumns, [data], workspaceId, type);
+            break
+        case 'fulfillment_events':
+            console.log('fulfillment_events data: ', data)
+            // await updateTable(FULFILLMENTEVENTS_TABLE_NAME, fulfillmentEventsColumns, [data], workspaceId, type);
+            // await 
         default:
             break
     }

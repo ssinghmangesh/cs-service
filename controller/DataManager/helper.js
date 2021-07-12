@@ -192,6 +192,10 @@ const PRODUCTRECOMMENDATIONS_TABLE_NAME = (workspaceId) => {
     return `productrecommendations${workspaceId}`
 }
 
+const FULFILLMENTEVENTS_TABLE_NAME = (workspaceId) => {
+    return `fulfillmentevents${workspaceId}`
+}
+
 // const
 // getInsertQury(discount222, order)
 // .then(console.log)
@@ -224,5 +228,6 @@ module.exports={
     DISCOUNTAPPLICATION_TABLE_NAME,
     VISITOR_TABLE_NAME,
     SENTEMAIL_TABLE_NAME,
-    PRODUCTRECOMMENDATIONS_TABLE_NAME
+    PRODUCTRECOMMENDATIONS_TABLE_NAME,
+    FULFILLMENTEVENTS_TABLE_NAME,
 }
