@@ -145,10 +145,6 @@
         "dataType": "varchar"
     },
     {
-        "columnName":"orders_count",
-        "dataType": "numeric"
-    },
-    {
         "columnName":"phone",
         "dataType": "varchar"
     },
