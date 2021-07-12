@@ -22,7 +22,7 @@ const {
     getUserToWorkspace,
 
 } = require('../controller/UserManager/index.js')
-const { editUser, getAllWorkspaces, getAllUserToWorkspaces } = require('../controller/UserManager/helper')
+const { editUser, getAllWorkspaces, getAllUserToWorkspaces, setCurrentWorkspace } = require('../controller/UserManager/helper')
 const Multer = require('multer');
 const upload = require('../aws/upload');
 
@@ -82,6 +82,15 @@ router.post('/user-manager/user/fetch', async function (req, res) {
     delete user.password
     const { Item } = await getUserToWorkspace(Number(workspaceId), user.user_id)
     res.status(200).send( { status: true, message: "successful", data: { ...user, ...Item } } )
+})
+
+router.post('/user-manager/workspace/current', async (req, res) => {
+    try {
+        const response = await setCurrentWorkspace(req.body);
+        res.status(200).send('current workspace changed')
+    } catch {
+        res.status(500).send("Something went wrong!")
+    }
 })
 
 router.post('/user-manager/workspace/fetch', async function (req, res) {
