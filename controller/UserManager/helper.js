@@ -101,8 +101,28 @@ const getAllUserToWorkspaces = async (userId) => {
     return res.map(item => item.Item)
 }
 
+const setCurrentWorkspace = async ({userId, workspace}) => {
+    try {
+        const params = {
+            TableName: 'User',
+            Key:{
+                "user_id": userId,
+            },
+            UpdateExpression: "set current_workspace = :workspaceId",
+            ExpressionAttributeValues:{
+                ":workspaceId": workspace,
+            },
+        };
+        await update(params);
+    } catch(err) {
+        console.log(err);
+        throw err;
+    }
+}
+
 module.exports = {
     editUser,
     getAllWorkspaces,
-    getAllUserToWorkspaces
+    getAllUserToWorkspaces,
+    setCurrentWorkspace,
 }
