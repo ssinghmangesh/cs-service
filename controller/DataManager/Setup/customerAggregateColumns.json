@@ -157,10 +157,6 @@
         "dataType": "boolean"
     },
     {
-        "columnName":"total_spent",
-        "dataType": "numeric"
-    },
-    {
         "columnName":"updated_at",
         "dataType": "timestamptz"
     },
