@@ -103,5 +103,73 @@
     {
         "columnName":"zip",
         "dataType": "numeric"
+    },
+    {
+        "columnName":"accepts_marketing",
+        "dataType": "boolean"
+    },
+    {
+        "columnName":"accepts_marketing_updated_at",
+        "dataType": "timestamptz"
+    },
+    {
+        "columnName":"addresses",
+        "dataType": "jsonb[]"
+    },
+    {
+        "columnName":"currency",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"created_at",
+        "dataType": "timestamptz"
+    },
+    {
+        "columnName":"default_address",
+        "dataType": "jsonb"
+    },
+    {
+        "columnName":"last_order_id",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"last_order_name",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"marketing_opt_in_level",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"note",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"orders_count",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"phone",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"state",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"tax_exempt",
+        "dataType": "boolean"
+    },
+    {
+        "columnName":"total_spent",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"updated_at",
+        "dataType": "timestamptz"
+    },
+    {
+        "columnName":"verified_email",
+        "dataType": "boolean"
     }
 ]

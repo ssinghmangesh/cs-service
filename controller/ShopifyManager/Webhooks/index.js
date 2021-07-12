@@ -137,7 +137,7 @@ const update = async ({ workspaceId, event, type}, data) => {
             await updateTable(CHECKOUT_TABLE_NAME, checkoutColumns, [data], workspaceId, type);
             break
         case 'customers':
-            // console.log('customers data: ', data)
+            console.log('customers data: ', data)
             customers = []
             if(type != 'delete') {
                 customers.push({
@@ -146,12 +146,12 @@ const update = async ({ workspaceId, event, type}, data) => {
                     country: data.default_address && data.default_address.country,
                     city: data.default_address && data.default_address.city,
                 })
-                // console.log('data to be inserted in customer table: ', customers)
             } else {
                 customers.push(data)
             }
-            // console.log('customers data: ', customers)
+            console.log('customers data: ', customers)
             await updateTable(CUSTOMER_TABLE_NAME, customerColumns, customers, workspaceId, type);
+            
             let customeragg = []
             if(type != 'delete') {
                 customeragg.push({
@@ -166,7 +166,7 @@ const update = async ({ workspaceId, event, type}, data) => {
                 customeragg.push(data)
                 await del(CUSTOMERAGGREGATE_TABLE_NAME, customeragg, workspaceId, 'customer_id', 'id')
             }
-            // console.log('customer aggregate data: ', customeragg)
+            console.log('customer aggregate data: ', customeragg)
             break
         case 'draft_orders':
             // console.log('draft orders: ', data)
@@ -363,8 +363,8 @@ const update = async ({ workspaceId, event, type}, data) => {
             await updateTable(REFUNDED_TABLE_NAME, refundedColumns, [data], workspaceId, type);
             break
         case 'fulfillment_events':
-            console.log('fulfillment_events data: ', data)
-            // await updateTable(FULFILLMENTEVENTS_TABLE_NAME, fulfillmentEventsColumns, [data], workspaceId, type);
+            // console.log('fulfillment_events data: ', data)
+            await updateTable(FULFILLMENTEVENTS_TABLE_NAME, fulfillmentEventsColumns, [data], workspaceId, type);
             // await 
         default:
             break
