@@ -50,8 +50,6 @@ const {
     VISITOR_TABLE_NAME,
     SENTEMAIL_TABLE_NAME,
     VARIANTAGGREGATE_TABLE_NAME,
-    INVENTORYITEM_TABLE_NAME,
-    INVENTORYLEVEL_TABLE_NAME,
 } = require("./helper");
 
 const { createTable } = require('./Setup/helper')
