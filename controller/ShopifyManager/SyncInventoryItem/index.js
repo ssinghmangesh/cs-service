@@ -19,8 +19,9 @@ const SYNC = async ({ shopName, accessToken, workspaceId}) => {
             if(string.length) {
                 string += ','
             }
-            string += queryresponse.rows[i].inventory_item_id
+            string += queryresponse.rows[j].inventory_item_id
         }
+        // console.log('@', string)
         let response = await Shopify.fetchInventoryItem(shopName, accessToken, string)
 
         // console.log('!', response.data.inventory_items)

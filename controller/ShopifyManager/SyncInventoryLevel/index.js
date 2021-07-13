@@ -17,7 +17,7 @@ const SYNC = async ({ shopName, accessToken, workspaceId}) => {
             if(string.length) {
                 string += ','
             }
-            string += queryresponse.rows[i].inventory_item_id
+            string += queryresponse.rows[j].inventory_item_id
         }
         let response = await Shopify.fetchInventoryLevel(shopName, accessToken, string)
 
