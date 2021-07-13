@@ -23,6 +23,7 @@ const visitorColumns = require("./visitorColumns.json");
 const sentEmailColumns = require("./sentEmailColumns.json");
 const productRecommendationsColumns = require("./productRecommendationsColumns.json");
 const fulfillmenteventsColumns = require("./fulfillmentEventsColumns.json");
+const variantAggregateColumns = require("./variantAggregateColumns.json");
 
 const {
     CUSTOMER_TABLE_NAME, 
@@ -50,6 +51,7 @@ const {
     SENTEMAIL_TABLE_NAME,
     PRODUCTRECOMMENDATIONS_TABLE_NAME,
     FULFILLMENTEVENTS_TABLE_NAME,
+    VARIANTAGGREGATE_TABLE_NAME,
 } = require("../helper");
 
 
@@ -107,6 +109,10 @@ const setupWorkspace = async(workspaceId) => {
 
     await createTable(fulfillmenteventsColumns, FULFILLMENTEVENTS_TABLE_NAME, workspaceId)
 
+    await createTable(fulfillmenteventsColumns, FULFILLMENTEVENTS_TABLE_NAME, workspaceId)
+
+    await createTable(variantAggregateColumns, VARIANTAGGREGATE_TABLE_NAME, workspaceId)
+
     return {
         status: true,
         message: "Successful"
@@ -126,9 +132,9 @@ const deleteWorkspace = async (workspaceId) => {
 // .then(console.log)
 // .catch(console.log)
 
-// setupWorkspace(56788582584)
-// .then(console.log)
-// .catch(console.log)
+setupWorkspace(56788582584)
+.then(console.log)
+.catch(console.log)
 // createTable(visitorColumns, VISITOR_TABLE_NAME, 1);
 
 module.exports = {

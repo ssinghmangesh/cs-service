@@ -25,7 +25,7 @@ const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0, workspaceId
         await insert(CUSTOMER_TABLE_NAME, customerColumn, customers, workspaceId)
 
         // console.log('!!', customers)
-        await del(CUSTOMERAGGREGATE_TABLE_NAME, customers, workspaceId, 'customer_id', 'id')
+        await del(CUSTOMERAGGREGATE_TABLE_NAME, customers, workspaceId)
         customers.map(async (customer) => {
             await aggregate(workspaceId, customer.id)
         })

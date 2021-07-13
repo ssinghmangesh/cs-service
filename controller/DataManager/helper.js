@@ -196,6 +196,10 @@ const FULFILLMENTEVENTS_TABLE_NAME = (workspaceId) => {
     return `fulfillmentevents${workspaceId}`
 }
 
+const VARIANTAGGREGATE_TABLE_NAME = (workspaceId) => {
+    return `variantaggregate${workspaceId}`
+}
+
 // const
 // getInsertQury(discount222, order)
 // .then(console.log)
@@ -230,4 +234,5 @@ module.exports={
     SENTEMAIL_TABLE_NAME,
     PRODUCTRECOMMENDATIONS_TABLE_NAME,
     FULFILLMENTEVENTS_TABLE_NAME,
+    VARIANTAGGREGATE_TABLE_NAME,
 }

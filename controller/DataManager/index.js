@@ -1,5 +1,6 @@
 const PostgresqlDb = require('../../db')
 const customerAggregateColumn = require('./Setup/customerAggregateColumns.json')
+const variantAggregateColumns = require('./Setup/variantAggregateColumns.json')
 
 const {getColumnName, getValues, getIds} =  require("./helper")
 const {
@@ -9,7 +10,9 @@ const {
     REFUNDED_TABLE_NAME,
     CART_TABLE_NAME,
     EVENT_TABLE_NAME,
-    CUSTOMERAGGREGATE_TABLE_NAME
+    CUSTOMERAGGREGATE_TABLE_NAME,
+    VARIANT_TABLE_NAME,
+    VARIANTAGGREGATE_TABLE_NAME,
 } = require("./helper.js");
 
 
@@ -17,6 +20,7 @@ const insert = async(TABLE_NAME, column, data, workspaceId) => {
     if(data.length == 0){
         return;
     }
+    console.log('!!!!!!!!!!')
     const query = `
         INSERT INTO ${TABLE_NAME(workspaceId)}
         ${getColumnName({ columnData: column })}
@@ -26,13 +30,44 @@ const insert = async(TABLE_NAME, column, data, workspaceId) => {
     return await PostgresqlDb.query(query)
 }
 
+const variantAggregate = async (workspaceId, variantId) => {
+    let data = await PostgresqlDb.query(`SELECT * FROM ${VARIANT_TABLE_NAME(workspaceId)} WHERE id = ${variantId};`)
+    const variants = data.rows
+    data = await PostgresqlDb.query(`SELECT * FROM ${LINEITEMS_TABLE_NAME(workspaceId)} WHERE variant_id = ${variantId};`)
+    const lineitems = data.rows
+    data = await PostgresqlDb.query(`SELECT variant_id FROM ${CART_TABLE_NAME(workspaceId)};`)
+    const carts = data.rows
+    // console.log(carts)
+
+    let cartQuantity = 0
+    for(let i = 0; i < carts.length; i++) {
+        for(let j = 0; j < carts[i].variant_id.length; j++) {
+            if(carts[i].variant_id[j] === variantId) {
+                cartQuantity++
+            }
+        }
+    }
+    variantData = variants.map((variant) => {
+        return {
+            ...variant,
+            quantity_sold: lineitems.length,
+            quantity_in_cart: cartQuantity,
+        }
+    })
+    // console.log(variantData.length)
+
+    await insert(VARIANTAGGREGATE_TABLE_NAME, variantAggregateColumns, variantData, workspaceId)
+}
+
+// variantAggregate(56788582584, 39859538788536)
+
 const aggregate = async (workspaceId, customerId) => {
     // console.log('@@@@@@@@@@@')
     let data = await PostgresqlDb.query(`SELECT * FROM ${CUSTOMER_TABLE_NAME(workspaceId)} WHERE id = ${customerId};`)
     const customer = data.rows[0]
     data = await PostgresqlDb.query(`SELECT * FROM ${ORDER_TABLE_NAME(workspaceId)} WHERE customer_id = ${customerId} ORDER BY created_at;`)
     const orders = data.rows
-    data = await PostgresqlDb.query(`SELECT * FROM ${LINEITEMS_TABLE_NAME(workspaceId)} WHERE customer_id = ${customerId};`)
+    data = await PostgresqlDb.query(`SELECT DISTINCT(variant_id) FROM ${LINEITEMS_TABLE_NAME(workspaceId)} WHERE customer_id = ${customerId};`)
     const lineitems = data.rows
     data = await PostgresqlDb.query(`SELECT * FROM ${REFUNDED_TABLE_NAME(workspaceId)} WHERE customer_id = ${customerId};`)
     const refunded = data.rows
@@ -41,7 +76,8 @@ const aggregate = async (workspaceId, customerId) => {
     data = await PostgresqlDb.query(`SELECT * FROM ${EVENT_TABLE_NAME(workspaceId)} WHERE customer_id = ${customerId} ORDER BY created_at DESC;`)
     const event = data.rows
 
-    let tamount = 0, avgAmount = 0, cancelledOrder = 0, uncancelledOrder = 0, unfulfilledOrder = 0, unrefundedOrder = 0
+    let tamount = 0, avgAmount = 0, cancelledOrder = 0, refundedOrder = 0, paidOrders = 0, fulfilledOrder = 0
+        uncancelledOrder = 0, unfulfilledOrder = 0, unrefundedOrder = 0, unpaidOrders = 0
     let firstOrderAt, lastOrderAt
     if(orders.length) {
 
@@ -53,10 +89,20 @@ const aggregate = async (workspaceId, customerId) => {
             if(orders[i].cancelled_at === '') {
                 uncancelledOrder++
             }
-            if(orders[i].fulfillment_status === '') {
+            if(orders[i].fulfillment_status === '' || orders[i].fulfillment_status === 'null') {
                 unfulfilledOrder++
             }
-            if(orders[i].financial_status != 'partially_refunded' && orders[i].financial_status != 'refunded') {
+            if(orders[i].fulfillment_status === 'fulfilled') {
+                fulfilledOrder++
+            }
+
+            if(orders[i].financial_status === 'partially_refunded' && orders[i].financial_status === 'refunded') {
+                refundedOrder++
+            } else if(orders[i].financial_status === 'paid') {
+                paidOrders++
+            } else if(orders[i].financial_status === 'pending') {
+                unpaidOrders++
+            } else {
                 unrefundedOrder++
             }
         }
@@ -106,7 +152,7 @@ const aggregate = async (workspaceId, customerId) => {
     // last_seen pending
     const customerData = [{
         ...customer,
-        customer_id: customerId,
+        id: customerId,
         name: Name,
         first_name: firstName,
         last_name: lastName,
@@ -116,8 +162,9 @@ const aggregate = async (workspaceId, customerId) => {
         avg_order_price: avgAmount,
         product_purchased: productPurchased,
         product_viewed: productViewed,
-        refunded_order_count: refunded.length,
+        refunded_order_count: refundedOrder,
         cancelled_order_count: cancelledOrder,
+        fulfilled_order_count: fulfilledOrder,
         unfulfilled_order_count: unfulfilledOrder,
         unrefunded_order_count: unrefundedOrder,
         uncancelled_order_count: uncancelledOrder,
@@ -127,7 +174,9 @@ const aggregate = async (workspaceId, customerId) => {
         last_seen: lastSeen,
         tags: Tags,
         default_address: defaultAddress,
-        zip_code: zipCode
+        zip_code: zipCode,
+        paid_order_count: paidOrders,
+        unpaid_order_count: unpaidOrders
     }]
 
     // console.log(customerData)
@@ -161,4 +210,5 @@ module.exports = {
     insert,
     del,
     aggregate,
+    variantAggregate,
 }

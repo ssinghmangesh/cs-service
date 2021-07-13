@@ -1,6 +1,6 @@
 [
     {
-        "columnName":"customer_id",
+        "columnName":"id",
         "dataType": "numeric",
         "primaryKey": true
     },
@@ -49,6 +49,10 @@
         "dataType": "numeric"
     },
     {
+        "columnName":"fulfilled_order_count",
+        "dataType": "numeric"
+    },
+    {
         "columnName":"unfulfilled_order_count",
         "dataType": "numeric"
     },
@@ -58,6 +62,14 @@
     },
     {
         "columnName":"uncancelled_order_count",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"paid_order_count",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"unpaid_order_count",
         "dataType": "numeric"
     },
     {

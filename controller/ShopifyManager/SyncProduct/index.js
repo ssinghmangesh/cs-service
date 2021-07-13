@@ -1,6 +1,6 @@
 const Shopify = require('../Shopify')
-const {insert, del} = require("../../DataManager/index");
-const {PRODUCT_TABLE_NAME, VARIANT_TABLE_NAME} = require("../../DataManager/helper");
+const {insert, del, variantAggregate} = require("../../DataManager/index");
+const {PRODUCT_TABLE_NAME, VARIANT_TABLE_NAME, VARIANTAGGREGATE_TABLE_NAME} = require("../../DataManager/helper");
 const productColumns = require("../../DataManager/Setup/productColumns.json");
 const variantColumns = require("../../DataManager/Setup/variantColumns.json");
 const { socket } = require("../../../socket");
@@ -48,6 +48,11 @@ const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0, workspaceId
         
         await del(VARIANT_TABLE_NAME, variants, workspaceId)
         await insert(VARIANT_TABLE_NAME, variantColumns, variants, workspaceId)
+
+        await del(VARIANTAGGREGATE_TABLE_NAME, variants, workspaceId)
+        variants.map(async (variant) => {
+            await variantAggregate(workspaceId, variant.id)
+        })
     }
     
     //call next batch
