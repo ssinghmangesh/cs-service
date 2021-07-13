@@ -83,7 +83,7 @@ const update = async ({ workspaceId, event, type}, data) => {
     // console.log(workspaceId, event, type);
     switch(event){
         case 'carts':
-            // console.log('cart data: ', data)
+            console.log('cart data: ', data)
             let carts = []
             if(type != 'delete') {
                 const { customer } = data
