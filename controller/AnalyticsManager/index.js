@@ -210,8 +210,10 @@ class Dashboard {
                     }
                     query += `then true end)`
                 } else if(typeof statsDefinition[i].value === 'number' || statsDefinition[i].value === 'NULL' || statsDefinition[i].value === 'NULL') {
+                    query += `${statsDefinition[i].columnname} ${statsDefinition[i].operator} `
                     query += `${statsDefinition[i].value} then true end)`
                 } else {
+                    query += `${statsDefinition[i].columnname} ${statsDefinition[i].operator} `
                     query += `'${statsDefinition[i].value}' then true end)`
                 }
                 query += ` AS ${statsDefinition[i].alias}`
