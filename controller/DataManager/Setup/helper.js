@@ -24,7 +24,9 @@ const {
     DISCOUNTAPPLICATION_TABLE_NAME,
     VISITOR_TABLE_NAME,
     SENTEMAIL_TABLE_NAME,
-    PRODUCTRECOMMENDATIONS_TABLE_NAME
+    PRODUCTRECOMMENDATIONS_TABLE_NAME,
+    FULFILLMENTEVENTS_TABLE_NAME,
+    VARIANTAGGREGATE_TABLE_NAME,
 } = require("../helper");
 
 // // customer section
@@ -67,7 +69,9 @@ const deleteTable = async (workspaceId) => {
             ${DISCOUNTAPPLICATION_TABLE_NAME(workspaceId)},
             ${VISITOR_TABLE_NAME(workspaceId)},
             ${SENTEMAIL_TABLE_NAME(workspaceId)},
-            ${PRODUCTRECOMMENDATIONS_TABLE_NAME(workspaceId)}`
+            ${PRODUCTRECOMMENDATIONS_TABLE_NAME(workspaceId)},
+            ${FULFILLMENTEVENTS_TABLE_NAME(workspaceId)},
+            ${VARIANTAGGREGATE_TABLE_NAME(workspaceId)}`
 
     const query = `DROP TABLE IF EXISTS ${tableQuery};`
 

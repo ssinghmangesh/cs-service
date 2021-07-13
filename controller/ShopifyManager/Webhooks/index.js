@@ -48,6 +48,7 @@ const {
     INVENTORYLEVEL_TABLE_NAME,
     INVENTORYITEM_TABLE_NAME,
     FULFILLMENTEVENTS_TABLE_NAME,
+    VARIANTAGGREGATE_TABLE_NAME,
 } = require("../../DataManager/helper");
 
 const createWebhooks = async (shopName, accessToken, workspaceId) => {
@@ -77,12 +78,13 @@ const createWebhooks = async (shopName, accessToken, workspaceId) => {
 
 // createWebhooks('indian-dress-cart.myshopify.com', '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', 56788582584)
 // .then(console.log)
+    
 
 const update = async ({ workspaceId, event, type}, data) => {
     // console.log(workspaceId, event, type);
     switch(event){
         case 'carts':
-            // console.log('cart data: ', data)
+            console.log('cart data: ', data)
             let carts = []
             if(type != 'delete') {
                 const { customer } = data
@@ -107,6 +109,7 @@ const update = async ({ workspaceId, event, type}, data) => {
                     const { customer } = data
                     cartLineItems.push({
                         id: line_item.id,
+                        cart_id: data.id,
                         customer_id: customer ? customer.id : null,
                         quantity: line_item.quantity,
                         variant_id: line_item.variant_id,
@@ -128,10 +131,11 @@ const update = async ({ workspaceId, event, type}, data) => {
                         vendor: line_item.vendor
                     }) 
                 })
+                await updateTable(CARTLINEITEMS_TABLE_NAME, cartLineItemsColumns, cartLineItems, workspaceId, type);
             } else {
                 cartLineItems.push(data)
+                await updateTable(CARTLINEITEMS_TABLE_NAME, cartLineItemsColumns, cartLineItems, workspaceId, type, 'cart_id', 'id');
             }
-            await updateTable(CARTLINEITEMS_TABLE_NAME, cartLineItemsColumns, cartLineItems, workspaceId, type);
             break
         case 'checkouts':
             await updateTable(CHECKOUT_TABLE_NAME, checkoutColumns, [data], workspaceId, type);
@@ -149,24 +153,24 @@ const update = async ({ workspaceId, event, type}, data) => {
             } else {
                 customers.push(data)
             }
-            console.log('customers data: ', customers)
+            // console.log('customers data: ', customers)
             await updateTable(CUSTOMER_TABLE_NAME, customerColumns, customers, workspaceId, type);
-            
+
             let customeragg = []
             if(type != 'delete') {
                 customeragg.push({
                     ...data['default_address'],
                     ...data,
                 })
-                await del(CUSTOMERAGGREGATE_TABLE_NAME, customeragg, workspaceId, 'customer_id', 'id')
+                await del(CUSTOMERAGGREGATE_TABLE_NAME, customeragg, workspaceId)
                 customeragg.map(async (customer) => {
                     await aggregate(workspaceId, customer.id)
                 })
             } else {
                 customeragg.push(data)
-                await del(CUSTOMERAGGREGATE_TABLE_NAME, customeragg, workspaceId, 'customer_id', 'id')
+                await del(CUSTOMERAGGREGATE_TABLE_NAME, customeragg, workspaceId)
             }
-            console.log('customer aggregate data: ', customeragg)
+            // console.log('customer aggregate data: ', customeragg)
             break
         case 'draft_orders':
             // console.log('draft orders: ', data)
@@ -351,6 +355,13 @@ const update = async ({ workspaceId, event, type}, data) => {
                 variants.push(data)
             }
             await updateTable(VARIANT_TABLE_NAME, variantsColumns, variants, workspaceId, type, 'product_id', 'id');
+
+            await del(VARIANTAGGREGATE_TABLE_NAME, variants, workspaceId)
+            if(type != 'delete') {
+                variants.map(async (variant) => {
+                    await aggregate(workspaceId, variant.id)
+                })
+            }
             break
         case 'inventory_items':
             // console.log('inventory_items: ', data)

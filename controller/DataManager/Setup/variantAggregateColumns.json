@@ -1,0 +1,99 @@
+[
+    {
+        "columnName":"barcode",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"compare_at_price",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"created_at",
+        "dataType": "timestamptz"
+    },
+    {
+        "columnName":"fulfillment_service",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"grams",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"image_url",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"weight",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"weight_unit",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"id",
+        "dataType": "numeric",
+        "primaryKey": true
+    },
+    {
+        "columnName":"inventory_item_id",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"inventory_management",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"inventory_policy",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"inventory_quantity",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"option1",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"position",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"price",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"product_id",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"requires_shipping",
+        "dataType": "boolean"
+    },
+    {
+        "columnName":"sku",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"taxable",
+        "dataType": "boolean"
+    },
+    {
+        "columnName":"title",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"updated_at",
+        "dataType": "timestamptz"
+    },
+    {
+        "columnName":"quantity_sold",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"quantity_in_cart",
+        "dataType": "numeric"
+    }
+]

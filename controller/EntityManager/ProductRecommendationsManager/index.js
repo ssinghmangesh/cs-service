@@ -48,7 +48,7 @@ const historyBased = async ({workspaceId, customerId}) => {
             valid_till: new Date(new Date().getTime()+(history_recommendations.valid_till*24*60*60*1000))
         }]
         // console.log(data)
-        // insert(PRODUCTRECOMMENDATIONS_TABLE_NAME, productRecommendationsColumns, data, workspaceId)
+        insert(PRODUCTRECOMMENDATIONS_TABLE_NAME, productRecommendationsColumns, data, workspaceId)
         return data
     }
 }
@@ -95,7 +95,7 @@ const cartBased = async ({workspaceId, customerId}) => {
             return data
         })
         console.log(data)
-        // insert(PRODUCTRECOMMENDATIONS_TABLE_NAME, productRecommendationsColumns, data, workspaceId)
+        insert(PRODUCTRECOMMENDATIONS_TABLE_NAME, productRecommendationsColumns, data, workspaceId)
     }
 }
 
@@ -106,8 +106,8 @@ const addRecommendations = async (workspaceId, rawData) => {
         product_id: recommendation.product_id,
         variant_id: recommendation.variant_id,
         score: 1,
-        created_at: Date.now(),
-        valid_till: Date.now() + 10
+        created_at: new Date(),
+        valid_till: new Date(new Date().getTime()+(10*24*60*60*1000))
     }))
     return await insert(PRODUCTRECOMMENDATIONS_TABLE_NAME, productRecommendationsColumns, data, workspaceId)
 }
@@ -138,8 +138,8 @@ const popularProducts = async (data, workspaceId) => {
                     recommendation_type: 'Popular Products',
                     product_id: productId,
                     score: 1,
-                    created_at: Date.now(),
-                    valid_till: Date.now() + 10
+                    created_at: new Date(),
+                    valid_till: new Date(new Date().getTime()+(10*24*60*60*1000))
                 }))
                 await insert(PRODUCTRECOMMENDATIONS_TABLE_NAME, productRecommendationsColumns, recommendations, workspaceId)
                 resolve();
