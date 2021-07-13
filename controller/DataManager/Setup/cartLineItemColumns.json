@@ -5,6 +5,10 @@
         "primaryKey": true
     },
     {
+        "columnName":"cart_id",
+        "dataType": "varchar"
+    },
+    {
         "columnName":"customer_id",
         "dataType": "numeric"
     },

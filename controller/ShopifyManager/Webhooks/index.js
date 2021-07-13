@@ -78,6 +78,7 @@ const createWebhooks = async (shopName, accessToken, workspaceId) => {
 
 // createWebhooks('indian-dress-cart.myshopify.com', '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', 56788582584)
 // .then(console.log)
+    
 
 const update = async ({ workspaceId, event, type}, data) => {
     // console.log(workspaceId, event, type);
@@ -108,6 +109,7 @@ const update = async ({ workspaceId, event, type}, data) => {
                     const { customer } = data
                     cartLineItems.push({
                         id: line_item.id,
+                        cart_id: data.id,
                         customer_id: customer ? customer.id : null,
                         quantity: line_item.quantity,
                         variant_id: line_item.variant_id,
@@ -129,10 +131,11 @@ const update = async ({ workspaceId, event, type}, data) => {
                         vendor: line_item.vendor
                     }) 
                 })
+                await updateTable(CARTLINEITEMS_TABLE_NAME, cartLineItemsColumns, cartLineItems, workspaceId, type);
             } else {
                 cartLineItems.push(data)
+                await updateTable(CARTLINEITEMS_TABLE_NAME, cartLineItemsColumns, cartLineItems, workspaceId, type, 'cart_id', 'id');
             }
-            await updateTable(CARTLINEITEMS_TABLE_NAME, cartLineItemsColumns, cartLineItems, workspaceId, type);
             break
         case 'checkouts':
             await updateTable(CHECKOUT_TABLE_NAME, checkoutColumns, [data], workspaceId, type);
