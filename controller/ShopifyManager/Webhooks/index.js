@@ -48,6 +48,7 @@ const {
     INVENTORYLEVEL_TABLE_NAME,
     INVENTORYITEM_TABLE_NAME,
     FULFILLMENTEVENTS_TABLE_NAME,
+    VARIANTAGGREGATE_TABLE_NAME,
 } = require("../../DataManager/helper");
 
 const createWebhooks = async (shopName, accessToken, workspaceId) => {
@@ -151,20 +152,20 @@ const update = async ({ workspaceId, event, type}, data) => {
             }
             console.log('customers data: ', customers)
             await updateTable(CUSTOMER_TABLE_NAME, customerColumns, customers, workspaceId, type);
-            
+
             let customeragg = []
             if(type != 'delete') {
                 customeragg.push({
                     ...data['default_address'],
                     ...data,
                 })
-                await del(CUSTOMERAGGREGATE_TABLE_NAME, customeragg, workspaceId, 'customer_id', 'id')
+                await del(CUSTOMERAGGREGATE_TABLE_NAME, customeragg, workspaceId)
                 customeragg.map(async (customer) => {
                     await aggregate(workspaceId, customer.id)
                 })
             } else {
                 customeragg.push(data)
-                await del(CUSTOMERAGGREGATE_TABLE_NAME, customeragg, workspaceId, 'customer_id', 'id')
+                await del(CUSTOMERAGGREGATE_TABLE_NAME, customeragg, workspaceId)
             }
             console.log('customer aggregate data: ', customeragg)
             break
@@ -351,6 +352,13 @@ const update = async ({ workspaceId, event, type}, data) => {
                 variants.push(data)
             }
             await updateTable(VARIANT_TABLE_NAME, variantsColumns, variants, workspaceId, type, 'product_id', 'id');
+
+            await del(VARIANTAGGREGATE_TABLE_NAME, variants, workspaceId)
+            if(type != 'delete') {
+                variants.map(async (variant) => {
+                    await aggregate(workspaceId, variant.id)
+                })
+            }
             break
         case 'inventory_items':
             // console.log('inventory_items: ', data)
