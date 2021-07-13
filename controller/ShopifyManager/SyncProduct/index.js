@@ -4,6 +4,8 @@ const {PRODUCT_TABLE_NAME, VARIANT_TABLE_NAME, VARIANTAGGREGATE_TABLE_NAME} = re
 const productColumns = require("../../DataManager/Setup/productColumns.json");
 const variantColumns = require("../../DataManager/Setup/variantColumns.json");
 const { socket } = require("../../../socket");
+const {SYNC: inventoryItemSync} = require("../SyncInventoryItem/index")
+const {SYNC: inventoryLevelSync} = require("../SyncInventoryLevel/index")
 
 const getImageUrl = (image_id, images) => {
     if(!images){
@@ -60,6 +62,15 @@ const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0, workspaceId
         progress += response.data.products.length
         socket.emit("sync", workspaceId, 'products', `${progress} of ${count} done`)
         console.log(`${progress} of ${count} done`);
+
+        // sync inventory items
+        console.log("inventoryItem")
+        await inventoryItemSync({ shopName, accessToken, workspaceId });
+
+        // sync inventory levels
+        console.log("inventoryLevel")
+        await inventoryLevelSync({ shopName, accessToken, workspaceId });
+
         if(response.data.products.length) {
             return response.data.products[response.data.products.length - 1].id
         }

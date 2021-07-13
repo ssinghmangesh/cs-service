@@ -4,8 +4,6 @@ const {SYNC: productSync} = require("./SyncProduct/index")
 const {SYNC: discountSync} = require("./SyncDiscount/index")
 const {SYNC: cartSync} = require("./SyncCart/index")
 const {SYNC: draftOrderSync} = require("./SyncDraftOrder/index")
-const {SYNC: inventoryItemSync} = require("./SyncInventoryItem/index")
-const {SYNC: inventoryLevelSync} = require("./SyncInventoryLevel/index")
 const {SYNC: locationSync} = require("./SyncLocation/index")
 const Shopify = require("./Shopify");
 const { addRow, updateRow, deleteRow, fetchRow, fetchAllRows } = require("../SyncStatusManager/index")
@@ -153,12 +151,6 @@ const syncAll = async ({ shopName, accessToken, limit = 50, workspaceId, table =
             updateRowHelper(workspaceId, 'location', lastObjectId)
         }
     }
-
-    console.log("inventoryItem")
-    await inventoryItemSync({ shopName, accessToken, workspaceId });
-
-    console.log("inventoryLevel")
-    await inventoryLevelSync({ shopName, accessToken, workspaceId });
 
     console.log("Customer");
     const { data: { count: totalCustomerCount } } = await Shopify.fetchCustomerCount(shopName, accessToken);

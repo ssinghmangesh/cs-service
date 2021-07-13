@@ -153,7 +153,7 @@ const update = async ({ workspaceId, event, type}, data) => {
             } else {
                 customers.push(data)
             }
-            console.log('customers data: ', customers)
+            // console.log('customers data: ', customers)
             await updateTable(CUSTOMER_TABLE_NAME, customerColumns, customers, workspaceId, type);
 
             let customeragg = []
@@ -170,7 +170,7 @@ const update = async ({ workspaceId, event, type}, data) => {
                 customeragg.push(data)
                 await del(CUSTOMERAGGREGATE_TABLE_NAME, customeragg, workspaceId)
             }
-            console.log('customer aggregate data: ', customeragg)
+            // console.log('customer aggregate data: ', customeragg)
             break
         case 'draft_orders':
             // console.log('draft orders: ', data)
