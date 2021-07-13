@@ -1,5 +1,17 @@
 const { insert, del, fetch, fetchAll, update, query } = require("../../aws/index");
 const PostgresqlDb = require('../../db')
+const { insert: insertP } = require('../DataManager/index');
+const sentEmailColumns = require('../DataManager/Setup/sentEmailColumns.json');
+
+const addEmailStatus = async (data, workspaceId) => {
+    try{
+        const table = `sentemail${workspaceId}`
+        await insertP(table, sentEmailColumns, [data], workspaceId)
+    } catch(err) {
+        console.log(err);
+        throw err;
+    }
+}
 
 const addNotification = async (data) => {
     const params = {
@@ -151,4 +163,5 @@ module.exports = {
     fetchAllNotifications,
     getWorkspace,
     getProductImages,
+    addEmailStatus,
 }
