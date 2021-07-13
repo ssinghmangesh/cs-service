@@ -21,6 +21,9 @@ const taxColumns = require("./Setup/taxColumns.json");
 const discountApplicationsColumns = require("./Setup/discountApplicationsColumns.json");
 const visitorColumns = require("./Setup/visitorColumns.json");
 const sentEmailColumns = require("./Setup/sentEmailColumns.json");
+const variantAggregateColumns = require("./Setup/variantAggregateColumns.json");
+const inventoryItemColumns = require("./Setup/inventoryItemColumns.json");
+const inventoryLevelColumns = require("./Setup/inventoryLevelColumns.json");
 
 const {
     CUSTOMER_TABLE_NAME, 
@@ -45,7 +48,10 @@ const {
     TAX_TABLE_NAME,
     DISCOUNTAPPLICATION_TABLE_NAME,
     VISITOR_TABLE_NAME,
-    SENTEMAIL_TABLE_NAME
+    SENTEMAIL_TABLE_NAME,
+    VARIANTAGGREGATE_TABLE_NAME,
+    INVENTORYITEM_TABLE_NAME,
+    INVENTORYLEVEL_TABLE_NAME,
 } = require("./helper");
 
 const { createTable } = require('./Setup/helper')
@@ -92,6 +98,15 @@ const clearData = async (type, workspaceId) => {
             query = `DROP TABLE IF EXISTS ${VARIANT_TABLE_NAME(workspaceId)};`
             await PostgresqlDb.query(query)
             await createTable(variantColumns, VARIANT_TABLE_NAME, workspaceId)
+            query = `DROP TABLE IF EXISTS ${VARIANTAGGREGATE_TABLE_NAME(workspaceId)};`
+            await PostgresqlDb.query(query)
+            await createTable(variantAggregateColumns, VARIANTAGGREGATE_TABLE_NAME, workspaceId)
+            query = `DROP TABLE IF EXISTS ${INVENTORYITEM_TABLE_NAME(workspaceId)};`
+            await PostgresqlDb.query(query)
+            await createTable(inventoryItemColumns, INVENTORYITEM_TABLE_NAME, workspaceId)
+            query = `DROP TABLE IF EXISTS ${INVENTORYLEVEL_TABLE_NAME(workspaceId)};`
+            await PostgresqlDb.query(query)
+            await createTable(inventoryLevelColumns, INVENTORYLEVEL_TABLE_NAME, workspaceId)
             break;
         case 'cart':
             query = `DROP TABLE IF EXISTS ${CART_TABLE_NAME(workspaceId)};`
