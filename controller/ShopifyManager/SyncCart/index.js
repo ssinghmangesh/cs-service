@@ -17,15 +17,15 @@ const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0, workspaceId
     //call to shopify fetch one batch
 
     let response = await Shopify.fetchCart(shopName, accessToken, { since_id: sinceId, limit })
-    // console.log('@@@@@@@', response.data.checkouts)
-    // console.log('!!!!!!!', response.data.checkouts[0].line_items[1].discount_allocations)
+    // console.log('@@@@@@@', response.data)
+    // console.log('!!!!!!!', response.data.checkouts[0].line_items)
 
     let carts = []
     // console.log(response.data.checkouts[0].line_items)
     response.data.checkouts.map(checkout => {
         const { customer } = checkout
         carts.push({
-            id: checkout.id,
+            id: checkout.cart_token,
             customer_id: customer ? customer.id : null,
             token: checkout.cart_token,
             note: checkout.note,
@@ -42,6 +42,7 @@ const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0, workspaceId
         checkout.line_items.map(line_item => {
             cartLineItems.push({
                 id: checkout.id,
+                cart_id: checkout.cart_token,
                 customer_id: customer ? customer.id : null,
                 quantity: line_item.quantity,
                 variant_id: line_item.variant_id,
