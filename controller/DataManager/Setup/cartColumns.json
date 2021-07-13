@@ -1,7 +1,7 @@
 [
     {
         "columnName":"id",
-        "dataType": "varchar",
+        "dataType": "numeric",
         "primaryKey": true
     },
     {

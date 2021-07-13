@@ -132,9 +132,9 @@ const deleteWorkspace = async (workspaceId) => {
 // .then(console.log)
 // .catch(console.log)
 
-setupWorkspace(56788582584)
-.then(console.log)
-.catch(console.log)
+// setupWorkspace(56788582584)
+// .then(console.log)
+// .catch(console.log)
 // createTable(visitorColumns, VISITOR_TABLE_NAME, 1);
 
 module.exports = {
