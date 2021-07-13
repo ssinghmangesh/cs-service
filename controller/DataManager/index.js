@@ -20,7 +20,6 @@ const insert = async(TABLE_NAME, column, data, workspaceId) => {
     if(data.length == 0){
         return;
     }
-    console.log('!!!!!!!!!!')
     const query = `
         INSERT INTO ${TABLE_NAME(workspaceId)}
         ${getColumnName({ columnData: column })}
@@ -40,8 +39,8 @@ const variantAggregate = async (workspaceId, variantId) => {
     // console.log(carts)
 
     let cartQuantity = 0
-    for(let i = 0; i < carts.length; i++) {
-        for(let j = 0; j < carts[i].variant_id.length; j++) {
+    for(let i = 0; carts && i < carts.length; i++) {
+        for(let j = 0; carts[i].variant_id && j < carts[i].variant_id.length; j++) {
             if(carts[i].variant_id[j] === variantId) {
                 cartQuantity++
             }
