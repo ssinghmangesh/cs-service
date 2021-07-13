@@ -195,8 +195,21 @@ class Dashboard {
         let query = `SELECT `
         for(let i = 0; i < statsDefinition.length; i++) {
             if(statsDefinition[i].operator) {
-                query += `${statsDefinition[i].aggregate}(case when ${statsDefinition[i].columnname} ${statsDefinition[i].operator} `
-                if(typeof statsDefinition[i].value === 'number') {
+                query += `${statsDefinition[i].aggregate}(case when `
+                if(Array.isArray(statsDefinition[i].value)) {
+                    for(let j = 0; j < statsDefinition[i].value.length; j++) {
+                        query += `${statsDefinition[i].columnname} ${statsDefinition[i].operator} `
+                        if(typeof statsDefinition[i].value[j] === 'number') {
+                            query += `${statsDefinition[i].value[j]} `
+                        } else {
+                            query += `'${statsDefinition[i].value[j]}' `
+                        }
+                        if(j < statsDefinition[i].value.length - 1) {
+                            query += `OR `
+                        }
+                    }
+                    query += `then true end)`
+                } else if(typeof statsDefinition[i].value === 'number' || statsDefinition[i].value === 'NULL' || statsDefinition[i].value === 'NULL') {
                     query += `${statsDefinition[i].value} then true end)`
                 } else {
                     query += `'${statsDefinition[i].value}' then true end)`
