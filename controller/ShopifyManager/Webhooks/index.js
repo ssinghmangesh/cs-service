@@ -360,17 +360,17 @@ const update = async ({ workspaceId, event, type}, data) => {
             if(type != 'delete') {
                 data.variants.map((variant) => {
                     variants.push({
-                        product_title: product.title,
-                        tags: product.tags,
-                        vendor: product.vendor,
+                        product_title: data.title,
+                        tags: data.tags,
+                        vendor: data.vendor,
                         ...variant,
-                        image_url: getImageUrl(variant.image_id, product.images)
+                        image_url: getImageUrl(variant.image_id, data.images)
                     })
                 })
             } else {
                 variants.push(data)
             }
-            await updateTable(VARIANT_TABLE_NAME, variantsColumns, variants, workspaceId, type, 'product_id', 'id');
+            await updateTable(VARIANT_TABLE_NAME, variantsColumns, variants, workspaceId, type);
 
             await del(VARIANTAGGREGATE_TABLE_NAME, variants, workspaceId)
             if(type != 'delete') {
