@@ -29,6 +29,9 @@ const SYNC = async ({ shopName, accessToken, sinceId = 0, limit = 0, workspaceId
         product.variants.map(variant => {
             quantity += variant.inventory_quantity
             variants.push({
+                product_title: product.title,
+                tags: product.tags,
+                vendor: product.vendor,
                 ...variant,
                 image_url: getImageUrl(variant.image_id, product.images)
             })
