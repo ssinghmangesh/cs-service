@@ -370,9 +370,9 @@ const update = async ({ workspaceId, event, type}, data) => {
             } else {
                 variants.push(data)
             }
-            await updateTable(VARIANT_TABLE_NAME, variantsColumns, variants, workspaceId, type);
+            await updateTable(VARIANT_TABLE_NAME, variantsColumns, variants, workspaceId, type, 'product_id', 'id');
 
-            await del(VARIANTAGGREGATE_TABLE_NAME, variants, workspaceId)
+            await del(VARIANTAGGREGATE_TABLE_NAME, variants, workspaceId, 'product_id', 'id')
             if(type != 'delete') {
                 variants.map(async (variant) => {
                     await aggregate(workspaceId, variant.id)
