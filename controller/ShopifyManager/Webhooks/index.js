@@ -29,6 +29,18 @@ const getId = (array, column) => {
     return ids
 }
 
+const getImageUrl = (image_id, images) => {
+    if(!images){
+        return ''
+    }
+    let image = images.find(image => image.id === image_id);
+    if(image){
+        return image.src;
+    }else{
+        return null;
+    }
+}
+
 const {
     CUSTOMER_TABLE_NAME, 
     ORDER_TABLE_NAME,
@@ -348,7 +360,11 @@ const update = async ({ workspaceId, event, type}, data) => {
             if(type != 'delete') {
                 data.variants.map((variant) => {
                     variants.push({
+                        product_title: product.title,
+                        tags: product.tags,
+                        vendor: product.vendor,
                         ...variant,
+                        image_url: getImageUrl(variant.image_id, product.images)
                     })
                 })
             } else {
