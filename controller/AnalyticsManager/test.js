@@ -48,38 +48,38 @@ const Dashboard = require('./index.js')
 //         columnname: 'total_price',
 //         alias: 'Total',
 //     },
+    // {
+    //     aggregate: 'sum',
+    //     columnname: 'fulfillment_status',
+    //     alias: 'Status',
+    //     operator: '=',
+    //     value: ['fulfilled', 'partial']
+    // },
 //     {
-//         aggregate: 'count',
-//         columnname: 'fulfillment_status',
-//         alias: 'Status',
-//         operator: 'IS NOT',
-//         value: 'NULL'
+//         aggregate: '',
+//         columnname: 'email',
+//         alias: 'Email'
 //     },
-    // {
-    //     aggregate: '',
-    //     columnname: 'email',
-    //     alias: 'Email'
-    // },
-    // {
-    //     aggregate: 'avg',
-    //     columnname: 'total_price',
-    //     alias: 'Average'
-    // },
-    // {
-    //     aggregate: 'max',
-    //     columnname: 'total_price',
-    //     alias: 'Maximum'
-    // },
-    // {
-    //     aggregate: 'min',
-    //     columnname: 'total_price',
-    //     alias: 'Minimum'
-    // },
-    // {
-    //     aggregate: '',
-    //     columnname: 'id',
-    //     alias: 'ID'
-    // }
+//     {
+//         aggregate: 'avg',
+//         columnname: 'total_price',
+//         alias: 'Average'
+//     },
+//     {
+//         aggregate: 'max',
+//         columnname: 'total_price',
+//         alias: 'Maximum'
+//     },
+//     {
+//         aggregate: 'min',
+//         columnname: 'total_price',
+//         alias: 'Minimum'
+//     },
+//     {
+//         aggregate: '',
+//         columnname: 'id',
+//         alias: 'ID'
+//     }
 // ]
 
 // Dashboard.stats({TABLE_NAME: 'order56788582584', statsDefinition: statsDefinition})

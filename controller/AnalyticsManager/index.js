@@ -208,13 +208,23 @@ class Dashboard {
                             query += `OR `
                         }
                     }
-                    query += `then true end)`
+                    if(typeof statsDefinition[i].aggcolumnname === 'undefined' || !statsDefinition[i].aggcolumnname) {
+                        query += `then true end)`
+                    } else {
+                        query += `then ${statsDefinition[i].aggcolumnname} else 0 end)`
+                    }
                 } else if(typeof statsDefinition[i].value === 'number' || statsDefinition[i].value === 'NULL' || statsDefinition[i].value === 'NULL') {
-                    query += `${statsDefinition[i].columnname} ${statsDefinition[i].operator} `
-                    query += `${statsDefinition[i].value} then true end)`
+                    if(typeof statsDefinition[i].aggcolumnname === 'undefined' || !statsDefinition[i].aggcolumnname) {
+                        query += `${statsDefinition[i].columnname} ${statsDefinition[i].operator} ${statsDefinition[i].value} then true end)`
+                    } else {
+                        query += `${statsDefinition[i].columnname} ${statsDefinition[i].operator} ${statsDefinition[i].value} then ${statsDefinition[i].aggcolumnname} else 0 end)`
+                    }
                 } else {
-                    query += `${statsDefinition[i].columnname} ${statsDefinition[i].operator} `
-                    query += `'${statsDefinition[i].value}' then true end)`
+                    if(typeof statsDefinition[i].aggcolumnname === 'undefined' || !statsDefinition[i].aggcolumnname) {
+                        query += `${statsDefinition[i].columnname} ${statsDefinition[i].operator} '${statsDefinition[i].value}' then true end)`
+                    } else {
+                        query += `${statsDefinition[i].columnname} ${statsDefinition[i].operator} '${statsDefinition[i].value}' then ${statsDefinition[i].aggcolumnname} else 0 end)`
+                    }
                 }
                 query += ` AS ${statsDefinition[i].alias}`
             } else {
@@ -225,7 +235,7 @@ class Dashboard {
             }
         }
         query += ` FROM ${TABLE_NAME} ${wc ? 'WHERE ' + wc : ''} ${LIMIT(limit)} OFFSET ${skipRowby};`
-        // console.log(query)
+        console.log(query)
         return abstractData(await PostgresqlDb.query(query), "single");
     }
 
