@@ -95,5 +95,17 @@
     {
         "columnName":"quantity_in_cart",
         "dataType": "numeric"
+    },
+    {
+        "columnName":"product_title",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"tags",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"vendor",
+        "dataType": "varchar"
     }
 ]

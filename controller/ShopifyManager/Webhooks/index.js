@@ -29,6 +29,18 @@ const getId = (array, column) => {
     return ids
 }
 
+const getImageUrl = (image_id, images) => {
+    if(!images){
+        return ''
+    }
+    let image = images.find(image => image.id === image_id);
+    if(image){
+        return image.src;
+    }else{
+        return null;
+    }
+}
+
 const {
     CUSTOMER_TABLE_NAME, 
     ORDER_TABLE_NAME,
@@ -328,7 +340,7 @@ const update = async ({ workspaceId, event, type}, data) => {
             await updateTable(TAX_TABLE_NAME, taxColumns, taxes, workspaceId, type, 'order_id');
             break
         case 'products':
-            // console.log('products data: ', data)
+            console.log('products data: ', data)
             let products = []
             if(type != 'delete') {
                 let quantity = 0
@@ -348,7 +360,11 @@ const update = async ({ workspaceId, event, type}, data) => {
             if(type != 'delete') {
                 data.variants.map((variant) => {
                     variants.push({
+                        product_title: data.title,
+                        tags: data.tags,
+                        vendor: data.vendor,
                         ...variant,
+                        image_url: getImageUrl(variant.image_id, data.images)
                     })
                 })
             } else {
@@ -356,7 +372,7 @@ const update = async ({ workspaceId, event, type}, data) => {
             }
             await updateTable(VARIANT_TABLE_NAME, variantsColumns, variants, workspaceId, type, 'product_id', 'id');
 
-            await del(VARIANTAGGREGATE_TABLE_NAME, variants, workspaceId)
+            await del(VARIANTAGGREGATE_TABLE_NAME, variants, workspaceId, 'product_id', 'id')
             if(type != 'delete') {
                 variants.map(async (variant) => {
                     await aggregate(workspaceId, variant.id)
@@ -364,11 +380,11 @@ const update = async ({ workspaceId, event, type}, data) => {
             }
             break
         case 'inventory_items':
-            // console.log('inventory_items: ', data)
+            console.log('inventory_items: ', data)
             await updateTable(INVENTORYITEM_TABLE_NAME, inventoryItemColumns, [data], workspaceId, type)
         case 'inventory_levels':
-            // console.log('inventory_levels: ', data)
-            await updateTable(INVENTORYLEVEL_TABLE_NAME, inventoryLevelColumns, [data], workspaceId, type, 'inventory_item_id')
+            console.log('inventory_levels: ', data)
+            await updateTable(INVENTORYLEVEL_TABLE_NAME, inventoryLevelColumns, [data], workspaceId, type, 'inventory_item_id', 'id')
         case 'refunds':
             // console.log('refunded data: ', data)
             await updateTable(REFUNDED_TABLE_NAME, refundedColumns, [data], workspaceId, type);

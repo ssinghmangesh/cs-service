@@ -87,5 +87,17 @@
     {
         "columnName":"updated_at",
         "dataType": "timestamptz"
+    },
+    {
+        "columnName":"product_title",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"tags",
+        "dataType": "varchar"
+    },
+    {
+        "columnName":"vendor",
+        "dataType": "varchar"
     }
 ]
