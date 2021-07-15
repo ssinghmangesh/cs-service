@@ -219,7 +219,7 @@ class Dashboard {
         let query = `SELECT `
         for(let i = 0; i < statsDefinition.length; i++) {
             if(statsDefinition[i].operator) {
-                query += `${statsDefinition[i].aggregate}(case when `
+                query += `COALESCE(${statsDefinition[i].aggregate}(case when `
                 if(Array.isArray(statsDefinition[i].value)) {
                     for(let j = 0; j < statsDefinition[i].value.length; j++) {
                         query += `${statsDefinition[i].columnname} ${statsDefinition[i].operator} `
@@ -250,9 +250,9 @@ class Dashboard {
                         query += `${statsDefinition[i].columnname} ${statsDefinition[i].operator} '${statsDefinition[i].value}' then ${statsDefinition[i].aggcolumnname} else 0 end)`
                     }
                 }
-                query += ` AS ${statsDefinition[i].alias}`
+                query += `, 0) AS ${statsDefinition[i].alias}`
             } else {
-                query += `${statsDefinition[i].aggregate}(${statsDefinition[i].columnname}) AS ${statsDefinition[i].alias}`
+                query += `COALESCE(${statsDefinition[i].aggregate}(${statsDefinition[i].columnname}), 0) AS ${statsDefinition[i].alias}`
             }
             if(i < statsDefinition.length - 1) {
                 query += `, `
