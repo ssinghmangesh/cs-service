@@ -163,14 +163,14 @@ class Dashboard {
         }
     }
 
-    static async pieChart({table, workspaceId, columnname, statsDefinition = {}, orderByDirection = 'asc', filters = {}}) {
+    static async pieChart({table, workspaceId, columnname, orderByDirection = 'asc', limit, statsDefinition = {}, filters = {}}) {
         let query = ``
         let wc = ``
         // console.log('pie-chart filters: ', filters)
         if(Object.entries(filters).length) {
             wc = whereClause(filters, table, workspaceId);
         }
-        query = `SELECT ${columnname}, ${statsDefinition["aggregate"]}(${statsDefinition["columnname"]}) AS ${statsDefinition["aggregate"]} FROM ${table}${workspaceId} ${wc ? 'WHERE ' + wc : ''} GROUP BY ${columnname} ORDER BY ${statsDefinition["aggregate"]} ${orderByDirection};`
+        query = `SELECT ${columnname}, ${statsDefinition["aggregate"]}(${statsDefinition["columnname"]}) AS ${statsDefinition["aggregate"]} FROM ${table}${workspaceId} ${wc ? 'WHERE ' + wc : ''} GROUP BY ${columnname} ORDER BY ${statsDefinition["aggregate"]} ${orderByDirection} ${LIMIT(limit)};`
         // console.log(query)
         return abstractData(await PostgresqlDb.query(query));
     }
