@@ -107,7 +107,7 @@ let filters1 = {
 // AND id IN (SELECT order_id FROM order333 WHERE  (DATE(created_at)  = CURRENT_DATE - 10)) 
 // AND id IN (SELECT order_id FROM product333 WHERE  (title like '%a%')) )
 
-let typeoptions = ['text', 'number', 'array', 'boolean', 'timestamptz']
+let typeoptions = ['text', 'number', 'array', 'boolean', 'timestamptz', 'dropdown']
 
 // const columnDecider = (type) => {
 //     if(type === 'customer' || type === 'customeraggregate') return 'customer_id'
@@ -142,32 +142,40 @@ const typeBuild = (ptype, workspaceId, { columnName, filterType, dataType, value
     if(ptype === 'customer' || ptype === 'customeraggregate') {
         if(type === 'order') {
             prefix = `id IN (SELECT customer_id FROM ${ORDER_TABLE_NAME(workspaceId)} WHERE `
-        } else if(type === 'product') {
-            prefix = `id IN (SELECT customer_id FROM ${PRODUCT_TABLE_NAME(workspaceId)} WHERE `
-        } else if(type === 'fulfillment') {
-            prefix = `id IN (SELECT customer_id FROM ${FULFILLMENT_TABLE_NAME(workspaceId)} WHERE `
         } else if(type === 'discountapplication') {
             prefix = `id IN (SELECT customer_id FROM ${DISCOUNTAPPLICATION_TABLE_NAME(workspaceId)} WHERE `
+        } else if(type === 'event') {
+            prefix = `id IN (SELECT customer_id FROM ${EVENT_TABLE_NAME(workspaceId)} WHERE `
         }
     } else if(ptype === 'order') {
         if(type === 'customer' || type === 'customeraggregate') {
             prefix = `customer_id IN (SELECT id FROM ${CUSTOMERAGGREGATE_TABLE_NAME(workspaceId)} WHERE `
-        } else if(type === 'product') {
-            prefix = `product_id IN (SELECT id FROM ${PRODUCT_TABLE_NAME(workspaceId)} WHERE `
-        } else if(type === 'fulfillment') {
-            prefix = `fulfillment_id IN (SELECT id FROM ${FULFILLMENT_TABLE_NAME(workspaceId)} WHERE `
         } else if(type === 'discountapplication') {
             prefix = `id IN (SELECT order_id FROM ${DISCOUNTAPPLICATION_TABLE_NAME(workspaceId)} WHERE `
+        }
+    } else if(ptype === 'discountapplication') {
+        if(type === 'customer' || type === 'customeraggregate') {
+            prefix = `customer_id IN (SELECT id FROM ${CUSTOMERAGGREGATE_TABLE_NAME(workspaceId)} WHERE `
+        } else if(type === 'order') {
+            prefix = `order_id IN (SELECT id FROM ${ORDER_TABLE_NAME(workspaceId)} WHERE `
+        }
+    } else if(ptype === 'tax') {
+        if(type === 'customer' || type === 'customeraggregate') {
+            prefix = `customer_id IN (SELECT id FROM ${CUSTOMERAGGREGATE_TABLE_NAME(workspaceId)} WHERE `
+        } else if(type === 'order') {
+            prefix = `order_id IN (SELECT id FROM ${ORDER_TABLE_NAME(workspaceId)} WHERE `
         }
     } else if(ptype === 'draftorder') {
         if(type === 'customer' || type === 'customeraggregate') {
             prefix = `customer_id IN (SELECT id FROM ${CUSTOMERAGGREGATE_TABLE_NAME(workspaceId)} WHERE `
-        } else if(type === 'product') {
-            prefix = `product_id IN (SELECT id FROM ${PRODUCT_TABLE_NAME(workspaceId)} WHERE `
-        } else if(type === 'fulfillment') {
-            prefix = `fulfillment_id IN (SELECT id FROM ${FULFILLMENT_TABLE_NAME(workspaceId)} WHERE `
+        } else if(type === 'order') {
+            prefix = `order_id IN (SELECT id FROM ${ORDER_TABLE_NAME(workspaceId)} WHERE `
         } else if(type === 'discountapplication') {
             prefix = `id IN (SELECT order_id FROM ${DISCOUNTAPPLICATION_TABLE_NAME(workspaceId)} WHERE `
+        }
+    } else if(ptype === 'cart') {
+        if(type === 'customer' || type === 'customeraggregate') {
+            prefix = `customer_id IN (SELECT id FROM ${CUSTOMERAGGREGATE_TABLE_NAME(workspaceId)} WHERE `
         }
     }
 
@@ -254,44 +262,44 @@ const typeBuild = (ptype, workspaceId, { columnName, filterType, dataType, value
         }
     } else if (dataType === 'varchar') {
         if (filterType === 'equal_to') {
-            if(columnName === 'name') {
+            if(columnName === 'name' || columnName === 'event_name') {
                 query = `${prefix} (${columnName} = '${values[0]}')`
             } else {
                 query = `${prefix} (${columnName} = '${values[0]}')`
             }
         } else if (filterType === 'not_equal_to') {
-            if(columnName === 'name') {
+            if(columnName === 'name' || columnName === 'event_name') {
                 query = `${prefix} (${columnName} != '${values[0]}')`
             } else {
                 query = `${prefix} (${columnName} != '${values[0]}')`
             }
         } else if (filterType === 'starts_with') {
-            if(columnName === 'name') {
+            if(columnName === 'name' || columnName === 'event_name') {
                 query = `${prefix} (${columnName} like '${values[0]}%')`
             } else {
                 query = `${prefix} (${columnName} like '${values[0]}%')`
             }
         } else if (filterType === 'ends_with') {
-            if(columnName === 'name') {
+            if(columnName === 'name' || columnName === 'event_name') {
                 query = `${prefix} (${columnName} like '%${values[0]}')`
             } else {
                 query = `${prefix} (${columnName} like '%${values[0]}')`
             }
         } else if (filterType === 'contains') {
-            if(columnName === 'name') {
+            if(columnName === 'name' || columnName === 'event_name') {
                 query = `${prefix} (${columnName} like '%${values[0]}%')`
             } else {
                 query = `${prefix} (${columnName} like '%${values[0]}%')`
             }
         } else if (filterType === 'is_known' ) {
-            if(columnName === 'name') {
-                query = `${prefix} (LENGTH(${columnName}) > 1)`
+            if(columnName === 'name' || columnName === 'event_name') {
+                query = `${prefix} (LENGTH(${columnName}) > 0)`
             } else {
                 query = `${prefix} (LENGTH(${columnName}) > 0)`
             }
         } else if (filterType === 'is_unknown') {
-            if(columnName === 'name') {
-                query = `${prefix} (LENGTH(${columnName}) = 1)`
+            if(columnName === 'name' || columnName === 'event_name') {
+                query = `${prefix} (LENGTH(${columnName}) = 0)`
             } else {
                 query = `${prefix} (LENGTH(${columnName}) = 0)`
             }
