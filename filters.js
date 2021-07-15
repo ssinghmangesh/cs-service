@@ -12,7 +12,8 @@ const {
     CHECKOUT_TABLE_NAME,
     CHECKOUTLINEITEMS_TABLE_NAME,
     EVENT_TABLE_NAME,
-    CUSTOMERAGGREGATE_TABLE_NAME
+    CUSTOMERAGGREGATE_TABLE_NAME,
+    DISCOUNTAPPLICATION_TABLE_NAME
 } = require("./controller/DataManager/helper.js");
 
 // let filters1 = {
@@ -74,61 +75,23 @@ const {
 // }
 
 let filters1 = {
-    "relation": "AND",
-    conditions: [{
-        type: "CUSTOMER",
-        columnName: "name",
-        filterType: "contains",
-        dataType: "varchar",
-        values: ["a"]
-    },
-    {
-        "relation": "OR",
-        conditions: [{
-            type: "ORDER",
-            columnName: "fulfillment_status",
-            filterType: "equal_to",
-            dataType: "varchar",
-            values: ["pending"]
-        },
-        {
-            "relation": "AND",
-            conditions: [{
-                type: "FULFILLMENT",
-                columnName: "status",
-                filterType: "contains",
-                dataType: "varchar",
-                values: ["a"]
-            },
-            {
-                type: "PRODUCT",
-                columnName: "product_type",
-                filterType: "contains",
-                dataType: "varchar",
-                values: ["a"]
-            }]
-        },
-        {
-            type: "CUSTOMER",
-            columnName: "email",
-            filterType: "contains",
-            dataType: "varchar",
-            values: ["a"]
-        }]
-    },
-    {
-        columnName: "created_at",
-        filterType: "equal_to",
-        dataType: "timestamptz",
-        values: [10]
-    },
-    {
-        type: "PRODUCT",
-        columnName: "title",
-        filterType: "contains",
-        dataType: "varchar",
-        values: ["a"]
-    }]
+    relation: 'AND',
+    conditions:
+     [ { columnName: 'code',
+         type: 'text',
+         dataType: 'varchar',
+         title: 'Applied Discounts',
+         tableName: 'discountapplication',
+         filterType: 'equal_to',
+         values: ["DISCOUNT101"] } ]
+    // "relation": "AND",
+    // conditions: [{
+    //     type: "DISCOUNTAPPLICATION",
+    //     columnName: "code",
+    //     filterType: "equal_to",
+    //     dataType: "varchar",
+    //     values: ["DISCOUNT101"]
+    // }]
 }
 
 // RESULT
@@ -144,54 +107,88 @@ let filters1 = {
 // AND id IN (SELECT order_id FROM order333 WHERE  (DATE(created_at)  = CURRENT_DATE - 10)) 
 // AND id IN (SELECT order_id FROM product333 WHERE  (title like '%a%')) )
 
-const whereClause = (filters = filters1, workspaceId = 333, ptype) => {
+let typeoptions = ['text', 'number', 'array', 'boolean', 'timestamptz']
+
+const columnDecider = (type) => {
+    if(type === 'customer' || type === 'customeraggregate') return 'customer_id'
+    else if(type === 'order') return 'order_id'
+    else if(type === 'product') return 'product_id'
+    else if(type === 'fulfillment') return 'fulfillment_id'
+    else if(type === 'discountapplication') return 'id'
+}
+
+const whereClause = (filters, ptype, workspaceId) => {
     if(filters.conditions) {
         return `(${filters.conditions.map(filter => {
-            return whereClause(filter, workspaceId, ptype)
+            return whereClause(filter, ptype, workspaceId)
         }).join(` ${ filters.relation } `)} )`
     } else {
         return typeBuild(ptype, workspaceId, filters)
     }
 }
 
-const typeBuild = (ptype, workspaceId, { columnName, filterType, dataType, values, type }) => {
+const typeBuild = (ptype, workspaceId, { columnName, filterType, dataType, values, type, tableName }) => {
+    if(tableName && typeoptions.includes(type)) {
+        type = tableName
+    }
     let prefix = ''
     let table = ''
     let f = 0
-    if(type === 'CUSTOMER') {
+    // console.log(ptype, type)
+    if(type === 'customer') {
         table = `${CUSTOMER_TABLE_NAME(workspaceId)}`
-    } else if(type === 'ORDER') {
+    } else if(type === 'order') {
         table = `${ORDER_TABLE_NAME(workspaceId)}`
-    } else if(type === 'PRODUCT') {
+    } else if(type === 'product') {
         table = `${PRODUCT_TABLE_NAME(workspaceId)}`
-    } else if(type === 'FULFILLMENT') {
+    } else if(type === 'fulfillment') {
         table = `${FULFILLMENT_TABLE_NAME(workspaceId)}`
-    } else if(typeof type === 'undefined') {
+    } else if(type === 'discountapplication') {
+        table = `${DISCOUNTAPPLICATION_TABLE_NAME(workspaceId)}`
+    } else if(type === 'customeraggregate') {
+        table = `${CUSTOMERAGGREGATE_TABLE_NAME(workspaceId)}`
+    } else if(typeof type === 'undefined' || typeoptions.includes(type)) {
         f = 1
     }
 
-    if(ptype === 'CUSTOMER' && ptype != type) {
+    if(ptype === 'customer' && ptype != type) {
+        let col = columnDecider(type), subcol = 'id'
+        if(col === 'id') subcol = 'customer_id'
         if(f) {
             table = `${CUSTOMER_TABLE_NAME(workspaceId)}`
         }
-        prefix = `id IN (SELECT customer_id FROM ${table} WHERE `
-    } else if(ptype === 'ORDER' && ptype != type) {
+        prefix = `${col} IN (SELECT ${subcol} FROM ${table} WHERE `
+    } else if(ptype === 'customeraggregate' && ptype != type) {
+        let col = columnDecider(type), subcol = 'id'
+        if(col === 'id') subcol = 'customer_id'
+        if(f) {
+            table = `${CUSTOMERAGGREGATE_TABLE_NAME(workspaceId)}`
+        }
+        prefix = `${col} IN (SELECT ${subcol} FROM ${table} WHERE `
+    }  else if(ptype === 'order' && ptype != type) {
+        let col = columnDecider(type), subcol = 'id'
+        if(col === 'id') subcol = 'order_id'
         if(f) {
             table = `${ORDER_TABLE_NAME(workspaceId)}`
         }
-        prefix = `id IN (SELECT order_id FROM ${table} WHERE `
-    } else if(ptype === 'PRODUCT' && ptype != type) {
+        prefix = `${col} IN (SELECT ${subcol} FROM ${table} WHERE `
+    } else if(ptype === 'product' && ptype != type) {
+        let col = columnDecider(type), subcol = 'id'
+        if(col === 'id') subcol = 'product_id'
         if(f) {
             table = `${PRODUCT_TABLE_NAME(workspaceId)}`
         }
-        prefix = `id IN (SELECT product_id FROM ${table} WHERE `
-    } else if(ptype === 'FULFILLMENT' && ptype != type) {
+        prefix = `${col} IN (SELECT ${subcol} FROM ${table} WHERE `
+    } else if(ptype === 'fulfillment' && ptype != type) {
+        let col = columnDecider(type), subcol = 'id'
+        if(col === 'id') subcol = 'fulfillment_id'
         if(f) {
             table = `${FULFILLMENT_TABLE_NAME(workspaceId)}`
         }
-        prefix = `id IN (SELECT fulfillment_id FROM ${table} WHERE `
+        prefix = `${col} IN (SELECT ${subcol} FROM ${table} WHERE `
     }
 
+    // console.log(prefix)
     let query = ''
     if (dataType === 'numeric') {
         if (filterType === 'equal_to') {
@@ -327,6 +324,8 @@ const typeBuild = (ptype, workspaceId, { columnName, filterType, dataType, value
     }
     return query
 }
+
+// console.log(whereClause(filters1, 56788582584, 'customeraggregate'))
 
 module.exports = {
     whereClause
