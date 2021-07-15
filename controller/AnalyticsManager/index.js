@@ -166,12 +166,12 @@ class Dashboard {
     static async pieChart({table, workspaceId, columnname, statsDefinition = {}, orderByDirection = 'asc', filters = {}}) {
         let query = ``
         let wc = ``
-        console.log('pie-chart filters: ', filters)
+        // console.log('pie-chart filters: ', filters)
         if(Object.entries(filters).length) {
             wc = whereClause(filters, table, workspaceId);
         }
         query = `SELECT ${columnname}, ${statsDefinition["aggregate"]}(${statsDefinition["columnname"]}) AS ${statsDefinition["aggregate"]} FROM ${table}${workspaceId} ${wc ? 'WHERE ' + wc : ''} GROUP BY ${columnname} ORDER BY ${statsDefinition["aggregate"]} ${orderByDirection};`
-        console.log(query)
+        // console.log(query)
         return abstractData(await PostgresqlDb.query(query));
     }
 
@@ -196,7 +196,7 @@ class Dashboard {
 
     static async table({table, workspaceId, orderBykey, orderByDirection, limit, skipRowby = 0, filters = {}}) {
         let wc = ``
-        console.log('table filters: ', filters)
+        // console.log('table filters: ', filters)
         if(Object.entries(filters).length) {
             wc = whereClause(filters, table, workspaceId);
         }
@@ -207,7 +207,7 @@ class Dashboard {
             ${ORDER_BY(orderBykey, orderByDirection)}
             ${LIMIT(limit)} 
             OFFSET ${skipRowby};`
-        console.log('@@@@@@@@@', query)
+        // console.log('@@@@@@@@@', query)
         return abstractData(await PostgresqlDb.query(query));
     }
 
@@ -259,7 +259,7 @@ class Dashboard {
             }
         }
         query += ` FROM ${table}${workspaceId} ${wc ? 'WHERE ' + wc : ''} ${LIMIT(limit)} OFFSET ${skipRowby};`
-        console.log(query)
+        // console.log(query)
         return abstractData(await PostgresqlDb.query(query), "single");
     }
 

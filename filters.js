@@ -134,7 +134,7 @@ const typeBuild = (ptype, workspaceId, { columnName, filterType, dataType, value
     let prefix = ''
     let table = ''
     let f = 0
-    console.log(ptype, type)
+    // console.log(ptype, type)
     if(type === 'customer') {
         table = `${CUSTOMER_TABLE_NAME(workspaceId)}`
     } else if(type === 'order') {
