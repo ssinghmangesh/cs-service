@@ -9,32 +9,42 @@ const { CUSTOMER_TABLE_NAME,
 
 const Dashboard = require('./index.js')
 
-// Dashboard.count({TABLE_NAME: CUSTOMER_TABLE_NAME, workspaceId: 333, 
-//                 startdate: '2021-01-01 11:49:40.765997+05:30', enddate: '2021-05-13 11:49:40.765997+05:30'})
+let filters1 = {
+    relation: 'AND',
+    conditions:
+     [ { columnName: 'status',
+         type: 'text',
+         dataType: 'varchar',
+         title: 'Status',
+         filterType: 'not_in',
+         values: ["completed"] } ]
+}
+
+// Dashboard.count({table: 'order', workspaceId: 56788582584, 
+//                 startdate: '2021-01-01 11:49:40.765997+05:30', enddate: '2021-07-16 11:49:40.765997+05:30', filters: filters1})
 // .then(console.log)
 // .catch(console.log)
 
-// Dashboard.sum({TABLE_NAME: ORDER_TABLE_NAME, columnname: 'total_price', workspaceId: 333, 
-//     startdate: '2021-01-01 11:49:40.765997+05:30', enddate: '2021-05-13 11:49:40.765997+05:30'})
-// .then(console.log)
-// .catch(console.log)
+Dashboard.sum({table: 'order', columnname: 'total_price', workspaceId: 56788582584})
+.then(console.log)
+.catch(console.log)
 
 // Dashboard.lineGraph({TABLE_NAME: 'order333', columnname: 'total_price',
-//     dates: [{startdate: '2000-01-01 11:49:40.765997+05:30', enddate: '2021-05-13 11:49:40.765997+05:30'},
+//     dates: [{startdate: '2000-01-01 11:49:40.765997+05:30', enddate: '2021-07-16 11:49:40.765997+05:30'},
 //     {startdate: '2019-01-01 11:49:40.765997+05:30', enddate: '2021-01-01 11:49:40.765997+05:30'}],
 //     statsDefinition: {"aggregate": "count", "columnname": "id"}})
 // .then(console.log)
 // .catch(console.log)
 
 // Dashboard.barGraph({TABLE_NAME: 'order333', columnname: 'total_price', groupBykey2: 'fulfillment_status',
-//     startdate: '2000-01-01 11:49:40.765997+05:30', enddate: '2021-05-13 11:49:40.765997+05:30',
+//     startdate: '2000-01-01 11:49:40.765997+05:30', enddate: '2021-07-16 11:49:40.765997+05:30',
 //     prevstartdate: '2019-01-01 11:49:40.765997+05:30', prevenddate: '2021-01-01 11:49:40.765997+05:30',
 //     statsDefinition: {"aggregate": "count", "columnname": "id"}})
 // .then(console.log)
 // .catch(console.log)
 
 // Dashboard.pieChart({TABLE_NAME: ORDER_TABLE_NAME, columnname: 'cancel_reason', workspaceId: 333, 
-//     startdate: '2000-01-01 11:49:40.765997+05:30', enddate: '2021-05-13 11:49:40.765997+05:30'})
+//     startdate: '2000-01-01 11:49:40.765997+05:30', enddate: '2021-07-16 11:49:40.765997+05:30'})
 // .then(console.log)
 // .catch(console.log)
 
@@ -46,7 +56,7 @@ const Dashboard = require('./index.js')
 //     {
 //         aggregate: 'sum',
 //         columnname: 'total_price',
-//         alias: 'Total',
+//         alias: 'Revenue',
 //     },
     // {
     //     aggregate: 'sum',
@@ -82,7 +92,7 @@ const Dashboard = require('./index.js')
 //     }
 // ]
 
-// Dashboard.stats({TABLE_NAME: 'order56788582584', statsDefinition: statsDefinition})
+// Dashboard.stats({table: 'draftorder', workspaceId: 56788582584, statsDefinition: statsDefinition, filters: filters1})
 // .then(console.log)
 // .catch(console.log)
 

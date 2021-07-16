@@ -66,7 +66,7 @@ const aggregate = async (workspaceId, customerId) => {
     const customer = data.rows[0]
     data = await PostgresqlDb.query(`SELECT * FROM ${ORDER_TABLE_NAME(workspaceId)} WHERE customer_id = ${customerId} ORDER BY created_at;`)
     const orders = data.rows
-    data = await PostgresqlDb.query(`SELECT DISTINCT(variant_id) FROM ${LINEITEMS_TABLE_NAME(workspaceId)} WHERE customer_id = ${customerId};`)
+    data = await PostgresqlDb.query(`SELECT variant_id, product_id FROM ${LINEITEMS_TABLE_NAME(workspaceId)} WHERE customer_id = ${customerId};`)
     const lineitems = data.rows
     data = await PostgresqlDb.query(`SELECT * FROM ${REFUNDED_TABLE_NAME(workspaceId)} WHERE customer_id = ${customerId};`)
     const refunded = data.rows
@@ -113,9 +113,12 @@ const aggregate = async (workspaceId, customerId) => {
         avgAmount = tamount / orders.length
     }
 
-    let productPurchased = [], abandonedCart = false
+    let productPurchased = [], variantPurchased = [], abandonedCart = false
     for(let i = 0; i < lineitems.length; i++) {
-        productPurchased.push(Number(lineitems[i].variant_id))
+        productPurchased.push(Number(lineitems[i].product_id))
+    }
+    for(let i = 0; i < lineitems.length; i++) {
+        variantPurchased.push(Number(lineitems[i].variant_id))
     }
     if(cart.length) {
         abandonedCart = true
@@ -160,6 +163,7 @@ const aggregate = async (workspaceId, customerId) => {
         total_amount_spent: tamount,
         avg_order_price: avgAmount,
         product_purchased: productPurchased,
+        variant_purchased: variantPurchased,
         product_viewed: productViewed,
         refunded_order_count: refundedOrder,
         cancelled_order_count: cancelledOrder,
@@ -201,7 +205,7 @@ const del = async (TABLE_NAME, data, workspaceId, id = 'id', id1) => {
 // .then(console.log)
 // .catch(console.log)
 
-// aggregate(333, 2861387415684)
+// aggregate(56788582584, 5265646026936)
 // .then(console.log)
 // .catch(console.log)
 
