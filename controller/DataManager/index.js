@@ -51,9 +51,10 @@ const variantAggregate = async (workspaceId, variantId) => {
             ...variant,
             quantity_sold: lineitems.length,
             quantity_in_cart: cartQuantity,
+            product_and_variant: variant.product_title + ' - ' + variant.title
         }
     })
-    // console.log(variantData.length)
+    // console.log(variantData)
 
     await insert(VARIANTAGGREGATE_TABLE_NAME, variantAggregateColumns, variantData, workspaceId)
 }

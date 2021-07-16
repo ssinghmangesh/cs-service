@@ -74,24 +74,16 @@ const {
 
 // }
 
-let filters1 = {
-    relation: 'AND',
-    conditions:
-     [ { columnName: "product_purchased",
-     dataType: "numeric[]",
-     filterType: "in",
-     title: "Product Purchased",
-     type: "array",
-     values: ["39859538755768"] } ]
-    // "relation": "AND",
-    // conditions: [{
-    //     type: "DISCOUNTAPPLICATION",
-    //     columnName: "code",
-    //     filterType: "equal_to",
-    //     dataType: "varchar",
-    //     values: ["DISCOUNT101"]
-    // }]
-}
+// let filters1 = {
+//     relation: 'AND',
+//     conditions: [{
+//         type: "lineitems",
+//         columnName: "product_id",
+//         filterType: "in",
+//         dataType: "numeric[]",
+//         values: [6718142251192]
+//     }]
+// }
 
 // RESULT
 // (id IN (SELECT order_id FROM customer333 WHERE  (first_name like '%a%')) 
@@ -139,6 +131,8 @@ const typeBuild = (ptype, workspaceId, { columnName, filterType, dataType, value
             prefix = `customer_id IN (SELECT id FROM ${CUSTOMERAGGREGATE_TABLE_NAME(workspaceId)} WHERE `
         } else if(type === 'discountapplication') {
             prefix = `id IN (SELECT order_id FROM ${DISCOUNTAPPLICATION_TABLE_NAME(workspaceId)} WHERE `
+        } else if(type === 'lineitems') {
+            prefix = `id IN (SELECT order_id FROM ${LINEITEMS_TABLE_NAME(workspaceId)} WHERE `
         }
     } else if(ptype === 'discountapplication') {
         if(type === 'customer' || type === 'customeraggregate') {
@@ -185,11 +179,17 @@ const typeBuild = (ptype, workspaceId, { columnName, filterType, dataType, value
         }
     } else if (dataType === 'numeric[]') {
         if (filterType === 'in') {
-            // select * from customeraggregate56788582584 where product_purchased && array[39859538755768, 55555555555]::numeric[];
-            query = `${prefix} (${columnName} && array[${values}]::numeric[])`
+            if(columnName === 'product_purchased' || columnName === 'variant_purchased') {
+                query = `${prefix} (${columnName} && array[${values}]::numeric[])`
+            } else {
+                query = `${prefix} (${columnName} IN (${values}))`
+            }
         } else if (filterType === 'not_in') {
-            // select * from customeraggregate56788582584 where ( (case when product_purchased && array[39859538755768,555555555555]::numeric[] then false else true end) );
-            query = `${prefix} (case when ${columnName} && array[${values}]::numeric[] then false else true end)`
+            if(columnName === 'product_purchased' || columnName === 'variant_purchased') {
+                query = `${prefix} (case when ${columnName} && array[${values}]::numeric[] then false else true end)`
+            } else {
+                query = `${prefix} (${columnName} IN (${values}))`
+            }
         }
     } else if (dataType === 'varchar') {
         if (filterType === 'equal_to') {
@@ -300,7 +300,7 @@ const typeBuild = (ptype, workspaceId, { columnName, filterType, dataType, value
     return query
 }
 
-// console.log(whereClause(filters1, 'customeraggregate', 56788582584))
+// console.log(whereClause(filters1, 'order', 56788582584))
 
 module.exports = {
     whereClause
