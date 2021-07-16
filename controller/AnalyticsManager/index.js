@@ -3,9 +3,15 @@ const PostgresqlDb = require('./../../db')
 // const { whereClause } = require('./../../filters.js')
 
 
-const WHERE_CLAUSE = (startdate, enddate) => {
+const WHERE_CLAUSE = (table, startdate, enddate) => {
     if(startdate && enddate) {
-        return ` WHERE created_at >= '${startdate}' AND created_at <= '${enddate}'`
+        let col = 'created_at'
+        if(table === 'inventorylevel') {
+            col = 'updated_at'
+        } else if(table === 'sentemail') {
+            col = 'sent_time'
+        }
+        return ` WHERE ${col} >= '${startdate}' AND ${col} <= '${enddate}'`
     }
     else return ''
 }
@@ -73,7 +79,7 @@ class Dashboard {
         if(Object.entries(filters).length) {
             wc = whereClause(filters, table, workspaceId);
         }
-        let datequery = WHERE_CLAUSE(startdate, enddate)
+        let datequery = WHERE_CLAUSE(table, startdate, enddate)
         wc = getwc(datequery, wc)
         query = `SELECT COUNT(*) FROM ${table}${workspaceId} ${wc};`
         // console.log(query);
@@ -86,7 +92,7 @@ class Dashboard {
         if(Object.entries(filters).length) {
             wc = whereClause(filters, table, workspaceId);
         }
-        let datequery = WHERE_CLAUSE(startdate, enddate)
+        let datequery = WHERE_CLAUSE(table, startdate, enddate)
         wc = getwc(datequery, wc)
         query = `SELECT SUM(${columnname}) FROM ${table}${workspaceId} ${wc};`
         // console.log(query)
@@ -97,7 +103,7 @@ class Dashboard {
     //     let query = ``
     //     let response = []
     //     for(let i = 0; i < dates.length; i++) {
-    //         query = `SELECT EXTRACT(${groupBykey} FROM created_at) ${groupBykey === 'dow' ? ' + 1' : ''} AS ${x}, ${statsDefinition["aggregate"]}(${statsDefinition["columnname"]}) AS ${y} FROM ${table}${workspaceId} ${WHERE_CLAUSE({startdate: dates[i].startdate, enddate: dates[i].enddate})} GROUP BY ${x} ORDER BY ${x};`
+    //         query = `SELECT EXTRACT(${groupBykey} FROM created_at) ${groupBykey === 'dow' ? ' + 1' : ''} AS ${x}, ${statsDefinition["aggregate"]}(${statsDefinition["columnname"]}) AS ${y} FROM ${table}${workspaceId} ${WHERE_CLAUSE(table, {startdate: dates[i].startdate, enddate: dates[i].enddate})} GROUP BY ${x} ORDER BY ${x};`
     //         let data = abstractData(await PostgresqlDb.query(query))
     //         response.push(data)
     //     }
@@ -112,11 +118,11 @@ class Dashboard {
         }
         let wc = ``
         if(prevstartdate && prevenddate) {
-            let datequery = WHERE_CLAUSE(startdate, enddate)
+            let datequery = WHERE_CLAUSE(table, startdate, enddate)
             wc = getwc(datequery, wc1)
             query = `SELECT EXTRACT(${groupBykey} FROM created_at) ${groupBykey === 'dow' ? ' + 1' : ''} AS ${x}, ${statsDefinition["aggregate"]}(${statsDefinition["columnname"]}) AS ${y} FROM ${table}${workspaceId} ${wc} GROUP BY ${x} ORDER BY ${x};`
             
-            datequery = WHERE_CLAUSE({startdate: prevstartdate, enddate: prevenddate})
+            datequery = WHERE_CLAUSE(table, prevstartdate, prevenddate)
             wc = getwc(datequery, wc1)
             let query1 = `SELECT EXTRACT(${groupBykey} FROM created_at) ${groupBykey === 'dow' ? ' + 1' : ''} AS ${x}, ${statsDefinition["aggregate"]}(${statsDefinition["columnname"]}) AS ${y} FROM ${table}${workspaceId} ${wc} GROUP BY ${x} ORDER BY ${x};`
             // console.log(query)
@@ -128,7 +134,7 @@ class Dashboard {
             // console.log(response)
             return response
         } else {
-            let datequery = WHERE_CLAUSE({startdate, enddate})
+            let datequery = WHERE_CLAUSE(table, startdate, enddate)
             wc = getwc(datequery, wc1)
             query = `SELECT EXTRACT(${groupBykey} FROM created_at) ${groupBykey === 'dow' ? ' + 1' : ''} AS ${x}, ${statsDefinition["aggregate"]}(${statsDefinition["columnname"]}) AS ${y} FROM ${table}${workspaceId} ${wc} GROUP BY ${x} ORDER BY ${x};`
             // console.log(query)
@@ -147,11 +153,11 @@ class Dashboard {
         }
         let wc = ``
         if(prevstartdate && prevenddate) {
-            let datequery = WHERE_CLAUSE({startdate, enddate})
+            let datequery = WHERE_CLAUSE(table, startdate, enddate)
             wc = getwc(datequery, wc1)
             query = `SELECT EXTRACT(${groupBykey} FROM created_at) AS ${x}, ${groupBykey2}, ${statsDefinition["aggregate"]}(${statsDefinition["columnname"]}) AS ${y} FROM ${table}${workspaceId} ${wc} GROUP BY ${x}, ${groupBykey2} ORDER BY ${x}, ${groupBykey2};`
             
-            datequery = WHERE_CLAUSE({startdate: prevstartdate, enddate: prevenddate})
+            datequery = WHERE_CLAUSE(table, prevstartdate, prevenddate)
             wc = getwc(datequery, wc1)
             let query1 = `SELECT EXTRACT(${groupBykey} FROM created_at) AS ${x}, ${groupBykey2}, ${statsDefinition["aggregate"]}(${statsDefinition["columnname"]}) AS ${y} FROM ${table}${workspaceId} ${wc} GROUP BY ${x}, ${groupBykey2} ORDER BY ${x}, ${groupBykey2};`
             let response = {
@@ -160,7 +166,7 @@ class Dashboard {
             }
             return response
         } else {
-            let datequery = WHERE_CLAUSE({startdate, enddate})
+            let datequery = WHERE_CLAUSE(table, startdate, enddate)
             wc = getwc(datequery, wc1)
             query = `SELECT EXTRACT(${groupBykey} FROM created_at) AS ${x}, ${groupBykey2}, ${statsDefinition["aggregate"]}(${statsDefinition["columnname"]}) AS ${y} FROM ${table}${workspaceId} ${wc} GROUP BY ${x}, ${groupBykey2} ORDER BY ${x}, ${groupBykey2};`
             let response = {
@@ -173,11 +179,10 @@ class Dashboard {
     static async pieChart({table, workspaceId, columnname, startdate, enddate, orderByDirection = 'asc', limit, statsDefinition = {}, filters = {}}) {
         let query = ``
         let wc = ``
-        // console.log('pie-chart filters: ', filters)
         if(Object.entries(filters).length) {
             wc = whereClause(filters, table, workspaceId);
         }
-        let datequery = WHERE_CLAUSE(startdate, enddate)
+        let datequery = WHERE_CLAUSE(table, startdate, enddate)
         wc = getwc(datequery, wc)
         query = `SELECT ${columnname}, ${statsDefinition["aggregate"]}(${statsDefinition["columnname"]}) AS ${statsDefinition["aggregate"]} FROM ${table}${workspaceId} ${wc} GROUP BY ${columnname} ORDER BY ${statsDefinition["aggregate"]} ${orderByDirection} ${LIMIT(limit)};`
         // console.log(query)
@@ -190,7 +195,7 @@ class Dashboard {
         if(Object.entries(filters).length) {
             wc = whereClause(filters, table, workspaceId);
         }
-        let datequery = WHERE_CLAUSE(startdate, enddate)
+        let datequery = WHERE_CLAUSE(table, startdate, enddate)
         wc = getwc(datequery, wc)
         if(statsDefinition) {
             for(let i = 0; i < statsDefinition.length; i++) {
@@ -215,7 +220,7 @@ class Dashboard {
         if(Object.entries(filters).length) {
             wc = whereClause(filters, table, workspaceId);
         }
-        let datequery = WHERE_CLAUSE(startdate, enddate)
+        let datequery = WHERE_CLAUSE(table, startdate, enddate)
         wc = getwc(datequery, wc)
         let query = ``
         query = `
@@ -233,7 +238,7 @@ class Dashboard {
         if(Object.entries(filters).length) {
             wc = whereClause(filters, table, workspaceId);
         }
-        let datequery = WHERE_CLAUSE(startdate, enddate)
+        let datequery = WHERE_CLAUSE(table, startdate, enddate)
         wc = getwc(datequery, wc)
         let query = `SELECT `
         for(let i = 0; i < statsDefinition.length; i++) {
@@ -282,17 +287,17 @@ class Dashboard {
         return abstractData(await PostgresqlDb.query(query), "single");
     }
 
-    static async timeline({table, workspaceId, startdate, enddate, filters = {}}) {
+    static async timeline({table, workspaceId, startdate, enddate, limit, filters = {}}) {
         let query1 = ``
         let wc = ``
         if(Object.entries(filters).length) {
             wc = whereClause(filters, table, workspaceId);
         }
-        let datequery = WHERE_CLAUSE(startdate, enddate)
+        let datequery = WHERE_CLAUSE(table, startdate, enddate)
         wc = getwc(datequery, wc)
-        query1 = `SELECT * FROM order${workspaceId} ${wc};`
+        query1 = `SELECT * FROM order${workspaceId} ${wc} ${LIMIT(limit)};`
         let query2 = ``
-        query2 = `SELECT * FROM event${workspaceId} ${wc};`
+        query2 = `SELECT * FROM event${workspaceId} ${wc} ${LIMIT(limit)};`
         const data1 = abstractData(await PostgresqlDb.query(query1));
         const data2 = abstractData(await PostgresqlDb.query(query2));
         const data = [...data1, ...data2]
