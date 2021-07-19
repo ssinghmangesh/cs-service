@@ -111,7 +111,7 @@ class Dashboard {
     // }
 
     static async lineGraph({table, workspaceId, groupBykey = 'MONTH', startdate, enddate, x = 'x', y = 'y', statsDefinition = {}, prevstartdate, prevenddate, filters = {}}) {
-        let query = ``
+        let query = ``, query1 = ``
         let wc1 = ``
         if(Object.entries(filters).length) {
             wc1 = whereClause(filters, table, workspaceId);
@@ -120,11 +120,18 @@ class Dashboard {
         if(prevstartdate && prevenddate) {
             let datequery = WHERE_CLAUSE(table, startdate, enddate)
             wc = getwc(datequery, wc1)
-            query = `SELECT created_at::${groupBykey} AS ${x}, ${statsDefinition["aggregate"]}(${statsDefinition["columnname"]}) AS ${y} FROM ${table}${workspaceId} ${wc} GROUP BY ${x} ORDER BY ${x};`
-            
+            if(groupBykey === 'date') {
+                query = `SELECT created_at::${groupBykey} AS ${x}, ${statsDefinition["aggregate"]}(${statsDefinition["columnname"]}) AS ${y} FROM ${table}${workspaceId} ${wc} GROUP BY ${x} ORDER BY ${x};`
+            } else {
+                query = `SELECT EXTRACT(${groupBykey} FROM created_at) ${groupBykey === 'dow' ? ' + 1' : ''} AS ${x}, ${statsDefinition["aggregate"]}(${statsDefinition["columnname"]}) AS ${y} FROM ${table}${workspaceId} ${wc} GROUP BY ${x} ORDER BY ${x};`
+            }
             datequery = WHERE_CLAUSE(table, prevstartdate, prevenddate)
             wc = getwc(datequery, wc1)
-            let query1 = `SELECT created_at::${groupBykey} AS ${x}, ${statsDefinition["aggregate"]}(${statsDefinition["columnname"]}) AS ${y} FROM ${table}${workspaceId} ${wc} GROUP BY ${x} ORDER BY ${x};`
+            if(groupBykey === 'date') {
+                query1 = `SELECT created_at::${groupBykey} AS ${x}, ${statsDefinition["aggregate"]}(${statsDefinition["columnname"]}) AS ${y} FROM ${table}${workspaceId} ${wc} GROUP BY ${x} ORDER BY ${x};`
+            } else {
+                query1 = `SELECT EXTRACT(${groupBykey} FROM created_at) ${groupBykey === 'dow' ? ' + 1' : ''} AS ${x}, ${statsDefinition["aggregate"]}(${statsDefinition["columnname"]}) AS ${y} FROM ${table}${workspaceId} ${wc} GROUP BY ${x} ORDER BY ${x};`
+            }
             let response = {
                 current: abstractData(await PostgresqlDb.query(query)),
                 previous: abstractData(await PostgresqlDb.query(query1))
@@ -133,7 +140,11 @@ class Dashboard {
         } else {
             let datequery = WHERE_CLAUSE(table, startdate, enddate)
             wc = getwc(datequery, wc1)
-            query = `SELECT created_at::${groupBykey} AS ${x}, ${statsDefinition["aggregate"]}(${statsDefinition["columnname"]}) AS ${y} FROM ${table}${workspaceId} ${wc} GROUP BY ${x} ORDER BY ${x};`
+            if(groupBykey === 'date') {
+                query = `SELECT created_at::${groupBykey} AS ${x}, ${statsDefinition["aggregate"]}(${statsDefinition["columnname"]}) AS ${y} FROM ${table}${workspaceId} ${wc} GROUP BY ${x} ORDER BY ${x};`
+            } else {
+                query = `SELECT EXTRACT(${groupBykey} FROM created_at) ${groupBykey === 'dow' ? ' + 1' : ''} AS ${x}, ${statsDefinition["aggregate"]}(${statsDefinition["columnname"]}) AS ${y} FROM ${table}${workspaceId} ${wc} GROUP BY ${x} ORDER BY ${x};`
+            }
             let response = {
                 current: abstractData(await PostgresqlDb.query(query))
             }
@@ -151,7 +162,7 @@ class Dashboard {
             let wc2 = getwc(previousdatequery, wc1)
             let currentdatequery = WHERE_CLAUSE(table, startdate, enddate)
             wc1 = getwc(currentdatequery, wc1)
-            let current = [], previous = []
+            let current = [], previous = [], currentquery = ``, previousquery = ``
 
             for(let i = 0; idArray && i < idArray.length; i++) {
                 let wcc = wc1, wcp = wc2;
@@ -165,8 +176,13 @@ class Dashboard {
                 } else {
                     wcp = `WHERE ${columnname} = ${idArray[i].id}`
                 }
-                let currentquery = `SELECT created_at::${groupBykey} AS ${x}, ${statsDefinition["aggregate"]}(${statsDefinition["columnname"]}) AS ${y} FROM ${table}${workspaceId} ${wcc} GROUP BY ${x} ORDER BY ${x};`
-                let previousquery = `SELECT created_at::${groupBykey} AS ${x}, ${statsDefinition["aggregate"]}(${statsDefinition["columnname"]}) AS ${y} FROM ${table}${workspaceId} ${wcp} GROUP BY ${x} ORDER BY ${x};`
+                if(groupBykey === 'date') {
+                    currentquery = `SELECT created_at::${groupBykey} AS ${x}, ${statsDefinition["aggregate"]}(${statsDefinition["columnname"]}) AS ${y} FROM ${table}${workspaceId} ${wcc} GROUP BY ${x} ORDER BY ${x};`
+                    previousquery = `SELECT created_at::${groupBykey} AS ${x}, ${statsDefinition["aggregate"]}(${statsDefinition["columnname"]}) AS ${y} FROM ${table}${workspaceId} ${wcp} GROUP BY ${x} ORDER BY ${x};`
+                } else {
+                    currentquery = `SELECT EXTRACT(${groupBykey} FROM created_at) ${groupBykey === 'dow' ? ' + 1' : ''} AS ${x}, ${statsDefinition["aggregate"]}(${statsDefinition["columnname"]}) AS ${y} FROM ${table}${workspaceId} ${wcc} GROUP BY ${x} ORDER BY ${x};`
+                    previousquery = `SELECT EXTRACT(${groupBykey} FROM created_at) ${groupBykey === 'dow' ? ' + 1' : ''} AS ${x}, ${statsDefinition["aggregate"]}(${statsDefinition["columnname"]}) AS ${y} FROM ${table}${workspaceId} ${wcp} GROUP BY ${x} ORDER BY ${x};`
+                }
                 let response = abstractData(await PostgresqlDb.query(currentquery))
                 if(response) {
                     let array = []
@@ -207,7 +223,11 @@ class Dashboard {
                 } else {
                     wc1 = `WHERE ${columnname} = ${idArray[i].id}`
                 }
-                query = `SELECT created_at::${groupBykey} AS ${x}, ${statsDefinition["aggregate"]}(${statsDefinition["columnname"]}) AS ${y} FROM ${table}${workspaceId} ${wc1} GROUP BY ${x} ORDER BY ${x};`
+                if(groupBykey === 'date') {
+                    query = `SELECT created_at::${groupBykey} AS ${x}, ${statsDefinition["aggregate"]}(${statsDefinition["columnname"]}) AS ${y} FROM ${table}${workspaceId} ${wc1} GROUP BY ${x} ORDER BY ${x};`
+                } else {
+                    query = `SELECT EXTRACT(${groupBykey} FROM created_at) ${groupBykey === 'dow' ? ' + 1' : ''} AS ${x}, ${statsDefinition["aggregate"]}(${statsDefinition["columnname"]}) AS ${y} FROM ${table}${workspaceId} ${wc1} GROUP BY ${x} ORDER BY ${x};`
+                }
                 let response = abstractData(await PostgresqlDb.query(query))
                 if(response) {
                     let array = []
@@ -229,7 +249,7 @@ class Dashboard {
     }
 
     static async barGraph({table, workspaceId, groupBykey = 'date', groupBykey2 = 'fulfillment_status', x = 'x', y = 'y', startdate, enddate, prevstartdate, prevenddate, statsDefinition = {}, filters = {}}) {
-        let query = ``
+        let query = ``, query1 = ``
         let wc1 = ``
         if(Object.entries(filters).length) {
             wc1 = whereClause(filters, table, workspaceId);
@@ -238,11 +258,18 @@ class Dashboard {
         if(prevstartdate && prevenddate) {
             let datequery = WHERE_CLAUSE(table, startdate, enddate)
             wc = getwc(datequery, wc1)
-            query = `SELECT created_at::${groupBykey} AS ${x}, ${groupBykey2}, ${statsDefinition["aggregate"]}(${statsDefinition["columnname"]}) AS ${y} FROM ${table}${workspaceId} ${wc} GROUP BY ${x}, ${groupBykey2} ORDER BY ${x}, ${groupBykey2};`
-            
+            if(groupBykey === 'date') {
+                query = `SELECT created_at::${groupBykey} AS ${x}, ${groupBykey2}, ${statsDefinition["aggregate"]}(${statsDefinition["columnname"]}) AS ${y} FROM ${table}${workspaceId} ${wc} GROUP BY ${x}, ${groupBykey2} ORDER BY ${x}, ${groupBykey2};`
+            } else {
+                query = `SELECT EXTRACT(${groupBykey} FROM created_at) ${groupBykey === 'dow' ? ' + 1' : ''} AS ${x}, ${groupBykey2}, ${statsDefinition["aggregate"]}(${statsDefinition["columnname"]}) AS ${y} FROM ${table}${workspaceId} ${wc} GROUP BY ${x}, ${groupBykey2} ORDER BY ${x}, ${groupBykey2};`
+            }
             datequery = WHERE_CLAUSE(table, prevstartdate, prevenddate)
             wc = getwc(datequery, wc1)
-            let query1 = `SELECT created_at::${groupBykey} AS ${x}, ${groupBykey2}, ${statsDefinition["aggregate"]}(${statsDefinition["columnname"]}) AS ${y} FROM ${table}${workspaceId} ${wc} GROUP BY ${x}, ${groupBykey2} ORDER BY ${x}, ${groupBykey2};`
+            if(groupBykey === 'date') {
+                query1 = `SELECT created_at::${groupBykey} AS ${x}, ${groupBykey2}, ${statsDefinition["aggregate"]}(${statsDefinition["columnname"]}) AS ${y} FROM ${table}${workspaceId} ${wc} GROUP BY ${x}, ${groupBykey2} ORDER BY ${x}, ${groupBykey2};`
+            } else {
+                query1 = `SELECT EXTRACT(${groupBykey} FROM created_at) ${groupBykey === 'dow' ? ' + 1' : ''} AS ${x}, ${groupBykey2}, ${statsDefinition["aggregate"]}(${statsDefinition["columnname"]}) AS ${y} FROM ${table}${workspaceId} ${wc} GROUP BY ${x}, ${groupBykey2} ORDER BY ${x}, ${groupBykey2};`
+            }
             let response = {
                 current: abstractData(await PostgresqlDb.query(query)),
                 previous: abstractData(await PostgresqlDb.query(query1))
@@ -251,7 +278,11 @@ class Dashboard {
         } else {
             let datequery = WHERE_CLAUSE(table, startdate, enddate)
             wc = getwc(datequery, wc1)
-            query = `SELECT created_at::${groupBykey} AS ${x}, ${groupBykey2}, ${statsDefinition["aggregate"]}(${statsDefinition["columnname"]}) AS ${y} FROM ${table}${workspaceId} ${wc} GROUP BY ${x}, ${groupBykey2} ORDER BY ${x}, ${groupBykey2};`
+            if(groupBykey === 'date') {
+                query = `SELECT created_at::${groupBykey} AS ${x}, ${groupBykey2}, ${statsDefinition["aggregate"]}(${statsDefinition["columnname"]}) AS ${y} FROM ${table}${workspaceId} ${wc} GROUP BY ${x}, ${groupBykey2} ORDER BY ${x}, ${groupBykey2};`
+            } else {
+                query = `SELECT EXTRACT(${groupBykey} FROM created_at) ${groupBykey === 'dow' ? ' + 1' : ''} AS ${x}, ${groupBykey2}, ${statsDefinition["aggregate"]}(${statsDefinition["columnname"]}) AS ${y} FROM ${table}${workspaceId} ${wc} GROUP BY ${x}, ${groupBykey2} ORDER BY ${x}, ${groupBykey2};`
+            }
             let response = {
                 current: abstractData(await PostgresqlDb.query(query))
             }
