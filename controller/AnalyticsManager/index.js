@@ -187,7 +187,9 @@ class Dashboard {
                 if(response) {
                     let array = []
                     response.map((item) => {
-                        array.push(item)
+                        if(item.x) {
+                            array.push(item)
+                        }
                     })
                     current.push({
                         id: idArray[i],
@@ -198,7 +200,9 @@ class Dashboard {
                 if(response) {
                     let array = []
                     response.map((item) => {
-                        array.push(item)
+                        if(item.x) {
+                            array.push(item)
+                        }
                     })
                     previous.push({
                         name: idArray[i].name,
@@ -232,12 +236,16 @@ class Dashboard {
                 if(response) {
                     let array = []
                     response.map((item) => {
-                        array.push(item)
+                        if(item.x) {
+                            array.push(item)
+                        }
                     })
                     current.push({
                         name: idArray[i].name,
                         id: idArray[i].id,
-                        data: array
+                        data: array,
+                        startdate: startdate,
+                        enddate: enddate
                     })
                 }
             }
