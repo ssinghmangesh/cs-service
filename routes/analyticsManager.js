@@ -34,6 +34,15 @@ router.post('/analytics-manager/line-graph', async (req, res) => {
     res.status(200).send( { status: true, message: "successful", data: response } )
 })
 
+router.post('/analytics-manager/line-graph-specific', async (req, res) => {
+    const details = req.body
+    const { 'x-workspace-id': workspaceId } = req.headers
+    // console.log(statsDefinition)
+    let response = await Dashboard.lineGraphSpecific({table: details.table, columnname: details.columnname, idArray: details.idArray, workspaceId: workspaceId, groupBykey: details.groupBykey, startdate: details.startdate, enddate: details.enddate, statsDefinition: details.statsDefinition, prevstartdate: details.prevstartdate, prevenddate: details.prevenddate, limit: details.limit, filters: details.filters })
+    // console.log(response)
+    res.status(200).send( { status: true, message: "successful", data: response } )
+})
+
 router.post('/analytics-manager/bar-graph', async (req, res) => {
     const details = req.body
     const { 'x-workspace-id': workspaceId } = req.headers
