@@ -155,46 +155,50 @@ class Dashboard {
             let wc2 = getwc(previousdatequery, wc1)
             let currentdatequery = WHERE_CLAUSE(table, startdate, enddate)
             wc1 = getwc(currentdatequery, wc1)
-            // console.log(wc1, wc2)
             let current = [], previous = []
 
-            for(let i = 0; i < idArray.length; i++) {
+            for(let i = 0; idArray && i < idArray.length; i++) {
                 let wcc = wc1, wcp = wc2;
                 if(wc1) {
-                    wcc += ` AND ${columnname} = ${idArray[i]}`
+                    wcc += ` AND ${columnname} = ${idArray[i].id}`
                 } else {
-                    wcc = `WHERE ${columnname} = ${idArray[i]}`
+                    wcc = `WHERE ${columnname} = ${idArray[i].id}`
                 }
                 if(wc2) {
-                    wcp += ` AND ${columnname} = ${idArray[i]}`
+                    wcp += ` AND ${columnname} = ${idArray[i].id}`
                 } else {
-                    wcp = `WHERE ${columnname} = ${idArray[i]}`
+                    wcp = `WHERE ${columnname} = ${idArray[i].id}`
                 }
-                // console.log(wcc, wcp)
                 let currentquery = `SELECT EXTRACT(${groupBykey} FROM created_at) ${groupBykey === 'dow' ? ' + 1' : ''} AS ${x}, ${statsDefinition["aggregate"]}(${statsDefinition["columnname"]}) AS ${y} FROM ${table}${workspaceId} ${wcc} GROUP BY ${x} ORDER BY ${x};`
                 let previousquery = `SELECT EXTRACT(${groupBykey} FROM created_at) ${groupBykey === 'dow' ? ' + 1' : ''} AS ${x}, ${statsDefinition["aggregate"]}(${statsDefinition["columnname"]}) AS ${y} FROM ${table}${workspaceId} ${wcp} GROUP BY ${x} ORDER BY ${x};`
-                // console.log(i, currentquery)
-                // console.log(i, previousquery)
                 let response = abstractData(await PostgresqlDb.query(currentquery))
                 if(response) {
+                    let array = []
                     response.map((item) => {
-                        current.push(item)
+                        array.push(item)
+                    })
+                    current.push({
+                        id: idArray[i],
+                        data: array
                     })
                 }
                 response = abstractData(await PostgresqlDb.query(previousquery))
                 if(response) {
+                    let array = []
                     response.map((item) => {
-                        previous.push(item)
+                        array.push(item)
+                    })
+                    previous.push({
+                        name: idArray[i].name,
+                        id: idArray[i].id,
+                        data: array
                     })
                 }
             }
-            // console.log(current)
-            // console.log(previous)
             let response = {
                 current: current,
                 previous: previous
             }
-            // console.log(response)
             return response
         } else {
             let datequery = WHERE_CLAUSE(table, startdate, enddate)
@@ -203,21 +207,24 @@ class Dashboard {
             for(let i = 0; idArray && i < idArray.length; i++) {
                 let wc1 = wc
                 if(wc) {
-                    wc1 += ` AND ${columnname} = ${idArray[i]}`
+                    wc1 += ` AND ${columnname} = ${idArray[i].id}`
                 } else {
-                    wc1 = `WHERE ${columnname} = ${idArray[i]}`
+                    wc1 = `WHERE ${columnname} = ${idArray[i].id}`
                 }
-                // console.log('wc1', wc1)
                 query = `SELECT EXTRACT(${groupBykey} FROM created_at) ${groupBykey === 'dow' ? ' + 1' : ''} AS ${x}, ${statsDefinition["aggregate"]}(${statsDefinition["columnname"]}) AS ${y} FROM ${table}${workspaceId} ${wc1} GROUP BY ${x} ORDER BY ${x};`
-                // console.log(i, query)
                 let response = abstractData(await PostgresqlDb.query(query))
                 if(response) {
+                    let array = []
                     response.map((item) => {
-                        current.push(item)
+                        array.push(item)
+                    })
+                    current.push({
+                        name: idArray[i].name,
+                        id: idArray[i].id,
+                        data: array
                     })
                 }
             }
-            // console.log(query)
             let response = {
                 current: current
             }
