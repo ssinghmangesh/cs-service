@@ -54,7 +54,7 @@ router.post('/analytics-manager/bar-graph', async (req, res) => {
 router.post('/analytics-manager/pie-chart', async (req, res) => {
     const details = req.body
     const { 'x-workspace-id': workspaceId } = req.headers
-    let response = await Dashboard.pieChart({table: details.table, workspaceId: workspaceId, columnname: details.columnname, startdate: details.startdate, enddate: details.enddate, statsDefinition: details.statsDefinition, orderByDirection: details.orderByDirection, limit: details.limit, filters: details.filters })
+    let response = await Dashboard.pieChart({ ...details, workspaceId })
     // console.log(response)
     res.status(200).send( { status: true, message: "successful", data: response } )
 })
