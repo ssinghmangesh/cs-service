@@ -37,6 +37,10 @@
         "dataType": "numeric[]"
     },
     {
+        "columnName":"variant_purchased",
+        "dataType": "numeric[]"
+    },
+    {
         "columnName":"product_viewed",
         "dataType": "numeric[]"
     },
