@@ -5,11 +5,7 @@ const cors = require("cors");
 const port = 3000;
 const dotenv = require("dotenv").config();
 
-var corsOptions = {
-    origin: 'https://app.customsegment.com',
-    optionsSuccessStatus: 200 
-  }
-app.use(cors(corsOptions));
+app.use(cors());
 
 app.use(express.urlencoded({
     extended: true
