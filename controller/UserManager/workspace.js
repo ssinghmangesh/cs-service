@@ -1,4 +1,4 @@
-const { insert, del, fetch, fetchAll } = require("../../aws/index");
+const { insert, del, fetch, fetchAll, update } = require("../../aws/index");
 
 const addWorkspace = async (data) => {
     const params = {
@@ -27,6 +27,20 @@ const deleteWorkspace = async (data) => {
     return await del(params)
 }
 
+const updateWorkspace = async (data) => {
+    var params = {
+            TableName:'Workspace',
+            Key:{
+                "workspace_id": data.workspaceId
+            },
+            UpdateExpression: "set klaviyoData = :klaviyoData",
+            ExpressionAttributeValues: {
+                ":klaviyoData": data.klaviyoData
+            }
+        }
+    return await update(params)
+}
+
 const fetchWorkspace = async (data) => {
     var params = {
         TableName: 'Workspace',
@@ -48,6 +62,7 @@ const fetchAllWorkspaces = async (data) => {
 module.exports = {
     addWorkspace,
     deleteWorkspace,
+    updateWorkspace,
     fetchWorkspace,
     fetchAllWorkspaces
 }

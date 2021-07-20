@@ -16,6 +16,7 @@ const draftOrderManager = require('./EntityManager/draftOrderManager');
 const cartManager = require('./EntityManager/cartManager')
 const productManager = require('./EntityManager/productManager')
 const productRecommendationsManager = require('./EntityManager/productRecommendationsManager')
+const klaviyoManager = require('./klaviyoManager');
 
 routes.get('/', (req, res) => {
   res.status(200).json({ message: 'it works!' });
@@ -51,4 +52,5 @@ module.exports = {
   cartManager,
   productManager,
   productRecommendationsManager,
+  klaviyoManager,
 };
