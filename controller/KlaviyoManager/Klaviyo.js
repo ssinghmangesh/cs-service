@@ -8,7 +8,7 @@ const sync = async (workspaceId, segment) => {
     const {Item: workspace} = await fetchWorkspace({ "workspace_id": workspaceId });
     const KlaviyoClient = new Klaviyo({
       publicToken: workspace.klaviyoData.publicKey,
-      privateToken: 'pk_5a9cc515df4d80e877c9e96b2a0cfc72ea'
+      privateToken: workspace.klaviyoData.privateKey
     });
     const { Item } = await fetchKlaviyoSegmentHelper({csSegmentId: segment.segment_id}, workspaceId)
     if(Item){
