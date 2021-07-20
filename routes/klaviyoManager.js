@@ -3,6 +3,7 @@ const router = express.Router()
 const { updateWorkspace } = require('../controller/UserManager/workspace')
 const { addKlaviyoSegmentHelper, fetchKlaviyoSegmentHelper } = require('../controller/KlaviyoManager/helper')
 const { deleteKlaviyoSegment, fetchAllKlaviyoSegment } = require('../controller/KlaviyoManager/index')
+const { sync } = require('../controller/KlaviyoManager/Klaviyo')
 
 router.post('/klaviyo-manager/workspace/insert', async (req, res) => {
     const { 'x-workspace-id': workspaceId } = req.headers;
@@ -48,6 +49,16 @@ router.post('/klaviyo-manager/klaviyo/fetch', async (req, res) => {
 router.post('/klaviyo-manager/klaviyo/fetch-all', async (req, res) => {
     const response = await fetchAllKlaviyoSegment()
     res.status(200).send({ status: 200, message: "fetched", data: response })
+})
+
+router.post('/klaviyo-manager/sync', async(req, res) => {
+    const { 'x-workspace-id': workspaceId } = req.headers;
+    try{
+        await sync(Number(workspaceId), req.body.segment);
+        res.sendStatus(200);
+    }catch{
+        res.sendStatus(500);
+    }
 })
 
 module.exports = router
