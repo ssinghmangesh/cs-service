@@ -25,4 +25,8 @@ router.post('/klaviyo-manager/workspace/delete', async (req, res) => {
     res.status(200).send({ status: 200, message: "Added", message: "deleted" })
 })
 
+// router.post('/klaviyo/sync', async(req, res) => {
+
+// })
+
 module.exports = router
