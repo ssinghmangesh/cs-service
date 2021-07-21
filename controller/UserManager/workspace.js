@@ -38,12 +38,16 @@ const updateWorkspace = async (data, columnName) => {
             }
         }
     if(columnName === 'klaviyoData') {
-        params.UpdateExpression += 'klaviyoData = :klaviyoData'
+        params.UpdateExpression += 'klaviyo_data = :klaviyoData'
         params.ExpressionAttributeValues = { ":klaviyoData": data.klaviyoData }
     }
     if(columnName === 'mailchimpData') {
-        params.UpdateExpression += 'mailchimpData = :mailchimpData'
+        params.UpdateExpression += 'mailchimp_data = :mailchimpData'
         params.ExpressionAttributeValues = { ":mailchimpData": data.mailchimpData }
+    }
+    if(columnName === 'activeCampaignData') {
+        params.UpdateExpression += 'active_campaign_data = :activeCampaignData'
+        params.ExpressionAttributeValues = { ":activeCampaignData": data.activeCampaignData }
     }
     return await update(params)
 }

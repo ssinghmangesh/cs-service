@@ -18,6 +18,7 @@ const productManager = require('./EntityManager/productManager')
 const productRecommendationsManager = require('./EntityManager/productRecommendationsManager')
 const klaviyoManager = require('./klaviyoManager');
 const mailChimpManager = require('./mailChimpManager');
+const activeCampaignManager = require('./activeCampaignManager');
 
 routes.get('/', (req, res) => {
   res.status(200).json({ message: 'it works!' });
@@ -55,4 +56,5 @@ module.exports = {
   productRecommendationsManager,
   klaviyoManager,
   mailChimpManager,
+  activeCampaignManager,
 };
