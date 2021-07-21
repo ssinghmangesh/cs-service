@@ -49,7 +49,7 @@ router.get("/oauth/mailchimp/callback", async (req, res) => {
   );
 
   const { access_token } = await tokenResponse.json();
-
+    console.log(access_token);
   // Now we're using the access token to get information about the user.
   // Specifically, we want to get the user's server prefix, which we'll use to
   // make calls to the API on their behalf.  This prefix will change from user
