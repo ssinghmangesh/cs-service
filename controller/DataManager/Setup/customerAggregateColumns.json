@@ -179,5 +179,17 @@
     {
         "columnName":"verified_email",
         "dataType": "boolean"
+    },
+    {
+        "columnName":"discount_coupons",
+        "dataType": "varchar[]"
+    },
+    {
+        "columnName":"discount_lover",
+        "dataType": "numeric"
+    },
+    {
+        "columnName":"wholesale_buyer",
+        "dataType": "numeric"
     }
 ]

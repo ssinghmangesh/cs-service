@@ -2,8 +2,9 @@ const PostgresqlDb = require('../../db')
 const customerAggregateColumn = require('./Setup/customerAggregateColumns.json')
 const variantAggregateColumns = require('./Setup/variantAggregateColumns.json')
 
-const {getColumnName, getValues, getIds} =  require("./helper")
 const {
+    getColumnName, getValues, getIds,
+    DISCOUNTAPPLICATION_TABLE_NAME,
     CUSTOMER_TABLE_NAME,
     ORDER_TABLE_NAME,
     LINEITEMS_TABLE_NAME,
@@ -25,7 +26,7 @@ const insert = async(TABLE_NAME, column, data, workspaceId) => {
         ${getColumnName({ columnData: column })}
         VALUES ${getValues({ columnData: column, data })}
     `
-    console.log(query)
+    // console.log(query)
     return await PostgresqlDb.query(query)
 }
 
@@ -62,12 +63,11 @@ const variantAggregate = async (workspaceId, variantId) => {
 // variantAggregate(56788582584, 39859538788536)
 
 const aggregate = async (workspaceId, customerId) => {
-    // console.log('@@@@@@@@@@@')
     let data = await PostgresqlDb.query(`SELECT * FROM ${CUSTOMER_TABLE_NAME(workspaceId)} WHERE id = ${customerId};`)
     const customer = data.rows[0]
     data = await PostgresqlDb.query(`SELECT * FROM ${ORDER_TABLE_NAME(workspaceId)} WHERE customer_id = ${customerId} ORDER BY created_at;`)
     const orders = data.rows
-    data = await PostgresqlDb.query(`SELECT variant_id, product_id FROM ${LINEITEMS_TABLE_NAME(workspaceId)} WHERE customer_id = ${customerId};`)
+    data = await PostgresqlDb.query(`SELECT * FROM ${LINEITEMS_TABLE_NAME(workspaceId)} WHERE customer_id = ${customerId};`)
     const lineitems = data.rows
     data = await PostgresqlDb.query(`SELECT * FROM ${REFUNDED_TABLE_NAME(workspaceId)} WHERE customer_id = ${customerId};`)
     const refunded = data.rows
@@ -75,10 +75,27 @@ const aggregate = async (workspaceId, customerId) => {
     const cart = data.rows
     data = await PostgresqlDb.query(`SELECT * FROM ${EVENT_TABLE_NAME(workspaceId)} WHERE customer_id = ${customerId} ORDER BY created_at DESC;`)
     const event = data.rows
+    data = await PostgresqlDb.query(`SELECT * FROM ${DISCOUNTAPPLICATION_TABLE_NAME(workspaceId)} WHERE customer_id = ${customerId};`)
+    const discountapplications = data.rows
 
-    let tamount = 0, avgAmount = 0, cancelledOrder = 0, refundedOrder = 0, paidOrders = 0, fulfilledOrder = 0
-        uncancelledOrder = 0, unfulfilledOrder = 0, unrefundedOrder = 0, unpaidOrders = 0
-    let firstOrderAt, lastOrderAt
+    let tamount = 0, avgAmount = 0, cancelledOrder = 0, refundedOrder = 0, paidOrders = 0, fulfilledOrder = 0,
+        uncancelledOrder = 0, unfulfilledOrder = 0, unrefundedOrder = 0, unpaidOrders = 0,
+        discountLover = 0, wholesaleBuyer = 0, discountCount = 0, productCount = 0
+    let firstOrderAt, lastOrderAt, discountCoupons = []
+
+    let productPurchased = [], variantPurchased = [], abandonedCart = false
+
+    for(let i = 0; i < lineitems.length; i++) {
+        productPurchased.push(Number(lineitems[i].product_id))
+        variantPurchased.push(Number(lineitems[i].variant_id))
+        if(lineitems[i].quantity) {
+            productCount += Number(lineitems[i].quantity)
+        }
+        if(lineitems[i].total_discount) {
+            discountCount++
+        }
+    }
+
     if(orders.length) {
 
         for(i = 0; i < orders.length; i++) {
@@ -109,18 +126,19 @@ const aggregate = async (workspaceId, customerId) => {
 
         firstOrderAt = orders[0].created_at
         lastOrderAt = orders[orders.length - 1].created_at
-        // console.log('!!!!!!!!', firstOrderAt)
-
         avgAmount = tamount / orders.length
+
+        wholesaleBuyer = productCount/Number(orders.length)
     }
 
-    let productPurchased = [], variantPurchased = [], abandonedCart = false
-    for(let i = 0; i < lineitems.length; i++) {
-        productPurchased.push(Number(lineitems[i].product_id))
+    if(lineitems.length) {
+        discountLover = discountCount/lineitems.length*100
     }
-    for(let i = 0; i < lineitems.length; i++) {
-        variantPurchased.push(Number(lineitems[i].variant_id))
+
+    for(let i = 0; i < discountapplications.length; i++) {
+        discountCoupons.push(discountapplications[i].code)
     }
+
     if(cart.length) {
         abandonedCart = true
     }
@@ -180,7 +198,10 @@ const aggregate = async (workspaceId, customerId) => {
         default_address: defaultAddress,
         zip_code: zipCode,
         paid_order_count: paidOrders,
-        unpaid_order_count: unpaidOrders
+        unpaid_order_count: unpaidOrders,
+        discount_coupons: discountCoupons,
+        discount_lover: discountLover,
+        wholesale_buyer: wholesaleBuyer
     }]
 
     // console.log(customerData)
@@ -197,7 +218,7 @@ const del = async (TABLE_NAME, data, workspaceId, id = 'id', id1) => {
     }
     console.log('@@@@@@', id, id1)
     const query = `DELETE FROM ${TABLE_NAME(workspaceId)} WHERE ${id} IN ${getIds(data, id1)}`
-    console.log(query);
+    // console.log(query);
     let response =  await PostgresqlDb.query(query);
 }
 
@@ -206,7 +227,7 @@ const del = async (TABLE_NAME, data, workspaceId, id = 'id', id1) => {
 // .then(console.log)
 // .catch(console.log)
 
-// aggregate(56788582584, 5265646026936)
+// aggregate(56788582584, 5247167135928)
 // .then(console.log)
 // .catch(console.log)
 
