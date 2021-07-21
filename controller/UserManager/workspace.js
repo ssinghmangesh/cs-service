@@ -45,6 +45,10 @@ const updateWorkspace = async (data, columnName) => {
         params.UpdateExpression += 'mailchimpData = :mailchimpData'
         params.ExpressionAttributeValues = { ":mailchimpData": data.mailchimpData }
     }
+    if(columnName === 'activeCampaignData') {
+        params.UpdateExpression += 'activeCampaignData = :activeCampaignData'
+        params.ExpressionAttributeValues = { ":activeCampaignData": data.activeCampaignData }
+    }
     return await update(params)
 }
 
