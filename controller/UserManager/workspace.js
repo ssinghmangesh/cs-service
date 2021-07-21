@@ -27,17 +27,24 @@ const deleteWorkspace = async (data) => {
     return await del(params)
 }
 
-const updateWorkspace = async (data) => {
+const updateWorkspace = async (data, columnName) => {
     var params = {
             TableName:'Workspace',
             Key:{
                 "workspace_id": data.workspaceId
             },
-            UpdateExpression: "set klaviyoData = :klaviyoData",
+            UpdateExpression: "set ",
             ExpressionAttributeValues: {
-                ":klaviyoData": data.klaviyoData
             }
         }
+    if(columnName === 'klaviyoData') {
+        params.UpdateExpression += 'klaviyoData = :klaviyoData'
+        params.ExpressionAttributeValues = { ":klaviyoData": data.klaviyoData }
+    }
+    if(columnName === 'mailchimpData') {
+        params.UpdateExpression += 'mailchimpData = :mailchimpData'
+        params.ExpressionAttributeValues = { ":mailchimpData": data.mailchimpData }
+    }
     return await update(params)
 }
 
