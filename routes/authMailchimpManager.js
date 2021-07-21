@@ -28,6 +28,7 @@ router.get("/auth/mailchimp", (req, res) => {
 // this endpoint, along with a code you can use to exchange for the user's
 // access token.
 router.get("/oauth/mailchimp/callback", async (req, res) => {
+  console.log(req.query);
   const {
     query: { code }
   } = req;
@@ -64,7 +65,7 @@ router.get("/oauth/mailchimp/callback", async (req, res) => {
   );
 
   const { dc: server } = await metadataResponse.json();
-
+    console.log(server);
 
 //   mailchimp.setConfig({
 //     accessToken: access_token,
