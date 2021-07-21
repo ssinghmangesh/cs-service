@@ -14,7 +14,7 @@ router.post('/klaviyo-manager/workspace/insert', async (req, res) => {
             privateKey: req.body.privateKey
         }
     }
-    const response = await updateWorkspace(data)
+    const response = await updateWorkspace(data, 'klaviyoData')
     res.status(200).send({ status: 200, message: "Added", data: response })
 })
 
@@ -24,7 +24,7 @@ router.post('/klaviyo-manager/workspace/delete', async (req, res) => {
         workspaceId: Number(workspaceId),
         klaviyoData: {}
     }
-    const response = await updateWorkspace(data)
+    const response = await updateWorkspace(data, 'klaviyoData')
     res.status(200).send({ status: 200, message: "deleted", data: response })
 })
 
