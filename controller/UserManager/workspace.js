@@ -49,6 +49,10 @@ const updateWorkspace = async (data, columnName) => {
         params.UpdateExpression += 'activeCampaignData = :activeCampaignData'
         params.ExpressionAttributeValues = { ":activeCampaignData": data.activeCampaignData }
     }
+    if(columnName === 'userPermissions') {
+        params.UpdateExpression += 'userPermissions = :userPermissions'
+        params.ExpressionAttributeValues = { ":userPermissions": data.userPermissions }
+    }
     return await update(params)
 }
 

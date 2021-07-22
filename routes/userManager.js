@@ -9,6 +9,7 @@ const {
     addWorkspace,
     addUserToWorkspace,
 
+    updateWorkspace,
 
     deleteUser,
     deleteWorkspace,
@@ -124,6 +125,16 @@ router.post('/user-manager/user/edit', multer.single('file'), async function (re
 
 router.post('/user-manager/user-to-workspace/fetch-all', async function (req, res) {
     const response = await getAllUserToWorkspaces(req.body.userId)
+    res.status(200).send( { status: true, message: "successful", data: response } )
+})
+
+router.post('/user-manager/workspace/permissions', async function (req, res) {
+    const { 'x-workspace-id': workspaceId } = req.headers
+    const data = {
+        workspaceId: Number(workspaceId),
+        userPermissions: req.body.userPermissions
+    }
+    const response = await updateWorkspace(data, 'userPermissions')
     res.status(200).send( { status: true, message: "successful", data: response } )
 })
 
