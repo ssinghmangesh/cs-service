@@ -76,7 +76,7 @@ router.post('/connect', async (req, res) => {
             }
         }
         resp = await insert(params)
-        res.status(200).send(`https://custom-segment-service.herokuapp.com/install?shop=${req.body.shop}`);
+        res.status(200).send(`${appUrl}/install?shop=${req.body.shop}`);
     } catch (err) {
         console.log(err);
         res.status(500).send("Something Went Wrong!")

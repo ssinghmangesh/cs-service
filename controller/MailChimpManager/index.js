@@ -1,4 +1,6 @@
 const { insert, del, fetch, fetchAll, update, query } = require("../../aws/index");
+const { fetchWorkspace } = require("../UserManager");
+const client = require("@mailchimp/mailchimp_marketing");
 
 const addMailChimpSegment = async (data) => {
     const params = {
@@ -38,9 +40,25 @@ const fetchAllMailChimpSegment = async () => {
     return await fetchAll(params)
 }
 
+const fetchAllMailChimpAudience = async (workspaceId) => {
+    const {Item: workspace} = await fetchWorkspace({ "workspace_id": workspaceId });
+    client.setConfig({
+        apiKey: workspace.mailchimpData.accessToken,
+        server: workspace.mailchimpData.server,
+    });
+    const response = await client.lists.getAllLists();
+    const data = response.lists.map(list => ({
+        text: list.name,
+        value: list.id
+    }))
+    return data
+}
+
+
 module.exports = {
     addMailChimpSegment,
     deleteMailChimpSegment,
     fetchMailChimpSegment,
     fetchAllMailChimpSegment,
+    fetchAllMailChimpAudience
 }

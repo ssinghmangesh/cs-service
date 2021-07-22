@@ -95,7 +95,8 @@ router.post('/user-manager/workspace/current', async (req, res) => {
 })
 
 router.post('/user-manager/workspace/fetch', async function (req, res) {
-    let response = await fetchWorkspace(req.body)
+    const { 'x-workspace-id': workspaceId } = req.headers;
+    let response = await fetchWorkspace({ workspace_id: Number(workspaceId) })
     res.status(200).send( { status: true, message: "successful", data: response } )
 })
 

@@ -4,12 +4,15 @@ const allRoutes = require('./routes');
 const cors = require("cors");
 const port = 3000;
 const dotenv = require("dotenv").config();
+const cookieParser = require('cookie-parser');
 
+app.use(cookieParser());
 app.use(cors({
         credentials: true, 
         origin: true
     })
 );
+
 app.options('*', cors());
 
 app.all('/*', function(req, res, next) {
