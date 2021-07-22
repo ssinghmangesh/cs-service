@@ -9,14 +9,15 @@ const cookieParser = require('cookie-parser');
 app.use(cookieParser());
 app.use(cors({
         credentials: true, 
-        origin: true
+        origin: 'https://cs-service.herokuapp.com',
+        // origin: 'http://localhost:8080'
     })
 );
 
-app.options('*', cors());
+// app.options('*', cors());
 
 app.all('/*', function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*"); 
+    // res.header("Access-Control-Allow-Origin", "*"); 
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
     res.header('Access-Control-Allow-Headers', 'Content-Type');
     next();

@@ -3,6 +3,16 @@ const router = express.Router()
 const { syncAll } = require("../controller/ShopifyManager/index");
 const { count } = require("../controller/ShopifyManager/helper");
 const { fetchWorkspace } = require('../controller/UserManager')
+const { verify } = require('../controller/AuthManager/helper')
+
+// router.use((req, res, next) => {
+//     console.log('shopify');
+//     if(verify(req)){
+//         next();
+//     }else{
+//         res.sendStatus(403)
+//     }
+// })
 
 router.post('/shopify-manager/sync', async (req, res) => {
     const { 'x-workspace-id': workspaceId } = req.headers;

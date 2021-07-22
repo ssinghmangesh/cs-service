@@ -4,6 +4,17 @@ const { updateWorkspace } = require('../controller/UserManager/workspace')
 const { addKlaviyoSegmentHelper, fetchKlaviyoSegmentHelper } = require('../controller/KlaviyoManager/helper')
 const { deleteKlaviyoSegment, fetchAllKlaviyoSegment } = require('../controller/KlaviyoManager/index')
 const { sync } = require('../controller/KlaviyoManager/Klaviyo')
+const { verify } = require('../controller/AuthManager/helper')
+
+router.use(async (req, res, next) => {
+    const flag = await verify(req, res);
+    if(flag){
+        next();
+    }else{
+        res.sendStatus(403)
+    }
+})
+
 
 router.post('/klaviyo-manager/workspace/insert', async (req, res) => {
     const { 'x-workspace-id': workspaceId } = req.headers;
