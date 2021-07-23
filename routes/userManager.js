@@ -9,6 +9,7 @@ const {
     addWorkspace,
     addUserToWorkspace,
 
+    updateWorkspace,
 
     deleteUser,
     deleteWorkspace,
@@ -22,7 +23,7 @@ const {
     getUserToWorkspace,
 
 } = require('../controller/UserManager/index.js')
-const { editUser, getAllWorkspaces, getAllUserToWorkspaces, setCurrentWorkspace } = require('../controller/UserManager/helper')
+const { editUser, getAllWorkspaces, getAllUserToWorkspaces, setCurrentWorkspace, PermissionsDataConverter } = require('../controller/UserManager/helper')
 const Multer = require('multer');
 const upload = require('../aws/upload');
 
@@ -56,6 +57,16 @@ router.post('/user-manager/user-to-workspace/add', async function (req, res) {
 
 router.post('/user-manager/workspace/add', async function (req, res) {
     let response = await addWorkspace(req.body)
+    res.status(200).send( { status: true, message: "successful", data: response } )
+})
+
+router.post('/user-manager/workspace/permissions/add', async function (req, res) {
+    const { 'x-workspace-id': workspaceId } = req.headers
+    const data = {
+        workspaceId: Number(workspaceId),
+        userPermissions: PermissionsDataConverter(req.body.userPermissions)
+    }
+    const response = await updateWorkspace(data, 'userPermissions')
     res.status(200).send( { status: true, message: "successful", data: response } )
 })
 

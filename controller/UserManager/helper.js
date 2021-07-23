@@ -120,9 +120,76 @@ const setCurrentWorkspace = async ({userId, workspace}) => {
     }
 }
 
+// const data = [
+//     {
+//       module: 'read',
+//       Admin: true,
+//       Author: false,
+//       Editor: false,
+//       Maintainer: false,
+//       Subscriber: false,
+//       Staff: false
+//     },
+//     {
+//       module: 'write',
+//       Admin: false,
+//       Author: true,
+//       Editor: false,
+//       Maintainer: false,
+//       Subscriber: false,
+//       Staff: false
+//     },
+//     {
+//       module: 'create',
+//       Admin: false,
+//       Author: false,
+//       Editor: true,
+//       Maintainer: false,
+//       Subscriber: false,
+//       Staff: false
+//     },
+//     {
+//       module: 'delete',
+//       Admin: false,
+//       Author: false,
+//       Editor: false,
+//       Maintainer: true,
+//       Subscriber: false,
+//       Staff: false
+//     },
+//   ]
+
+const PermissionsDataConverter = (data) => {
+    console.log('data received', data)
+    const array = ['Admin', 'Author', 'Editor', 'Staff', 'Subscriber', 'Maintainer']
+    let perData = {
+        Admin: {},
+        Author: {},
+        Editor: {},
+        Staff: {},
+        Subscriber: {},
+        Maintainer: {}
+    }
+    array.forEach((role) => {
+        let obj = {
+            read: false,
+            write: false,
+            create: false,
+            delete: false
+        }
+        data.forEach((item) => {
+            obj[item.module] = item[role]
+        })
+        perData[role] = obj
+    })
+    console.log(perData)
+    return perData
+}
+
 module.exports = {
     editUser,
     getAllWorkspaces,
     getAllUserToWorkspaces,
     setCurrentWorkspace,
+    PermissionsDataConverter,
 }
