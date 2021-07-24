@@ -24,7 +24,8 @@ const setCookies = (res, accessToken, refreshToken) => {
     });
     res.cookie('refresh-token', refreshToken, {
         maxAge: 1000*60*60*24*7,
-        httpOnly: true
+        httpOnly: true,
+        SameSite: 'None'
     })
 }
 
