@@ -2,24 +2,12 @@ const express = require('express')
 const router = express.Router()
 const nonce = require('nonce')();
 const axios = require("axios");
-const { updateUser, fetchUser, addUser } = require("../controller/UserManager/index")
+const { updateUser, fetchUser, addUser } = require("../controller/UserManager/index");
+const { register, login, logout } = require('../controller/AuthManager');
+const { refresh } = require('../controller/AuthManager/helper');
 
 router.post('/auth-manager/check-for-register', async (req, res) => {
-    const { userId, password } = req.body 
-    // return res.status(200).send(`http://localhost:3000/install?shop=${shopName}`);
-    const fetchedUser = await fetchUser({ user_id: userId })
-    if(Object.keys(fetchedUser).length !== 0){
-        res.status(400).send('email already exists!');
-    } else {
-        const user = {
-            user_id: userId,
-            password: password,
-            created_at: Date.now(),
-            updated_at: Date.now()
-        }
-        await addUser(user);
-        res.status(200).send('User Registered');
-    }
+    register(req, res);
     //step 1: check if the email of user already exists
     //login
     //step 2: check if the workspace already exists
@@ -60,21 +48,15 @@ router.post('/auth-manager/set-password', async (req, res) => {
 })
 
 router.post('/auth-manager/login', async (req, res) => {
-    const { userId, password } = req.body
-    const data = {
-        "user_id": userId
-    }
-    const { Item: user } = await fetchUser(data);
-    if(!user) {
-        res.status(404).send('Email not Found')
-        return;
-    }
-    if (user.password === password){
-        delete user.password
-        res.status(200).send(user);
-    } else {
-        res.status(403).send('Incorrect Password');
-    }
+    login(req, res);
+})
+
+router.post('/refresh', async (req, res) => {
+    refresh(req, res);
+})
+
+router.post('/auth-manager/logout', async (req, res) => {
+    logout(req, res);
 })
 
 module.exports = router

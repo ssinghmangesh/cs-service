@@ -2,12 +2,17 @@ const express = require('express')
 const router = express.Router()
 const Dashboard = require('../controller/AnalyticsManager/index')
 const { download } = require('../controller/AnalyticsManager/helper')
-// const { setupWorkspace } = require('../controller/DataManager/Setup')
-// const { update } = require("../controller/ShopifyManager/Webhooks/index");
-// const {CUSTOMER_TABLE_NAME, ORDER_TABLE_NAME} = require("../controller/DataManager/helper");
-// const customerColumns = require("../controller/DataManager/Setup/customerColumns.json");
-// const orderColumns = require("../controller/DataManager/Setup/orderColumns.json");
-// const productColumns = require("../controller/DataManager/Setup/productColumns.json");
+const { verify } = require('../controller/AuthManager/helper')
+
+router.use(async (req, res, next) => {
+    const flag = await verify(req, res);
+    if(flag){
+        next();
+    }else{
+        res.sendStatus(403)
+    }
+})
+
 
 router.post('/analytics-manager/count', async (req, res) => {
     const details = req.body
@@ -72,7 +77,6 @@ router.post('/analytics-manager/table', async (req, res) => {
     const { 'x-workspace-id': workspaceId } = req.headers
     let response = await Dashboard.table({table: details.table, workspaceId: workspaceId, startdate: details.startdate, enddate: details.enddate, orderBykey: details.orderBykey, orderByDirection: details.orderByDirection, limit: details.limit, skipRowby: details.skipRowby, filters: details.filters })
     // console.log(response)
-    res.setHeader('Access-Control-Allow-Origin', '*');
     res.status(200).send( { status: true, message: "successful", data: response } )
 })
 

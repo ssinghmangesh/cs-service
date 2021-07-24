@@ -3,6 +3,17 @@ const router = express.Router()
 const { updateWorkspace } = require('../controller/UserManager/workspace')
 const { addMailChimpSegmentHelper, fetchMailChimpSegmentHelper, sync } = require('../controller/MailChimpManager/helper')
 const { deleteMailChimpSegment, fetchAllMailChimpSegment, fetchAllMailChimpAudience } = require('../controller/MailChimpManager/index')
+const { verify } = require('../controller/AuthManager/helper')
+
+router.use(async (req, res, next) => {
+    const flag = await verify(req, res);
+    if(flag){
+        next();
+    }else{
+        res.sendStatus(403)
+    }
+})
+
 
 router.post('/mailchimp-manager/workspace/insert', async (req, res) => {
     const { 'x-workspace-id': workspaceId } = req.headers;
