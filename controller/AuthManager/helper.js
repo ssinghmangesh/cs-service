@@ -21,12 +21,14 @@ const setCookies = (res, accessToken, refreshToken) => {
     res.cookie('access-token', accessToken, {
         maxAge: 1000*3600,
         httpOnly: true,
-        sameSite: 'none'
+        sameSite: 'none',
+        secure: true
     });
     res.cookie('refresh-token', refreshToken, {
         maxAge: 1000*60*60*24*7,
         httpOnly: true,
-        sameSite: 'none'
+        sameSite: 'none',
+        secure: true
     })
 }
 
