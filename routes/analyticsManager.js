@@ -5,6 +5,11 @@ const { download } = require('../controller/AnalyticsManager/helper')
 const { verify } = require('../controller/AuthManager/helper')
 
 router.use(async (req, res, next) => {
+    // console.log(req.headers);
+    if(req.method === 'OPTIONS') {
+        // console.log(req.method);
+        return next();
+    }
     const flag = await verify(req, res);
     if(flag){
         next();
