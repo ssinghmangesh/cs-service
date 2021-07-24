@@ -20,7 +20,8 @@ const generateToken = async (email) => {
 const setCookies = (res, accessToken, refreshToken) => {
     res.cookie('access-token', accessToken, {
         maxAge: 1000*3600,
-        httpOnly: true
+        httpOnly: true,
+        SameSite: 'None'
     });
     res.cookie('refresh-token', refreshToken, {
         maxAge: 1000*60*60*24*7,
