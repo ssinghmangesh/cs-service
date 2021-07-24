@@ -20,17 +20,22 @@ const generateToken = async (email) => {
 const setCookies = (res, accessToken, refreshToken) => {
     res.cookie('access-token', accessToken, {
         maxAge: 1000*3600,
-        httpOnly: true
+        httpOnly: true,
+        sameSite: 'none',
+        secure: true
     });
     res.cookie('refresh-token', refreshToken, {
         maxAge: 1000*60*60*24*7,
-        httpOnly: true
+        httpOnly: true,
+        sameSite: 'none',
+        secure: true
     })
 }
 
 const verify = async (req, res) => {
     try{
         const accessToken = req.cookies['access-token'];
+        // console.log(accessToken);
         // const accessToken = null;
         const item = jwt.verify(accessToken, ACCESS_TOKEN_SECRET);
         return true;
@@ -44,7 +49,7 @@ const refresh = async (req, res) => {
     try{
         
         const refreshToken = req.cookies['refresh-token'];
-        // console.log(req.cookies);
+        // console.log(req.cookies['refresh-token']);
         const params = {
             TableName: 'RefreshTokens',
             Key: {
@@ -52,6 +57,7 @@ const refresh = async (req, res) => {
             }
         }
         const {Item} = await fetch(params)
+        console.log(Item);
         if(Item){
             const item = jwt.verify(refreshToken, REFRESH_TOKEN_SECRET);
             const { accessToken: newAccessToken, refreshToken: newRefreshToken } = await generateToken(item.email)
@@ -61,7 +67,6 @@ const refresh = async (req, res) => {
         }else{
             res.sendStatus(401)
         }
-
     }catch{
         res.sendStatus(401)
     }

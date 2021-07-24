@@ -7,19 +7,26 @@ const dotenv = require("dotenv").config();
 const cookieParser = require('cookie-parser');
 
 app.use(cookieParser());
-app.use(cors({
-        credentials: true, 
-        origin: 'https://cs-service.herokuapp.com',
-        // origin: 'http://localhost:8080'
-    })
-);
+// app.use(cors({
+//         credentials: true, 
+//         origin: 'https://cs-service.herokuapp.com',
+//         // origin: 'http://localhost:8080'
+//     })
+// );
 
-// app.options('*', cors());
+// // app.options('*', cors());
 
-app.all('/*', function(req, res, next) {
-    // res.header("Access-Control-Allow-Origin", "*"); 
+app.use(function(req, res, next) {
+    // console.log(req.headers.origin)
+    const allowedOrigins = ['http://localhost:8080', 'https://app.customsegment.com']
+    // console.log(allowedOrigins.includes(req.headers.origin))
+    if(allowedOrigins.includes(req.headers.origin)){
+        res.header("Access-Control-Allow-Origin", req.headers.origin);
+        res.header("Access-Control-Allow-Credentials", true); 
+    }
+    // console.log(req.path)
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, x-workspace-id, x-workspace-name');
     next();
   });
 
