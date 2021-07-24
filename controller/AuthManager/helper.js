@@ -67,7 +67,6 @@ const refresh = async (req, res) => {
         }else{
             res.sendStatus(401)
         }
-
     }catch{
         res.sendStatus(401)
     }
