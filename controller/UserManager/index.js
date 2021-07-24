@@ -1,5 +1,5 @@
 const { addUser, deleteUser, fetchUser, fetchAllUsers, updateUser } = require("./user")
-const { addWorkspace, deleteWorkspace, fetchWorkspace, fetchAllWorkspaces } = require("./workspace")
+const { addWorkspace, deleteWorkspace, fetchWorkspace, fetchAllWorkspaces, updateWorkspace } = require("./workspace")
 const { addUserToWorkspace, updateUserToWorkpace, deleteUserToWorkspace, getUserToWorkspace, fetchAllUserToWorkspaces } = require("./userToWorkspace");
 
 module.exports = {
@@ -13,6 +13,7 @@ module.exports = {
 
     updateUser,
     updateUserToWorkpace,
+    updateWorkspace,
 
     deleteUser,
     deleteWorkspace,
