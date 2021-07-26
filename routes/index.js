@@ -19,6 +19,7 @@ const productManager = require('./EntityManager/productManager')
 const productRecommendationsManager = require('./EntityManager/productRecommendationsManager')
 const klaviyoManager = require('./klaviyoManager');
 const authMailchimpManager = require('./authMailchimpManager');
+const authDripManager = require('./authDripManager');
 const mailChimpManager = require('./mailChimpManager');
 const activeCampaignManager = require('./activeCampaignManager');
 
@@ -45,6 +46,7 @@ module.exports = {
   authManager,
   authShopifyManager,
   authMailchimpManager,
+  authDripManager,
   notificationsManager,
   shopifyManager,
   analyticsManager,
