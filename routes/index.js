@@ -1,4 +1,5 @@
 const routes = require('express').Router();
+const dripManager = require('./dripManager');
 const userManager = require("./userManager") 
 const dataManager = require("./dataManager") 
 const shopifyManager = require("./shopifyManager")
@@ -37,6 +38,7 @@ routes.get('/health', (req, res) => {
 
 
 module.exports = {
+  dripManager,
   routes,
   userManager,
   dataManager,
