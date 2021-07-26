@@ -7,6 +7,9 @@ const { sync } = require('../controller/KlaviyoManager/Klaviyo')
 const { verify } = require('../controller/AuthManager/helper')
 
 router.use(async (req, res, next) => {
+    if(req.method === 'OPTIONS') {
+        return next();
+    }
     const flag = await verify(req, res);
     if(flag){
         next();

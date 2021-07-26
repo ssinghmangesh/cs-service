@@ -5,14 +5,18 @@ const { count } = require("../controller/ShopifyManager/helper");
 const { fetchWorkspace } = require('../controller/UserManager')
 const { verify } = require('../controller/AuthManager/helper')
 
-// router.use((req, res, next) => {
-//     console.log('shopify');
-//     if(verify(req)){
-//         next();
-//     }else{
-//         res.sendStatus(403)
-//     }
-// })
+router.use(async (req, res, next) => {
+    // console.log(req.path);
+    if(req.method === 'OPTIONS') {
+        return next();
+    }
+    const flag = await verify(req, res);
+    if(flag){
+        next();
+    }else{
+        res.sendStatus(403)
+    }
+})
 
 router.post('/shopify-manager/sync', async (req, res) => {
     const { 'x-workspace-id': workspaceId } = req.headers;
