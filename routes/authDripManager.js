@@ -60,7 +60,7 @@ router.post("/oauth/drip/connect", async (req, res) => {
     const data = {
         workspaceId: Number(workspaceId),
         dripData: {
-            accessToken: access_token,
+            token: access_token,
             tokenType: token_type,
             accountId: 6667052
         }
