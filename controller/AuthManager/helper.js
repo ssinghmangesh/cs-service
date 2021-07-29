@@ -57,7 +57,7 @@ const refresh = async (req, res) => {
             }
         }
         const {Item} = await fetch(params)
-        console.log(Item);
+        // console.log(Item);
         if(Item){
             const item = jwt.verify(refreshToken, REFRESH_TOKEN_SECRET);
             const { accessToken: newAccessToken, refreshToken: newRefreshToken } = await generateToken(item.email)

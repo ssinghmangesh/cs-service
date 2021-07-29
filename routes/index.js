@@ -22,6 +22,7 @@ const authMailchimpManager = require('./authMailchimpManager');
 const authDripManager = require('./authDripManager');
 const mailChimpManager = require('./mailChimpManager');
 const activeCampaignManager = require('./activeCampaignManager');
+const tagManager = require('./tagManager')
 
 routes.get('/', (req, res) => {
   res.status(200).json({ message: 'it works!' });
@@ -50,6 +51,7 @@ module.exports = {
   notificationsManager,
   shopifyManager,
   analyticsManager,
+  tagManager,
   customerManager,
   whereClause,
   mailManager,
