@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const { updateWorkspace } = require('../controller/UserManager/workspace')
 const { deleteDripSegment, fetchAllDripSegment } = require('../controller/DripManager/index')
-const { addDripSegmentHelper, fetchDripSegmentHelper } = require('../controller/DripManager/helper')
+const { addDripSegmentHelper, fetchDripSegmentHelper, sync } = require('../controller/DripManager/helper')
 
 router.post('/drip-manager/workspace/insert', async (req, res) => {
     const { 'x-workspace-id': workspaceId } = req.headers;
@@ -48,6 +48,16 @@ router.post('/drip-manager/drip/fetch', async (req, res) => {
 router.post('/drip-manager/drip/fetch-all', async (req, res) => {
     const response = await fetchAllDripSegment()
     res.status(200).send({ status: 200, message: "fetched", data: response })
+})
+
+router.post('/drip-manager/sync', async (req, res) => {
+    const { 'x-workspace-id': workspaceId } = req.headers
+    try{
+        await sync(Number(workspaceId), req.body.segment)    
+        res.status(200).send({ status: 200, message: "synced"})
+    }catch{
+        res.sendStatus(500)
+    }
 })
 
 module.exports = router

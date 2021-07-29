@@ -19,8 +19,10 @@ const productManager = require('./EntityManager/productManager')
 const productRecommendationsManager = require('./EntityManager/productRecommendationsManager')
 const klaviyoManager = require('./klaviyoManager');
 const authMailchimpManager = require('./authMailchimpManager');
+const authDripManager = require('./authDripManager');
 const mailChimpManager = require('./mailChimpManager');
 const activeCampaignManager = require('./activeCampaignManager');
+const tagManager = require('./tagManager')
 
 routes.get('/', (req, res) => {
   res.status(200).json({ message: 'it works!' });
@@ -42,17 +44,19 @@ module.exports = {
   routes,
   userManager,
   dataManager,
-  shopifyManager,
   authManager,
   authShopifyManager,
   authMailchimpManager,
+  authDripManager,
+  notificationsManager,
+  shopifyManager,
   analyticsManager,
+  tagManager,
   customerManager,
   whereClause,
   mailManager,
   segment,
   templateManager,
-  notificationsManager,
   orderManager,
   draftOrderManager,
   cartManager,
