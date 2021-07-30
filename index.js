@@ -18,7 +18,7 @@ app.use(cookieParser());
 
 app.use(function(req, res, next) {
     // console.log(req.headers.origin)
-    const allowedOrigins = ['http://localhost:8080', 'https://app.customsegment.com']
+    const allowedOrigins = ['http://localhost:8080', 'http://localhost:8085', 'https://app.customsegment.com']
     // console.log(allowedOrigins.includes(req.headers.origin))
     if(allowedOrigins.includes(req.headers.origin)){
         res.header("Access-Control-Allow-Origin", req.headers.origin);
