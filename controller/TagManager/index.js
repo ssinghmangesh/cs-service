@@ -1,6 +1,6 @@
 const { insert, query, del } = require("../../aws")
 const { fetchWorkspace } = require("../UserManager")
-const { table, updateCustomer, updateOrder } = require("./helper")
+const { table, updateCustomer, updateOrder, updateProduct } = require("./helper")
 
 const addTag = async (workspaceId, data) => {
     try{
@@ -71,13 +71,26 @@ const orderTags = async (tags, Item, workspaceId) => {
     const orders = {}
     for( let i=0; i<tags.length; i++){
         const res = await table({table: 'order', workspaceId, filters: tags[i].filters})
-        console.log(res);
         res.forEach(order => {
             orders[order.id] = orders[order.id] ? orders[order.id]+', '+tags[i].then : tags[i].then;
         })
         // console.log(res);
     }
     const promises = Object.keys(orders).map(key => updateOrder(Item.shop_name, Item.access_token, key, orders[key]))
+    await Promise.all(promises)
+    return true;
+}
+
+const productTags = async (tags, Item, workspaceId) => {
+    const products = {}
+    for( let i=0; i<tags.length; i++){
+        const res = await table({table: 'product', workspaceId, filters: tags[i].filters})
+        res.forEach(order => {
+            products[product.id] = products[product.id] ? products[product.id]+', '+tags[i].then : tags[i].then;
+        })
+        // console.log(res);
+    }
+    const promises = Object.keys(products).map(key => updateProduct(Item.shop_name, Item.access_token, key, products[key]))
     await Promise.all(promises)
     return true;
 }
@@ -104,6 +117,9 @@ const applyTags = async (workspaceId, {type, trigger}) => {
         case 'orders':
             await orderTags(tags, Item, workspaceId);
             break;
+        case 'product':
+            await productTags(tags, Item, workspaceId);
+            break;
         default:
             break;
     }
@@ -116,4 +132,5 @@ module.exports = {
     addTag,
     getTags,
     deleteTag,
+    applyTags,
 }

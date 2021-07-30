@@ -98,8 +98,19 @@ const updateOrder = (shopName, accessToken, id, tags) => {
     })
 }
 
+const updateProduct = (shopName, accessToken, id, tags) => {
+    return axios.put(`https://${shopName}/admin/api/2021-07/products/${id}.json`,{
+        product: { id, tags }
+    }, {
+        headers: {
+            'X-Shopify-Access-Token': accessToken,
+        }
+    })
+}
+
 module.exports = {
     table,
     updateCustomer,
     updateOrder,
+    updateProduct,
 }
