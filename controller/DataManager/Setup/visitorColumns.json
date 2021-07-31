@@ -23,5 +23,9 @@
     {
         "columnName": "os",
         "dataType": "varchar"
+    },
+    {
+        "columnName": "created_at",
+        "dataType": "timestamptz"
     }
 ]
