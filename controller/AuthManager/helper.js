@@ -5,7 +5,7 @@ ACCESS_TOKEN_SECRET = 'jkpouytefhgj'
 REFRESH_TOKEN_SECRET = 'jhbnmgkliyoy'
 
 const generateToken = async (email) => {
-    const accessToken = jwt.sign({ email: email }, ACCESS_TOKEN_SECRET, { expiresIn: '1h' });
+    const accessToken = jwt.sign({ email: email }, ACCESS_TOKEN_SECRET, { expiresIn: '3d' });
     const refreshToken = jwt.sign({ email: email }, REFRESH_TOKEN_SECRET, { expiresIn: '7d' });
     const params = {
         TableName: 'RefreshTokens',
@@ -19,7 +19,7 @@ const generateToken = async (email) => {
 
 const setCookies = (res, accessToken, refreshToken) => {
     res.cookie('access-token', accessToken, {
-        maxAge: 1000*3600,
+        maxAge: 1000*60*60*24*3,
         httpOnly: true,
         sameSite: 'none',
         secure: true

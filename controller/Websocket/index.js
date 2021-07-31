@@ -9,7 +9,8 @@ const addVisitor = async (csData, workspaceId, id) => {
         type: csData.customer_id ? 'customer' : 'visitor',
         first_page_viewed: csData.event_name,
         last_page_viewed: csData.previous_page,
-        os: csData.os
+        os: csData.os,
+        created_at: new Date()
     }
     await insert(VISITOR_TABLE_NAME, visitorColumns, [data], workspaceId);
     console.log('visitor added');
