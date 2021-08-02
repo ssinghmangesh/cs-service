@@ -4,7 +4,7 @@ const nonce = require('nonce')();
 const axios = require("axios");
 const { updateUser, fetchUser, addUser } = require("../controller/UserManager/index");
 const { register, login, logout } = require('../controller/AuthManager');
-const { refresh } = require('../controller/AuthManager/helper');
+const { refresh, verifyEmail } = require('../controller/AuthManager/helper');
 
 router.post('/auth-manager/check-for-register', async (req, res) => {
     register(req, res);
@@ -40,10 +40,9 @@ router.post('/auth-manager/set-password', async (req, res) => {
         },
         UpdateExpression: "set password = :password",
         ExpressionAttributeValues:{
-            ":password": password,
+            ":password": password
         }
     }
-    await updateUser(data);
     res.status(200).send();
 })
 
@@ -53,6 +52,15 @@ router.post('/auth-manager/login', async (req, res) => {
 
 router.post('/refresh', async (req, res) => {
     refresh(req, res);
+})
+
+router.post('/auth-manager/verify', async (req, res) => {
+    const response = verifyEmail(req)
+    if(response){
+        res.status(200).send(response)
+    }else{
+        res.sendStatus(400)
+    }
 })
 
 router.post('/auth-manager/logout', async (req, res) => {

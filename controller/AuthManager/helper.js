@@ -1,6 +1,16 @@
 const jwt = require("jsonwebtoken");
 const { insert, fetch, del } = require("../../aws");
 
+const nodemailer = require('nodemailer')
+
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'customsegment@gmail.com',
+        pass: 'cs#@123456'
+    }
+});
+
 ACCESS_TOKEN_SECRET = 'jkpouytefhgj'
 REFRESH_TOKEN_SECRET = 'jhbnmgkliyoy'
 
@@ -72,9 +82,39 @@ const refresh = async (req, res) => {
     }
 }
 
+const sendLink = async (email) => {
+    const accessToken = jwt.sign({ email: email }, ACCESS_TOKEN_SECRET, { expiresIn: '3d' });
+    const html = `<p>Click <a href="http://localhost:8080/pages/authentication/reset-password-v1?token=${accessToken}">here</a> to set your password</p>`
+    const mailOptions = {
+        from: 'lionelthegoatmessi@gmail.com',
+        to: email,// to,
+        subject: "Set your password",
+        html: html,
+    }
+    await transporter.sendMail(mailOptions);
+    console.log('success');
+}
+
+const verifyEmail = (req) => {
+    try{
+        const accessToken = req.body.token;
+        // console.log(accessToken);
+        // const accessToken = null;
+        const item = jwt.verify(accessToken, ACCESS_TOKEN_SECRET);
+        return item;
+    }
+    catch(err){
+        return false;
+    }
+}
+
+// sendLink('deva.sahab.25@gmail.com')
+
 module.exports = {
     generateToken,
     setCookies,
     verify,
     refresh,
+    verifyEmail,
+    sendLink,
 }
