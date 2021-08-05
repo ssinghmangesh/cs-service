@@ -3,15 +3,22 @@ const { updateUser, fetchUser, addUser } = require("../UserManager");
 const { del } = require("../../aws");
 
 const register = async (req, res) => {
-    const { userId } = req.body 
-    // return res.status(200).send(`http://localhost:3000/install?shop=${shopName}`);
-    const fetchedUser = await fetchUser({ user_id: userId })
-    if(Object.keys(fetchedUser).length !== 0){
-        res.status(400).send('email already exists!');
-    } else {
-        await sendLink(userId)
-        res.sendStatus(200)
+    const { userId, password } = req.body 
+    const user = {
+        user_id: userId,
+        password,
+        status: 'verified',
     }
+    await addUser(user);
+    return res.sendStatus(200);
+    // return res.status(200).send(`http://localhost:3000/install?shop=${shopName}`);
+    // const fetchedUser = await fetchUser({ user_id: userId })
+    // if(Object.keys(fetchedUser).length !== 0){
+    //     res.status(400).send('email already exists!');
+    // } else {
+    //     await sendLink(userId)
+    //     res.sendStatus(200)
+    // }
 }
 
 const login = async (req, res) => {
@@ -25,13 +32,16 @@ const login = async (req, res) => {
         res.status(404).send('Email not Found')
         return;
     }
+    if(user.status === 'pending') {
+        return res.status(400).send('Email not verified');
+    }
     if (user.password === password){
         delete user.password
         const { accessToken, refreshToken} = await generateToken(userId);
         setCookies(res, accessToken, refreshToken);
         res.status(200).send(user);
     } else {
-        res.status(403).send('Incorrect Password');
+        res.status(400).send('Incorrect Password');
     }
 }
 
