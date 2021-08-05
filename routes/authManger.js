@@ -4,7 +4,7 @@ const nonce = require('nonce')();
 const axios = require("axios");
 const { updateUser, fetchUser, addUser } = require("../controller/UserManager/index");
 const { register, login, logout } = require('../controller/AuthManager');
-const { refresh, verifyEmail } = require('../controller/AuthManager/helper');
+const { refresh, verifyEmail, sendOtp, verifyOtp } = require('../controller/AuthManager/helper');
 
 router.post('/auth-manager/check-for-register', async (req, res) => {
     register(req, res);
@@ -67,5 +67,9 @@ router.post('/auth-manager/verify', async (req, res) => {
 router.post('/auth-manager/logout', async (req, res) => {
     logout(req, res);
 })
+
+router.post('/auth-manager/send-otp', sendOtp);
+
+router.post('/auth-manager/verify-otp', verifyOtp);
 
 module.exports = router
