@@ -43,6 +43,7 @@ router.post('/auth-manager/set-password', async (req, res) => {
             ":password": password
         }
     }
+    await updateUser(data);
     res.status(200).send();
 })
 

@@ -84,7 +84,7 @@ const refresh = async (req, res) => {
 
 const sendLink = async (email) => {
     const accessToken = jwt.sign({ email: email }, ACCESS_TOKEN_SECRET, { expiresIn: '3d' });
-    const html = `<p>Click <a href="http://localhost:8080/pages/authentication/reset-password-v1?token=${accessToken}">here</a> to set your password</p>`
+    const html = `<p>Click <a href="https://app.customsegment.com/pages/authentication/reset-password-v1?token=${accessToken}">here</a> to set your password</p>`
     const mailOptions = {
         from: 'lionelthegoatmessi@gmail.com',
         to: email,// to,
