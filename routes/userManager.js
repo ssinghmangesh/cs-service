@@ -69,7 +69,7 @@ router.post('/user-manager/user/add', async function (req, res) {
             from: 'customsegment@gmai.com',
             to: req.body.user_id,
             subject: 'Invitation',
-            html: '<p>You have been invited to custom segment. Click <a href="http://localhost:8080/join?code='+encodeURIComponent(code)+'">here</a> to accept invitation</p>'
+            html: '<p>You have been invited to custom segment. Click <a href="https://app.customsegment.com/join?code='+encodeURIComponent(code)+'">here</a> to accept invitation</p>'
         }
         await transporter.sendMail(mailOptions);
         return res.status(200).send( { status: true, message: "successful", data: response } )
