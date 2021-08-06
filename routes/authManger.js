@@ -38,13 +38,17 @@ router.post('/auth-manager/set-password', async (req, res) => {
         Key:{
             "user_id": userId
         },
-        UpdateExpression: "set password = :password and updated_at = :updated_at",
+        UpdateExpression: "set #password = :password, #updated_at = :updated_at",
+        ExpressionAttributeNames: {
+            "#password": "password",
+            "#updated_at": "updated_at"
+        },
         ExpressionAttributeValues:{
             ":password": password,
             ":updated_at": Date.now()
         }
     }
-    await updateUser(data);
+    const response = await updateUser(data);
     res.status(200).send();
 })
 
