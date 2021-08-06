@@ -18,11 +18,12 @@ const addUserToWorkspace = async (data) => {
 
 // addUserToWorkspace(data);
 
-const deleteUserToWorkspace = async (data) => {
+const deleteUserToWorkspace = async (workspaceId, userId) => {
     var params = {
-            TableName: 'User',
+            TableName: 'UserToWorkspace',
             Key:{
-                "id": data.id
+                "workspace_id": workspaceId,
+                "user_id": userId
             }
         }
     await del(params)

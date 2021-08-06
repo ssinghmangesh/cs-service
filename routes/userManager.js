@@ -21,10 +21,13 @@ const {
     fetchAllWorkspaces, //parms user id 
     fetchAllUserToWorkspaces,
     getUserToWorkspace,
+    updateUserToWorkpace,
 
 } = require('../controller/UserManager/index.js')
 const { editUser, getAllWorkspaces, getAllUserToWorkspaces, setCurrentWorkspace, PermissionsDataConverter } = require('../controller/UserManager/helper')
+const nodemailer = require('nodemailer')
 const Multer = require('multer');
+const CryptoJS = require("crypto-js");
 const upload = require('../aws/upload');
 
 const router = express.Router()
@@ -36,18 +39,44 @@ const multer = Multer({
     }
   });
 
+
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'customsegment@gmail.com',
+        pass: 'cs#@123456'
+    }
+});
+
 /***** ADD *****/
 router.post('/user-manager/user/add', async function (req, res) {
-    let response = await fetchUser({ user_id: req.body.user_id })
-    const flag = (response.Item && response.Item.password) ? true : false
-    if(!response.Item){
-        response = await addUser({user_id: req.body.user_id, status: 'pending', created_at: Date.now(), updated_at: Date.now()})
+    try{
+
+        let response = await getUserToWorkspace(req.body.workspace_id, req.body.user_id);
+        // console.log(response);
+        if(response.Item && response.Item.status !== 'pending'){
+            return res.status(400).send({message: 'User already exists'});
+        }
+        response = await fetchUser({ user_id: req.body.user_id })
+        // const flag = (response.Item) ? true : false
+        if(!response.Item){
+            response = await addUser({user_id: req.body.user_id, status: 'pending', created_at: Date.now(), updated_at: Date.now()})
+        }
+        response = await addUserToWorkspace({workspace_id: req.body.workspace_id, user_id: req.body.user_id, company: req.body.company, role: req.body.role, status: 'pending'})
+        const code = CryptoJS.AES.encrypt(JSON.stringify({ workspaceId: req.body.workspace_id, userId: req.body.user_id }), 'password').toString();
+        // console.log(code);
+        const mailOptions = {
+            from: 'customsegment@gmai.com',
+            to: req.body.user_id,
+            subject: 'Invitation',
+            html: '<p>You have been invited to custom segment. Click <a href="http://localhost:8080/join?code='+encodeURIComponent(code)+'">here</a> to accept invitation</p>'
+        }
+        await transporter.sendMail(mailOptions);
+        return res.status(200).send( { status: true, message: "successful", data: response } )
+    }catch(err){
+        console.log(err);
+        res.status(500).send({ message: 'Internal Server Error'})
     }
-    response = await addUserToWorkspace({workspace_id: req.body.workspace_id, user_id: req.body.user_id, company: req.body.company, role: req.body.role})
-    if(!flag){
-        sendMail({ from: 'lionelthegoatmessi@gmail.com', to: req.body.user_id, subject: 'Set Password for Custom Segment' ,html: '<p>Click <a href="https://app.customsegment.com/pages/authentication/reset-password-v1?user_id=' + encodeURIComponent(req.body.user_id) + '">here</a> to set your password</p>'})
-    }
-    return res.status(200).send( { status: true, message: "successful", data: response } )
 })
 
 router.post('/user-manager/user-to-workspace/add', async function (req, res) {
@@ -77,7 +106,8 @@ router.post('/user-manager/user/delete', async function (req, res) {
 })
 
 router.post('/user-manager/user-to-workspace/delete', async function (req, res) {
-    let response = await deleteUserToWorkspace(req.body)
+    console.log(req.body.workspaceId, req.body.userId);
+    let response = await deleteUserToWorkspace(req.body.workspaceId, req.body.userId)
     res.status(200).send( { status: true, message: "successful", data: response } )
 })
 
@@ -137,6 +167,45 @@ router.post('/user-manager/user/edit', multer.single('file'), async function (re
 router.post('/user-manager/user-to-workspace/fetch-all', async function (req, res) {
     const response = await getAllUserToWorkspaces(req.body.userId)
     res.status(200).send( { status: true, message: "successful", data: response } )
+})
+
+router.post('/user-manager/decrypt', async (req, res) => {
+    try{
+        const { code } = req.body;
+        var bytes  = CryptoJS.AES.decrypt(code, 'password');
+        // console.log(bytes.toString(CryptoJS.enc.Utf8));
+        var decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));  
+        // console.log(decryptedData);
+        const data = { ...decryptedData }
+        let user = await fetchUser({ user_id: decryptedData.userId });
+        if(user.Item && user.Item.status !== 'pending'){
+            data.userExists = true;
+        }
+        let workspace = await fetchWorkspace({ workspace_id: decryptedData.workspaceId });
+        data.shopName = workspace.Item.shop_name; 
+        res.status(200).send(data);
+    }catch(err){
+        console.log(err);
+        res.sendStatus(500);
+    }
+})
+
+router.post('/user-manager/user-to-workspace/activate', async function (req, res) {
+    const data = {
+        Key:{
+            "user_id": req.body.userId,
+            "workspace_id": req.body.workspaceId
+        },
+        UpdateExpression: "set #status = :status",
+        ExpressionAttributeNames: {
+            "#status": "status"
+        },
+        ExpressionAttributeValues: {
+            ":status": "active"
+        }
+    }
+    let response = await updateUserToWorkpace(data);
+    res.status(200).send( { status: true, message: "successful" } )
 })
 
 module.exports = router
