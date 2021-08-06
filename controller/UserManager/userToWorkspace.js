@@ -54,6 +54,7 @@ const fetchAllUserToWorkspaces = async (workspaceId) => {
         FilterExpression: "workspace_id = :workspaceId",
         ExpressionAttributeValues: { ":workspaceId": Number(workspaceId) }
     }
+    // console.log(params);
     return await fetchAll(params)
 }
 

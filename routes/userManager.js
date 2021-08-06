@@ -152,8 +152,10 @@ router.post('/user-manager/user/fetch-all', async function (req, res) {
     const { Items } = await fetchAllUserToWorkspaces(workspaceId);
     for( const item of Items ){
         const { Item: user } = await fetchUser({ user_id: item.user_id })
-        delete user.password;
-        users.push({ ...user, ...item });
+        if(user){
+            delete user.password;
+            users.push({ ...user, ...item });
+        }
     }
     res.status(200).send( { status: true, message: "successful", data: users} )
 })
@@ -161,7 +163,8 @@ router.post('/user-manager/user/fetch-all', async function (req, res) {
 router.post('/user-manager/user/edit', multer.single('file'), async function (req, res) {
     const { 'x-workspace-id': workspaceId } = req.headers;
     const response = await editUser(req.file, req.body, workspaceId)
-    res.status(200).send( { status: true, message: "successful"} )
+    console.log(response);
+    res.status(200).send( { status: true, message: "successful", data: {name: response.Attributes.name, src: response.Attributes.src } })
 })
 
 router.post('/user-manager/user-to-workspace/fetch-all', async function (req, res) {

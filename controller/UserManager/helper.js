@@ -50,12 +50,13 @@ const editUser = async (file, data, workspaceId) => {
             ":status": data.status,
             ":username": data.username,
             ":updated_at": Date.now()
-        }
+        },
+        ReturnValues:"ALL_NEW"
     }
     if (Location) {
         value.ExpressionAttributeValues[':src'] = Location
     }
-    await updateUser(value)
+    const response = await updateUser(value)
     value = {
         Key:{
             "user_id": data.user_id,
@@ -71,7 +72,8 @@ const editUser = async (file, data, workspaceId) => {
             ":company": data.company,
         }
     }
-    return await updateUserToWorkpace(value);
+    await updateUserToWorkpace(value);
+    return response;
 }
 
 const getAllUserToWorkspaces = async (userId) => {
