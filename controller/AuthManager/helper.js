@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 const { insert, fetch, del } = require("../../aws");
 const otpGenerator = require('otp-generator')
 const nodemailer = require('nodemailer');
-const { addUser, fetchUser } = require("../UserManager");
+const { addUser, fetchUser, updateUser } = require("../UserManager");
 
 const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -121,6 +121,34 @@ const sendOtp = async (req, res) => {
     res.sendStatus(200);
 }
 
+const forgotPassword = async (req, res) => {
+    const { userId } = req.body 
+    const fetchedUser = await fetchUser({ user_id: userId })
+    if(Object.keys(fetchedUser).length === 0 || fetchedUser.Item.status === 'pending'){
+        return res.status(400).send('User not found!');
+    }
+    const otp = otpGenerator.generate(6, { alphabets: false, upperCase: false, specialChars: false });
+    const data = {
+        Key:{
+            "user_id": userId
+        },
+        UpdateExpression: "set otp = :otp",
+        ExpressionAttributeValues:{
+            ":otp": otp
+        }
+    }
+    await updateUser(data);
+    const html = `<p>Your OTP is ${otp}</p>`
+    const mailOptions = {
+        from: 'customsegment@gmail.com',
+        to: userId,// to,
+        subject: "OTP",
+        html: html,
+    }
+    await transporter.sendMail(mailOptions);
+    res.sendStatus(200);
+}
+
 const verifyOtp = async (req, res) => {
     const { userId, otp } = req.body 
     const fetchedUser = await fetchUser({ user_id: userId })
@@ -153,5 +181,6 @@ module.exports = {
     verifyEmail,
     sendLink,
     sendOtp,
-    verifyOtp
+    verifyOtp,
+    forgotPassword,
 }
