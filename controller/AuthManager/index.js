@@ -8,6 +8,8 @@ const register = async (req, res) => {
         user_id: userId,
         password,
         status: 'verified',
+        created_at: Date.now(),
+        updated_at: Date.now()
     }
     await addUser(user);
     return res.sendStatus(200);
