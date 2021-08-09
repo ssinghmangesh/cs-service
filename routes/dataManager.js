@@ -25,6 +25,7 @@ const checkoutColumns = require("../controller/DataManager/Setup/checkoutColumns
 const checkoutLineItemsColumns = require("../controller/DataManager/Setup/checkoutLineItemsColumns.json");
 const { default: axios } = require('axios');
 const clearData = require('../controller/DataManager/clearData');
+const { aggregate, variantAggregate } = require('../controller/DataManager');
 
 
 
@@ -148,6 +149,26 @@ router.post('/bg1-webhooks/:workspaceId/:store/:event/:subevent/:type',async (re
     console.log('body: ', req.body)
     // bgUpdate(req.params, req.body)
     res.status(200).send("done")
+})
+
+router.post('/data-manager/customer/aggregate', async (req, res) => {
+    const { 'x-workspace-id': workspaceId } = req.headers
+    try{
+        await aggregate(Number(workspaceId), req.body.id);
+        res.sendStatus(200);
+    }catch(err){
+        res.sendStatus(500);
+    }    
+})
+
+router.post('/data-manager/product/aggregate', async (req, res) => {
+    const { 'x-workspace-id': workspaceId } = req.headers
+    try{
+        await variantAggregate(Number(workspaceId), req.body.id);
+        res.sendStatus(200);
+    }catch(err){
+        res.sendStatus(500);
+    }    
 })
 
 module.exports = router
