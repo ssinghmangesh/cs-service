@@ -53,6 +53,7 @@ router.post('/tag-manager/apply', async (req, res) => {
         const response = await applyTags(Number(workspaceId), req.body)
         res.status(200).send( { status: true, message: "successful" } )
     }catch(err){
+        console.log(err);
         res.status(400).send({status: false, message: 'Not able to delete Tag!'})
     }
 })
