@@ -18,7 +18,7 @@ const Shopify = require('../controller/ShopifyManager/Shopify')
 
 const shopifyApiPublicKey = 'eb6b044f4a8cf434a8100f85cac58205';
 const shopifyApiSecretKey = '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';
-const scopes = 'read_products, write_products, read_product_listings, read_customers, write_customers, read_orders, write_orders, read_script_tags, write_script_tags, read_checkouts, read_draft_orders, read_price_rules, read_fulfillments, read_assigned_fulfillment_orders, read_content, read_inventory, read_third_party_fulfillment_orders, read_merchant_managed_fulfillment_orders, read_shipping'
+const scopes = 'read_products, write_products, read_product_listings, read_customers, write_customers, read_orders, write_orders, read_script_tags, write_script_tags, read_checkouts, read_draft_orders, write_draft_orders, read_price_rules, read_fulfillments, read_assigned_fulfillment_orders, read_content, read_inventory, read_third_party_fulfillment_orders, read_merchant_managed_fulfillment_orders, read_shipping'
 const appUrl = 'https://cs-service.herokuapp.com';
 
 

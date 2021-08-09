@@ -1,6 +1,6 @@
 const { insert, query, del } = require("../../aws")
 const { fetchWorkspace } = require("../UserManager")
-const { table, updateCustomer, updateOrder, updateProduct } = require("./helper")
+const { table, updateCustomer, updateOrder, updateProduct, updateDraftOrder } = require("./helper")
 
 const addTag = async (workspaceId, data) => {
     try{
@@ -85,12 +85,28 @@ const productTags = async (tags, Item, workspaceId) => {
     const products = {}
     for( let i=0; i<tags.length; i++){
         const res = await table({table: 'product', workspaceId, filters: tags[i].filters})
-        res.forEach(order => {
+        // console.log(res);
+        res.forEach(product => {
             products[product.id] = products[product.id] ? products[product.id]+', '+tags[i].then : tags[i].then;
         })
         // console.log(res);
     }
     const promises = Object.keys(products).map(key => updateProduct(Item.shop_name, Item.access_token, key, products[key]))
+    await Promise.all(promises)
+    return true;
+}
+
+draftOrderTags = async (tags, Item, workspaceId) => {
+    const draftOrders = {}
+    for( let i=0; i<tags.length; i++){
+        const res = await table({table: 'draftOrder', workspaceId, filters: tags[i].filters})
+        // console.log(res);
+        res.forEach(draftOrder => {
+            draftOrders[draftOrder.id] = draftOrders[draftOrder.id] ? draftOrders[draftOrder.id]+', '+tags[i].then : tags[i].then;
+        })
+        // console.log(res);
+    }
+    const promises = Object.keys(draftOrders).map(key => updateDraftOrder(Item.shop_name, Item.access_token, key, draftOrders[key]))
     await Promise.all(promises)
     return true;
 }
@@ -120,13 +136,16 @@ const applyTags = async (workspaceId, {type, trigger}) => {
         case 'product':
             await productTags(tags, Item, workspaceId);
             break;
+        case 'product':
+            await draftOrderTags(tags, Item, workspaceId);
+            break
         default:
             break;
     }
     console.log('done');
 }
 
-// applyTags(56788582584, { type: 'orders', trigger: 'orderRefunded' });
+applyTags(56788582584, { type: 'product', trigger: 'orderRefunded' });
 
 module.exports = {
     addTag,
