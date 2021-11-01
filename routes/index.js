@@ -40,10 +40,10 @@ routes.get('/health', (req, res) => {
 
 
 routes.get('/cdn/test', (req, res) => {
-  const { id } = req.body
-  res.status(200).json({  status: true, id });
+  const { id } = req.query
+  let data = getSegments(id)
+  res.status(200).json({ status: true, id, data });
 
-  // let data = getSegments(id)
 });
 
 
