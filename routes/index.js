@@ -41,8 +41,9 @@ routes.get('/health', (req, res) => {
 
 routes.get('/cdn/test', (req, res) => {
   const { id } = req.body
-  let data = getSegments(id)
-  res.status(200).json({ data, status: true, id });
+  res.status(200).json({  status: true, id });
+
+  // let data = getSegments(id)
 });
 
 
