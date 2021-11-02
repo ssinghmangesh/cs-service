@@ -42,7 +42,7 @@ routes.get('/health', (req, res) => {
 routes.get('/cdn/test', (req, res) => {
   const { id } = req.query
   let data = getSegments(id)
-  res.status(200).json({ status: true, id, data });
+  res.status(200).json({ status: true, id, data, ref: Math.floor(Math.random() * 100) });
 
 });
 
